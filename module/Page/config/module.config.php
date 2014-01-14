@@ -4,25 +4,39 @@ return array(
     'router'       => array(
         'routes' => array(
             'page' => array(
-                'type'    => 'Segment',
-                'options' => array(
-                    'route'       => '/page[/:action][/:id]',
+                'type'          => 'Segment',
+                'options'       => array(
+                    'route'       => '[/:controller][/:action][/:id]',
                     'constraints' => array(
-//                        'controller' => '[a-zA-Z][a-zA-Z0-9_-]*',
-                        'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
-                        'id'     => '[0-9]+',
+                        'controller' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                        'action'     => '[a-zA-Z][a-zA-Z0-9_-]*',
+                        'id'         => '[0-9]+',
                     ),
                     'defaults'    => array(
-                        'controller' => 'Page\Controller\Index',
+                        'controller' => 'page',
                         'action'     => 'index',
                     ),
                 ),
+//                'may_terminate' => true,
+//                'child_routes'  => array(
+//                    'sitemap' => array(
+//                        "type"     => "segment",
+//                        "options"  => array(
+//                            "route" => "/sitemap"
+//                        ),
+//                        'defaults' => array(
+//                            'controller' => 'sitemap',
+//                            'action'     => 'index',
+//                        ),
+//                    ),
+//                ),
             ),
         ),
     ),
     'controllers'  => array(
         'invokables' => array(
-            'Page\Controller\Index' => 'Page\Controller\IndexController'
+            'page'    => 'Page\Controller\IndexController',
+            'sitemap' => 'Page\Controller\SitemapController',
         ),
     ),
     'view_manager' => array(
