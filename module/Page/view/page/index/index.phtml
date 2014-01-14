@@ -28,19 +28,8 @@ $this->headTitle($title);
             <td><?= $page->date ?></td>
             <td><?= $page->article ?></td>
             <td>
-                <a href="<?php
-                echo $this->url("page", array(
-                    "action" => "edit",
-                    "id"     => $page->id,
-                ))
-                ?>
-                   ">Редактировать</a>
-                <a href="<?php
-                echo $this->url("page", array(
-                    "action" => "delete",
-                    "id"     => $page->id,
-                ))
-                ?>">Удалить</a>
+                <a href="/page/edit/<?php echo $page->id ?>">Редактировать</a>
+                <a href="/page/delete/<?php echo $page->id ?>">Удалить</a>
             </td>
         </tr>
     <?php endforeach; ?>

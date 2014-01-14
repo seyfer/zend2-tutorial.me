@@ -55,7 +55,7 @@ class PageTest extends PHPUnit_Framework_TestCase {
             'title'   => 'some title');
 
         $album->exchangeArray($data);
-        $copyArray = $album->toArray();
+        $copyArray = $album->getArrayCopy();
 
         $this->assertSame(
                 $data['article'], $copyArray['article'], '"artist" was not set correctly'

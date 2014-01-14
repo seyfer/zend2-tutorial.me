@@ -33,6 +33,12 @@ class PageTable extends AbstractTableGateway {
         return $resultSet;
     }
 
+    /**
+     *
+     * @param type $id
+     * @return Page
+     * @throws Exception
+     */
     public function getPage($id)
     {
         $idSanit = (int) $id;
@@ -52,9 +58,9 @@ class PageTable extends AbstractTableGateway {
 
     public function savePage(Page $page)
     {
-        $data = $page->toArray();
+        $data = $page->getArrayCopy();
 
-        if (!$id) {
+        if (!$data['id']) {
             $this->insert($data);
         }
         else {

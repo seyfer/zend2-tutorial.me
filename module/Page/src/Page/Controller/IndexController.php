@@ -2,8 +2,9 @@
 
 namespace Page\Controller;
 
-use Page\Model\Page;
-use Page\Model\PageTable;
+use Page\Model\Page,
+    Page\Model\PageTable,
+    Page\Form\PageForm;
 use Zend\Debug\Debug;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
@@ -28,17 +29,54 @@ class IndexController extends AbstractActionController {
 
     public function deleteAction()
     {
+        $id = (int) $this->params()->fromRoute("id");
 
+//        Debug::dump($id);
+//        exit();
+
+        $this->getPageTable()->deletePage($id);
+
+        $this->redirect()->toUrl("/page");
     }
 
     public function editAction()
     {
+        $id = (int) $this->params()->fromRoute("id");
 
+        if (!$id) {
+            $this->redirect()->toUrl("/add");
+        }
+
+        $page = $this->getPageTable()->getPage($id);
+
+        $form = new PageForm();
+//        $form->setData($page->toArray());
+        $form->bind($page);
+        $form->get("submit")->setAttribute("value", "Рудактировать");
+
+        return new ViewModel(array("form" => $form));
     }
 
     public function addAction()
     {
+        $form = new PageForm();
 
+        $request = $this->getRequest();
+        if ($request->isPost()) {
+            $page = new Page();
+
+            $form->setInputFilter($page->getInputFilter());
+            $form->setData($request->getPost());
+
+            if ($form->isValid()) {
+                $page->exchangeArray($form->getData());
+                $this->getPageTable()->savePage($page);
+
+                $this->redirect()->toUrl("/page");
+            }
+        }
+
+        return new ViewModel(array("form" => $form));
     }
 
     public function getPageTable()

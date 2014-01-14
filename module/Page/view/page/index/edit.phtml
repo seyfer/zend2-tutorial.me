@@ -1,1 +1,55 @@
-<h1>Hi there.</h1>
+<?php
+//echo $form;
+
+$title = "Add Page";
+
+echo $this->headTitle();
+?>
+
+<h1><?php echo $this->escapeHtml($title) ?></h1>
+
+<?php
+$form->setAttribute("action", "/page/add");
+$form->setAttribute("class", "form-horizontal");
+
+$form->prepare();
+
+echo $this->form()->openTag($form);
+?>
+
+<div class="control-group">
+    <label class="control-label" for="title">title</label>
+    <div class="controls">
+        <input type="text" id="title" placeholder="title">
+    </div>
+</div>
+<div class="control-group">
+    <label class="control-label" for="article">article</label>
+    <div class="controls">
+        <input type="text" id="article" placeholder="article">
+    </div>
+</div>
+<div class="control-group">
+    <label class="control-label" for="date">date</label>
+    <div class="controls">
+        <input type="password" id="date" placeholder="date">
+    </div>
+</div>
+<div class="control-group">
+    <div class="controls">
+        <!--        <label class="checkbox">
+                    <input type="checkbox"> Запомнить меня
+                </label>-->
+        <button type="submit" class="btn">submit</button>
+    </div>
+</div>
+
+<?php
+echo $this->formHidden($form->get("id")), "<br>";
+echo $this->formRow($form->get("title")), "<br>";
+echo $this->formRow($form->get("article")), "<br>";
+echo $this->formRow($form->get("date")), "<br>";
+echo $this->formRow($form->get("submit"));
+
+echo $this->form()->closeTag();
+?>

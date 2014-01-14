@@ -17,16 +17,16 @@ class PageForm extends Form {
     {
         parent::__construct("page", $options);
 
-
         $this->setAttribute("method", "post");
         $this->setAttribute("target", "__blank");
-        $this->setAttribute("enctype", "application/x-www-form-urlencoded");
+//        $this->setAttribute("enctype", "application/x-www-form-urlencoded");
         $this->setAttribute("id", "pageform");
 
         $this->add(array(
-            "name"      => "id",
-            "attribute" => array(
-                "type" => "hidden",
+            "name"       => "id",
+            "attributes" => array(
+                "type"  => "hidden",
+                "value" => "0",
             )
         ));
 
@@ -44,7 +44,7 @@ class PageForm extends Form {
 
         $title = new Element("title");
         $title->setAttribute("type", "text");
-        $title->setLabel("Заголовок");
+        $title->setLabel("Title");
 
         $this->add($title);
 
@@ -62,9 +62,9 @@ class PageForm extends Form {
 
         $this->add(
                 array(
-                    "name"      => "submit",
-                    "attribute" => array(
-                        "type"  => "submit",
+                    "name"       => "submit",
+                    "type"       => "submit",
+                    "attributes" => array(
                         "value" => "Отправить",
                         "id"    => "submitbutton",
                     ),
