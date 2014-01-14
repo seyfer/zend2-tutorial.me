@@ -67,6 +67,7 @@ class PageForm extends Form {
                     "attributes" => array(
                         "value" => "Отправить",
                         "id"    => "submitbutton",
+                        "class" => "btn",
                     ),
                 )
         );

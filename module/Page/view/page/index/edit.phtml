@@ -1,7 +1,7 @@
 <?php
 //echo $form;
 
-$title = "Add Page";
+$title = "Edit Page";
 
 echo $this->headTitle();
 ?>
@@ -9,15 +9,15 @@ echo $this->headTitle();
 <h1><?php echo $this->escapeHtml($title) ?></h1>
 
 <?php
-$form->setAttribute("action", "/page/add");
-$form->setAttribute("class", "form-horizontal");
+$form->setAttribute("action", "/page/edit/" . $id);
 
-$form->prepare();
+$formRenderer = $this->formRenderer($form, 'renderer.bootstrap', 'horizontal');
+$formRenderer->prepare();
 
-echo $this->form()->openTag($form);
+echo $formRenderer->openTag($form);
 ?>
 
-<div class="control-group">
+<!--<div class="control-group">
     <label class="control-label" for="title">title</label>
     <div class="controls">
         <input type="text" id="title" placeholder="title">
@@ -37,19 +37,19 @@ echo $this->form()->openTag($form);
 </div>
 <div class="control-group">
     <div class="controls">
-        <!--        <label class="checkbox">
+                <label class="checkbox">
                     <input type="checkbox"> Запомнить меня
-                </label>-->
+                </label>
         <button type="submit" class="btn">submit</button>
     </div>
-</div>
+</div>-->
 
 <?php
-echo $this->formHidden($form->get("id")), "<br>";
-echo $this->formRow($form->get("title")), "<br>";
-echo $this->formRow($form->get("article")), "<br>";
-echo $this->formRow($form->get("date")), "<br>";
-echo $this->formRow($form->get("submit"));
+echo $formRenderer->formHidden($form->get("id")), "<br>";
+echo $formRenderer->formRow($form->get("title")), "<br>";
+echo $formRenderer->formRow($form->get("article")), "<br>";
+echo $formRenderer->formRow($form->get("date")), "<br>";
+echo $formRenderer->formRow($form->get("submit"));
 
-echo $this->form()->closeTag();
+echo $formRenderer->closeTag();
 ?>

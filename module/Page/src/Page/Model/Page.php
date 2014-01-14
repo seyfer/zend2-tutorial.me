@@ -45,6 +45,11 @@ class Page implements InputFilterAwareInterface {
         $this->date    = $data['date'];
     }
 
+//    public function getArrayCopy()
+//    {
+//        return get_object_vars($this);
+//    }
+
     public function getArrayCopy()
     {
         $class = new \ReflectionClass(__CLASS__);
@@ -53,8 +58,9 @@ class Page implements InputFilterAwareInterface {
         $arr = [];
         foreach ($props as $prop) {
 //            Debug::dump($prop);
-            if ($prop->isPublic())
+            if ($prop->isPublic()) {
                 $arr[$prop->name] = $this->{$prop->name};
+            }
         }
 
         return $arr;

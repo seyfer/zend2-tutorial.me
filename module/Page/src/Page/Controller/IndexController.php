@@ -43,18 +43,35 @@ class IndexController extends AbstractActionController {
     {
         $id = (int) $this->params()->fromRoute("id");
 
-        if (!$id) {
-            $this->redirect()->toUrl("/add");
-        }
+        Debug::dump($id);
+
+//        if ($id == NULL) {
+//            $this->redirect()->toUrl("/page/add");
+//        }
 
         $page = $this->getPageTable()->getPage($id);
 
         $form = new PageForm();
 //        $form->setData($page->toArray());
         $form->bind($page);
-        $form->get("submit")->setAttribute("value", "Рудактировать");
+        $form->get("submit")->setAttribute("value", "Редактировать");
 
-        return new ViewModel(array("form" => $form));
+        if ($this->request->isPost()) {
+            $form->setInputFilter($page->getInputFilter());
+            $form->setData($this->request->getPost());
+
+            if ($form->isValid()) {
+                $page->exchangeArray($form->getData()->getArrayCopy());
+                $this->getPageTable()->savePage($page);
+
+                $this->redirect()->toUrl("/page");
+            }
+        }
+
+        return new ViewModel(array(
+            "form" => $form,
+            "id"   => $id,
+        ));
     }
 
     public function addAction()

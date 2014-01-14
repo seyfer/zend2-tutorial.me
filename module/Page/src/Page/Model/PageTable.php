@@ -41,6 +41,9 @@ class PageTable extends AbstractTableGateway {
      */
     public function getPage($id)
     {
+        \Zend\Debug\Debug::dump(__METHOD__);
+        \Zend\Debug\Debug::dump($id);
+        
         $idSanit = (int) $id;
 
         $rowSet = $this->select(array(
@@ -50,7 +53,7 @@ class PageTable extends AbstractTableGateway {
         $row = $rowSet->current();
 
         if (!$row) {
-            throw new Exception(__METHOD__ . " не найдена страница");
+            throw new \Exception(__METHOD__ . " не найдена страница");
         }
 
         return $row;
