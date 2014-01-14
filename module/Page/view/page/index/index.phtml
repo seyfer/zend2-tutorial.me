@@ -1,1 +1,31 @@
 <h1>Hi there.</h1>
+
+<!--<pre>
+<?php
+//print_r($pages);
+
+$title = "Страницы";
+$this->headTitle($title);
+?>
+</pre>-->
+
+<h1>
+    <?php echo $this->escapeHtml($title); ?>
+</h1>
+
+<table class="table">
+    <thead>
+    <th>Название</th>
+    <th>Дата</th>
+    <th>Содержание</th>
+</thead>
+<tbody>
+    <?php foreach ($pages as $page) : ?>
+        <tr>
+            <td><?= $page->title ?></td>
+            <td></td>
+            <td></td>
+        </tr>
+    <?php endforeach; ?>
+</tbody>
+</table>

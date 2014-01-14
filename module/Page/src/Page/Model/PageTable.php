@@ -14,7 +14,7 @@ use Zend\Db\TableGateway\AbstractTableGateway;
  */
 class PageTable extends AbstractTableGateway {
 
-    private $table = "page";
+    protected $table = "page";
 
     public function __construct(Adapter $adapter)
     {
@@ -52,12 +52,19 @@ class PageTable extends AbstractTableGateway {
 
     public function savePage(Page $page)
     {
-        $data = $page->exchangeArray($data);
+        $data = $page->toArray();
+
+        if (!$id) {
+            $this->insert($data);
+        }
+        else {
+            $this->update($data, array("id" => $data['id']));
+        }
     }
 
     public function deletePage($id)
     {
-
+        $this->delete(array("id" => $id));
     }
 
 }

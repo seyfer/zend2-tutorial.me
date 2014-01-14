@@ -12,7 +12,14 @@
  * file.
  */
 return array(
-    "db" => array(
-        "database" => "page",
+    "db"              => array(
+        "driver"   => "Mysqli",
+        "database" => "zend2_tutorial",
+        'options'  => array('buffer_results' => true)
+    ),
+    'service_manager' => array(
+        "factories" => array(
+            'Zend\Db\Adapter\Adapter' => "Zend\Db\Adapter\AdapterServiceFactory"
+        )
     ),
 );
