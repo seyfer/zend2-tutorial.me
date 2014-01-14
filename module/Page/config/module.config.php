@@ -6,10 +6,11 @@ return array(
             'page' => array(
                 'type'    => 'Segment',
                 'options' => array(
-                    'route'       => '/page/[:controller[/:action]]',
+                    'route'       => '/page[/:action][/:id]',
                     'constraints' => array(
-                        'controller' => '[a-zA-Z][a-zA-Z0-9_-]*',
-                        'action'     => '[a-zA-Z][a-zA-Z0-9_-]*',
+//                        'controller' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                        'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                        'id'     => '[0-9]+',
                     ),
                     'defaults'    => array(
                         'controller' => 'Page\Controller\Index',
