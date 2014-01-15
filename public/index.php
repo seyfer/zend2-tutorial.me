@@ -2,6 +2,11 @@
 
 ini_set("display_errors", 1);
 
+define('REQUEST_MICROTIME', microtime(true));
+
+//define("APP_ENV", "development");
+//define("APP_ENV", "production");
+
 /**
  * This makes our life easier when dealing with paths. Everything is relative
  * to the application root now.

@@ -3,10 +3,10 @@
 return array(
     'router'       => array(
         'routes' => array(
-            'page' => array(
+            'page'    => array(
                 'type'    => 'Segment',
                 'options' => array(
-                    'route'       => '[/:controller][/:action][/:id]',
+                    'route'       => '/page[/:action][/:id]',
                     'constraints' => array(
                         'controller' => '[a-zA-Z][a-zA-Z0-9_-]*',
                         'action'     => '[a-zA-Z][a-zA-Z0-9_-]*',
@@ -20,7 +20,7 @@ return array(
 //                'may_terminate' => true,
 //                'child_routes'  => array(
 //                    'sitemap' => array(
-//                        "type"     => "segment",
+//                        "type"     => "Segment",
 //                        "options"  => array(
 //                            "route" => "/sitemap"
 //                        ),
@@ -31,12 +31,23 @@ return array(
 //                    ),
 //                ),
             ),
+            'sitemap' => array(
+                "type"     => "Segment",
+                "options"  => array(
+                    "route" => "/sitemap"
+                ),
+                'defaults' => array(
+                    'controller' => 'Page\Controller\SitemapController',
+                    'action'     => 'index',
+                ),
+            ),
         ),
     ),
     'controllers'  => array(
         'invokables' => array(
-            'page'    => 'Page\Controller\IndexController',
-            'sitemap' => 'Page\Controller\SitemapController',
+            'page'                    => 'Page\Controller\IndexController',
+            'sitemap'                 => 'Page\Controller\SitemapController',
+            'Page\Controller\Sitemap' => 'Page\Controller\SitemapController',
         ),
     ),
     'view_manager' => array(

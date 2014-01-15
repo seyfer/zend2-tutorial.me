@@ -1,15 +1,25 @@
 <?php
 
+$env = getenv('APP_ENV') ? : 'production';
+
+//Zend\Debug\Debug::dump($env);
+
+$modules = array(
+    'DoctrineModule',
+    'DoctrineORMModule',
+    'Application',
+    'Page',
+    'ReverseForm',
+);
+
+if ($env == 'development') {
+    $modules[] = 'ZendDeveloperTools';
+    $modules[] = 'BjyProfiler';
+}
+
 return array(
     // This should be an array of module namespaces used in the application.
-    'modules'                 => array(
-        'ZendDeveloperTools',
-        'DoctrineModule',
-        'DoctrineORMModule',
-        'Application',
-        'Page',
-        'ReverseForm',
-    ),
+    'modules'                 => $modules,
     // These are various options for the listeners attached to the ModuleManager
     'module_listener_options' => array(
         // This should be an array of paths in which modules reside.
