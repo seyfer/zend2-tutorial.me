@@ -19,7 +19,6 @@ class IndexController extends AbstractActionController {
 
     public function indexAction()
     {
-
         return new ViewModel(
                 array(
             "pages" => $this->getPageTable()->fetchAll()
@@ -34,20 +33,35 @@ class IndexController extends AbstractActionController {
 //        Debug::dump($id);
 //        exit();
 
-        $this->getPageTable()->deletePage($id);
+        if ($id == NULL) {
+            $this->redirect()->toUrl("/page");
+        }
 
-        $this->redirect()->toUrl("/page");
+        $page = $this->getPageTable()->getPage($id);
+
+        if ($this->request->isPost()) {
+            $del = $this->request->getPost("del");
+
+            if ($del == "Yes") {
+                $this->getPageTable()->deletePage($id);
+                $this->redirect()->toUrl("/page");
+            }
+        }
+
+        return array(
+            "id"   => $id,
+            "page" => $page,
+        );
     }
 
     public function editAction()
     {
         $id = (int) $this->params()->fromRoute("id");
 
-        Debug::dump($id);
-
-//        if ($id == NULL) {
-//            $this->redirect()->toUrl("/page/add");
-//        }
+//        Debug::dump($id);
+        if ($id == NULL) {
+            $this->redirect()->toUrl("/page/add");
+        }
 
         $page = $this->getPageTable()->getPage($id);
 
@@ -68,10 +82,10 @@ class IndexController extends AbstractActionController {
             }
         }
 
-        return new ViewModel(array(
+        return array(
             "form" => $form,
             "id"   => $id,
-        ));
+        );
     }
 
     public function addAction()

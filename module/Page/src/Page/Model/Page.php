@@ -12,6 +12,8 @@ use Zend\InputFilter\InputFilterInterface;
  * Description of Page
  *
  * @author seyfer
+ * @Annotation\Name("page");
+ * @Annotation\Hydrator("Zend\Stdlib\Hydrator\ObjectProperty")
  */
 class Page implements InputFilterAwareInterface {
 

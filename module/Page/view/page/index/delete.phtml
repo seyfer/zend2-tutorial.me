@@ -1,0 +1,18 @@
+<?php
+//echo $form;
+
+$title = "Удалить?";
+
+echo $this->headTitle();
+?>
+
+<h1><?php echo $this->escapeHtml($title) ?></h1>
+
+<p>Вы точно хотите удалить? <?php echo $page->title ?></p>
+
+<form method="post">
+
+    <input type="hidden" name="id" value="<?php echo $id ?>">
+    <input type="submit" value="Yes" name="del">
+    <input type="submit" value="No" name="del">
+</form>

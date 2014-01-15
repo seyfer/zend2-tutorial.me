@@ -41,9 +41,9 @@ class PageTable extends AbstractTableGateway {
      */
     public function getPage($id)
     {
-        \Zend\Debug\Debug::dump(__METHOD__);
-        \Zend\Debug\Debug::dump($id);
-        
+//        \Zend\Debug\Debug::dump(__METHOD__);
+//        \Zend\Debug\Debug::dump($id);
+
         $idSanit = (int) $id;
 
         $rowSet = $this->select(array(
