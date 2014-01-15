@@ -9,7 +9,10 @@ use Page\Model\Page,
 use Zend\Debug\Debug,
     Zend\Mvc\Controller\AbstractActionController,
     Zend\View\Model\ViewModel,
-    Zend\Form\Annotation\AnnotationBuilder;
+    Zend\Form\Annotation\AnnotationBuilder,
+    Zend\Session\SessionManager,
+    Zend\Session\Config\StandardConfig,
+    Zend\Session\Container;
 use Application\Model\MyAdapter;
 
 class IndexController extends AbstractActionController {
@@ -40,13 +43,19 @@ class IndexController extends AbstractActionController {
      */
     public function indexAction()
     {
+        ini_set("display_errors", 1);
+        $visible = FALSE;
+        $request = $this->getRequest();
 
-        if ($this->request->isPost()) {
-            $login    = $this->request->getPost("login", "guest");
-            $password = $this->request->getPost("password");
+//        $sessCont      = new Container("auth");
+//        $sessCont->foo = "bar";
 
-            //        $login    = "seyfers";
-//        $password = "seed1212";
+        Debug::dump((new Container("auth"))->foo);
+
+        if ($request->isPost()) {
+
+            $login    = $request->getPost("login", "guest");
+            $password = $request->getPost("password");
 
             Debug::dump($login, $password);
 
@@ -54,22 +63,22 @@ class IndexController extends AbstractActionController {
 
             $result = $adapter->authenticate();
 
-            if ($result->isValid()) {
-                return new ViewModel(
-                        array(
-                    "pages" => $this->getPageTable()->fetchAll()
-                        )
-                );
-            }
+            $visible = $result->isValid();
+        }
+
+        if ($visible) {
+
+            return new ViewModel(
+                    array(
+                "pages" => $this->getPageTable()->fetchAll()
+                    )
+            );
         }
         else {
             $builder = new AnnotationBuilder();
             $form    = $builder->createForm("Page\Model\User");
-//            $form    = $builder->createForm(new User);
-
 
             return array("form" => $form);
-//            die("Access Denied");
         }
     }
 

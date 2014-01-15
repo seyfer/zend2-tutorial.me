@@ -2,15 +2,17 @@
 
 namespace Application\Model;
 
-use Zend\Authentication\Adapter\AdapterInterface;
-use Zend\Authentication\Result;
+use Zend\Authentication\Adapter\AdapterInterface,
+    Zend\Authentication\Result,
+    Zend\Authentication\Adapter\DbTable;
+use Zend\Db\Adapter\Adapter;
 
 /**
  * Description of MyAdapter
  *
  * @author seyfer
  */
-class MyAdapter implements AdapterInterface {
+class MyAdapter extends DbTable implements AdapterInterface {
 
     /**
      * FOR TEST
@@ -18,12 +20,27 @@ class MyAdapter implements AdapterInterface {
      * @param type $password
      */
     public $username = "seyfer";
-    public $password = "seed1212";
+    public $password = "seesfsdsdf";
 
     public function __construct($username, $password)
     {
+        $dbConfigLocal = \Zend\Config\Factory::fromFile(__DIR__ .
+                '/../../../../../config/autoload/local.php')['db'];
+
+        $dbConfigGlobal = \Zend\Config\Factory::fromFile(__DIR__ .
+                '/../../../../../config/autoload/global.php')['db'];
+
+        $dbConfig = array_merge($dbConfigLocal, $dbConfigGlobal);
+
+//        \Zend\Debug\Debug::dump($dbConfig);
+
+        $dbAdapter = new Adapter($dbConfig);
+
+        parent::__construct($dbAdapter, "user", "login", "password");
         $this->username = $username;
         $this->password = $password;
+
+        $this->setIdentity($username)->setCredential($password);
     }
 
     /**
@@ -33,24 +50,27 @@ class MyAdapter implements AdapterInterface {
      */
     public function authenticate()
     {
-        try {
+        $res = parent::authenticate();
+        return $res;
 
-            if ($this->username == "seyfer" &&
-                    $this->password == "seed1212") {
-
-                $identity = "user";
-                $code     = Result::SUCCESS;
-                return new Result($code, $identity);
-            }
-            else {
-                throw new \Exception("Authentication Failed");
-            }
-        }
-        catch (\Exception $e) {
-            $code     = Result::FAILURE;
-            $identity = "guest";
-            return new Result($code, $identity, array($e->getMessage()));
-        }
+//        try {
+//
+//            if ($this->username == "seyfer" &&
+//                    $this->password == "sessfsf") {
+//
+//                $identity = "user";
+//                $code     = Result::SUCCESS;
+//                return new Result($code, $identity);
+//            }
+//            else {
+//                throw new \Exception("Authentication Failed");
+//            }
+//        }
+//        catch (\Exception $e) {
+//            $code     = Result::FAILURE;
+//            $identity = "guest";
+//            return new Result($code, $identity, array($e->getMessage()));
+//        }
     }
 
 }

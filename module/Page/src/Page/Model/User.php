@@ -20,6 +20,7 @@ class User {
      *
      * @var type
      * @Annotation\Filter({"name":"StringTrim"});
+     * @Annotation\Filter({"name":"StripTags"});
      * @Annotation\Validator({"name":"StringLength", "options":{"min":3, "max":100}})
      * @Annotation\Attributes({"type":"text"})
      * @Annotation\Options({"label":"Login:"})
