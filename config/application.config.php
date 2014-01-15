@@ -7,9 +7,10 @@ $env = getenv('APP_ENV') ? : 'production';
 $modules = array(
     'DoctrineModule',
     'DoctrineORMModule',
+    'ReverseForm',
     'Application',
     'Page',
-    'ReverseForm',
+    'SED',
 );
 
 if ($env == 'development') {
@@ -31,14 +32,14 @@ return array(
         // If a string key is provided, the listener will consider that a module
         // namespace, the value of that key the specific path to that module's
         // Module class.
-        'module_paths'             => array(
+        'module_paths'         => array(
             './module',
             './vendor',
         ),
         // An array of paths from which to glob configuration files after
         // modules are loaded. These effectively override configuration
         // provided by modules themselves. Paths may use GLOB_BRACE notation.
-        'config_glob_paths'        => array(
+        'config_glob_paths'    => array(
             'config/autoload/{,*.}{global,local}.php',
         ),
         // Whether or not to enable a configuration cache.
@@ -46,19 +47,19 @@ return array(
         // subsequent requests.
 //        'config_cache_enabled'     => ($env == 'production'),
         // The key used to create the configuration cache file name.
-        'config_cache_key'         => $stringKeyCache,
+        'config_cache_key'     => $stringKeyCache,
         // Whether or not to enable a module class map cache.
         // If enabled, creates a module class map cache which will be used
         // by in future requests, to reduce the autoloading process.
 //        'module_map_cache_enabled' => ($env == 'production'),
         // The key used to create the class map cache file name.
-        'module_map_cache_key'     => $stringKeyModule,
+        'module_map_cache_key' => $stringKeyModule,
         // The path in which to cache merged configuration.
-        'cache_dir'                => $stringKeyCachePath,
+        'cache_dir'            => $stringKeyCachePath,
         // Whether or not to enable modules dependency checking.
         // Enabled by default, prevents usage of modules that depend on other modules
         // that weren't loaded.
-        'check_dependencies'       => ($env != 'production'),
+        'check_dependencies'   => ($env != 'production'),
     ),
         // Used to create an own service manager. May contain one or more child arrays.
         //'service_listener_options' => array(

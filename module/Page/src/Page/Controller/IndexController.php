@@ -3,12 +3,14 @@
 namespace Page\Controller;
 
 use Page\Model\Page,
+    Page\Model\User,
     Page\Model\PageTable,
     Page\Form\PageForm;
 use Zend\Debug\Debug,
     Zend\Mvc\Controller\AbstractActionController,
     Zend\View\Model\ViewModel,
     Zend\Form\Annotation\AnnotationBuilder;
+use Application\Model\MyAdapter;
 
 class IndexController extends AbstractActionController {
 
@@ -38,11 +40,37 @@ class IndexController extends AbstractActionController {
      */
     public function indexAction()
     {
-        return new ViewModel(
-                array(
-            "pages" => $this->getPageTable()->fetchAll()
-                )
-        );
+
+        if ($this->request->isPost()) {
+            $login    = $this->request->getPost("login", "guest");
+            $password = $this->request->getPost("password");
+
+            //        $login    = "seyfers";
+//        $password = "seed1212";
+
+            Debug::dump($login, $password);
+
+            $adapter = new MyAdapter($login, $password);
+
+            $result = $adapter->authenticate();
+
+            if ($result->isValid()) {
+                return new ViewModel(
+                        array(
+                    "pages" => $this->getPageTable()->fetchAll()
+                        )
+                );
+            }
+        }
+        else {
+            $builder = new AnnotationBuilder();
+            $form    = $builder->createForm("Page\Model\User");
+//            $form    = $builder->createForm(new User);
+
+
+            return array("form" => $form);
+//            die("Access Denied");
+        }
     }
 
     /**

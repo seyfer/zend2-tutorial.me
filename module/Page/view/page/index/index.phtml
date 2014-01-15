@@ -1,37 +1,63 @@
 <h1>Hi there.</h1>
 
-<!--<pre>
 <?php
-//print_r($pages);
+if (isset($pages)) {
 
-$title = "Страницы";
-$this->headTitle($title);
+    $title = "Страницы";
+    $this->headTitle($title);
+    ?>
+
+
+    <h1>
+        <?php echo $this->escapeHtml($title); ?>
+    </h1>
+
+    <a href="/page/add">Добавить</a>
+    <table class="table">
+        <thead>
+        <th>Название</th>
+        <th>Дата</th>
+        <th>Содержание</th>
+        <th>&nbsp;</th>
+    </thead>
+    <tbody>
+        <?php foreach ($pages as $page) : ?>
+            <tr>
+                <td><?= $page->title ?></td>
+                <td><?= $page->date ?></td>
+                <td><?= $page->article ?></td>
+                <td>
+                    <a href="/page/edit/<?php echo $page->id ?>">Редактировать</a>
+                    <a href="/page/delete/<?php echo $page->id ?>">Удалить</a>
+                </td>
+            </tr>
+        <?php endforeach; ?>
+    </tbody>
+    </table>
+
+    <?php
+} else {
+
+//    $formRenderer = $this->formRenderer($form, 'renderer.bootstrap', 'horizontal');
+//    $formRenderer->prepare();
+//    echo $formRenderer->openTag($form);
+//
+//    echo $formRenderer->formRow($form->get("login")), "<br>";
+//    echo $formRenderer->formRow($form->get("password")), "<br>";
+//    echo $formRenderer->formRow($form->get("rememberme")), "<br>";
+//    echo $formRenderer->formRow($form->get("submit"));
+//    echo $formRenderer->formCollection($form);
+//    echo $formRenderer->closeTag();
+
+    $form->prepare();
+    echo $this->form()->openTag($form);
+    echo $this->formRow($form->get("login")), "<br>";
+    echo $this->formRow($form->get("password")), "<br>";
+    echo $this->formRow($form->get("rememberme")), "<br>";
+    echo $this->formRow($form->get("submit"));
+
+//    echo $this->formCollection($form);
+
+    echo $this->form()->closeTag();
+}
 ?>
-</pre>-->
-
-<h1>
-    <?php echo $this->escapeHtml($title); ?>
-</h1>
-
-<a href="/page/add">Добавить</a>
-<table class="table">
-    <thead>
-    <th>Название</th>
-    <th>Дата</th>
-    <th>Содержание</th>
-    <th>&nbsp;</th>
-</thead>
-<tbody>
-    <?php foreach ($pages as $page) : ?>
-        <tr>
-            <td><?= $page->title ?></td>
-            <td><?= $page->date ?></td>
-            <td><?= $page->article ?></td>
-            <td>
-                <a href="/page/edit/<?php echo $page->id ?>">Редактировать</a>
-                <a href="/page/delete/<?php echo $page->id ?>">Удалить</a>
-            </td>
-        </tr>
-    <?php endforeach; ?>
-</tbody>
-</table>

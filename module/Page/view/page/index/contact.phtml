@@ -10,12 +10,12 @@ echo $this->headTitle();
 
 <?php
 //$this->form->setAttribute("action", "/page/contact");
-//$formRenderer = $this->formRenderer($form, 'renderer.bootstrap', 'horizontal');
-//$formRenderer->prepare();
-//echo $formRenderer->openTag($form);
+$formRenderer = $this->formRenderer($form, 'renderer.bootstrap', 'horizontal');
+$formRenderer->prepare();
+echo $formRenderer->openTag($form);
 
-$form->prepare();
-$this->form()->openTag($form);
+//$form->prepare();
+//$this->form()->openTag($form);
 ?>
 
 <!--<div class="well">
@@ -25,18 +25,18 @@ $this->form()->openTag($form);
 <fieldset class="<?php echo $formRenderer->_formStyle; ?>">
 
     <?php
-//    echo $formRenderer->formHidden($form->get("id")), "<br>";
-//    echo $formRenderer->formRow($form->get("title")), "<br>";
-    echo $this->formRow($form->get("title")), "<br>";
-//    echo $formRenderer->formRow($form->get("article")), "<br>";
-//    echo $formRenderer->formRow($form->get("date")), "<br>";
-//    echo $formRenderer->formRow($form->get("submit"));
+    echo $formRenderer->formHidden($form->get("id")), "<br>";
+    echo $formRenderer->formRow($form->get("title")), "<br>";
+//    echo $this->formRow($form->get("title")), "<br>";
+    echo $formRenderer->formRow($form->get("article")), "<br>";
+    echo $formRenderer->formRow($form->get("date")), "<br>";
+    echo $formRenderer->formRow($form->get("submit"));
 //    echo $formRenderer->formAction($form->get('submit'));
     ?>
 
 </fieldset>
 
 <?php
-echo $this->form()->closeTag();
-//echo $formRenderer->closeTag();
+//echo $this->form()->closeTag();
+echo $formRenderer->closeTag();
 ?>
