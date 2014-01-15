@@ -31,9 +31,9 @@ return array(
                 ),
             ),
             // The following is a route to simplify getting started creating
-            // new controllers and actions without needing to create a new
-            // module. Simply drop new controllers in, and you can access them
-            // using the path /application/:controller/:action
+// new controllers and actions without needing to create a new
+// module. Simply drop new controllers in, and you can access them
+// using the path /application/:controller/:action
             'application' => array(
                 'type'          => 'Literal',
                 'options'       => array(
@@ -54,8 +54,7 @@ return array(
                                 'controller' => '[a-zA-Z][a-zA-Z0-9_-]*',
                                 'action'     => '[a-zA-Z][a-zA-Z0-9_-]*',
                             ),
-                            'defaults'    => array(
-                            ),
+                            'defaults'    => array(),
                         ),
                     ),
                 ),
@@ -85,6 +84,7 @@ return array(
         'invokables' => array(
             'Application\Controller\Index'   => 'Application\Controller\IndexController',
             'Application\Controller\Contact' => 'Application\Controller\ContactController',
+            'Application\Controller\Auth'    => 'Application\Controller\AuthController',
         ),
     ),
     'view_manager'    => array(
@@ -106,8 +106,7 @@ return array(
     // Placeholder for console routes
     'console'         => array(
         'router' => array(
-            'routes' => array(
-            ),
+            'routes' => array(),
         ),
     ),
 );

@@ -1,1 +1,28 @@
-Contact
+<?php
+//echo $form;
+
+$title = "Contact Page";
+
+echo $this->headTitle();
+?>
+
+<h1><?php echo $this->escapeHtml($title) ?></h1>
+
+<?php
+//$form->setAttribute("action", "/page/edit/" . $id);
+
+$formRenderer = $this->formRenderer($form, 'renderer.bootstrap', 'horizontal');
+$formRenderer->prepare();
+
+echo $formRenderer->openTag($form);
+?>
+
+<?php
+//echo $formRenderer->formHidden($form->get("id")), "<br>";
+echo $formRenderer->formRow($form->get("title")), "<br>";
+echo $formRenderer->formRow($form->get("article")), "<br>";
+echo $formRenderer->formRow($form->get("date")), "<br>";
+echo $formRenderer->formRow($form->get("submit"));
+
+echo $formRenderer->closeTag();
+?>
