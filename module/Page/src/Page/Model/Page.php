@@ -12,7 +12,9 @@ use Zend\InputFilter\InputFilterInterface;
  * Description of Page
  *
  * @author seyfer
- * @Annotation\Name("page");
+ *
+ * Аннотации для теста
+ * @Annotation\Name("Page\Model\Page");
  * @Annotation\Hydrator("Zend\Stdlib\Hydrator\ObjectProperty")
  */
 class Page implements InputFilterAwareInterface {
@@ -23,14 +25,34 @@ class Page implements InputFilterAwareInterface {
      * @Annotation\Exclude()
      */
     public $id;
+
     /**
      *
      * @var type
      * @Annotation\Filter({"name":"StringTrim"});
-     *
+     * @Annotation\Validator({"name":"StringLength", "options":{"min":1, "max":100}})
+     * @Annotation\Attributes({"type":"text"})
+     * @Annotation\Options({"label":"title:"})
      */
     public $title;
+
+    /**
+     *
+     * @var type
+     * @Annotation\Filter({"name":"StringTrim"});
+     * @Annotation\Validator({"name":"StringLength", "options":{"min":1, "max":10000}})
+     * @Annotation\Attributes({"type":"textarea"})
+     * @Annotation\Options({"label":"article"})
+     */
     public $article;
+
+    /**
+     *
+     * @var type
+     * @Annotation\Filter({"name":"StringTrim"});
+     * @Annotation\Attributes({"type":"text"})
+     * @Annotation\Options({"label":"date"})
+     */
     public $date;
 
     /**

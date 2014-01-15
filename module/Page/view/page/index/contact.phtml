@@ -1,0 +1,42 @@
+<?php
+//print_r($form);
+
+$title = "Contact Page (annotation test)";
+
+echo $this->headTitle();
+?>
+
+<h1><?php echo $this->escapeHtml($title) ?></h1>
+
+<?php
+//$this->form->setAttribute("action", "/page/contact");
+//$formRenderer = $this->formRenderer($form, 'renderer.bootstrap', 'horizontal');
+//$formRenderer->prepare();
+//echo $formRenderer->openTag($form);
+
+$form->prepare();
+$this->form()->openTag($form);
+?>
+
+<!--<div class="well">
+<?php print_r($form->getMessages()); ?>
+</div>-->
+
+<fieldset class="<?php echo $formRenderer->_formStyle; ?>">
+
+    <?php
+//    echo $formRenderer->formHidden($form->get("id")), "<br>";
+//    echo $formRenderer->formRow($form->get("title")), "<br>";
+    echo $this->formRow($form->get("title")), "<br>";
+//    echo $formRenderer->formRow($form->get("article")), "<br>";
+//    echo $formRenderer->formRow($form->get("date")), "<br>";
+//    echo $formRenderer->formRow($form->get("submit"));
+//    echo $formRenderer->formAction($form->get('submit'));
+    ?>
+
+</fieldset>
+
+<?php
+echo $this->form()->closeTag();
+//echo $formRenderer->closeTag();
+?>

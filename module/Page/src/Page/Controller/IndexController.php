@@ -5,9 +5,10 @@ namespace Page\Controller;
 use Page\Model\Page,
     Page\Model\PageTable,
     Page\Form\PageForm;
-use Zend\Debug\Debug;
-use Zend\Mvc\Controller\AbstractActionController;
-use Zend\View\Model\ViewModel;
+use Zend\Debug\Debug,
+    Zend\Mvc\Controller\AbstractActionController,
+    Zend\View\Model\ViewModel,
+    Zend\Form\Annotation\AnnotationBuilder;
 
 class IndexController extends AbstractActionController {
 
@@ -17,6 +18,24 @@ class IndexController extends AbstractActionController {
      */
     protected $pageTable;
 
+    /**
+     * тестирование билдера
+     * @return type
+     */
+    public function contactAction()
+    {
+        $builder = new AnnotationBuilder();
+        $form    = $builder->createForm("Page\Model\Page");
+
+        return new ViewModel(array(
+            "form" => $form,
+        ));
+    }
+
+    /**
+     *
+     * @return \Zend\View\Model\ViewModel
+     */
     public function indexAction()
     {
         return new ViewModel(
@@ -26,6 +45,10 @@ class IndexController extends AbstractActionController {
         );
     }
 
+    /**
+     *
+     * @return type
+     */
     public function deleteAction()
     {
         $id = (int) $this->params()->fromRoute("id");
@@ -54,6 +77,10 @@ class IndexController extends AbstractActionController {
         );
     }
 
+    /**
+     *
+     * @return type
+     */
     public function editAction()
     {
         $id = (int) $this->params()->fromRoute("id");
@@ -88,6 +115,10 @@ class IndexController extends AbstractActionController {
         );
     }
 
+    /**
+     *
+     * @return \Zend\View\Model\ViewModel
+     */
     public function addAction()
     {
         $form = new PageForm();
