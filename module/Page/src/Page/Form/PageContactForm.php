@@ -11,7 +11,7 @@ use Zend\Form\Factory;
  *
  * @author seyfer
  */
-class PageForm extends Form {
+class PageContactForm extends Form {
 
     public function __construct($name = null, $options = array())
     {

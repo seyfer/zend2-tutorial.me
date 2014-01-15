@@ -17,7 +17,18 @@ use Zend\InputFilter\InputFilterInterface;
  */
 class Page implements InputFilterAwareInterface {
 
+    /**
+     *
+     * @var type
+     * @Annotation\Exclude()
+     */
     public $id;
+    /**
+     *
+     * @var type
+     * @Annotation\Filter({"name":"StringTrim"});
+     *
+     */
     public $title;
     public $article;
     public $date;
