@@ -9,6 +9,7 @@ $modules = array(
     'DoctrineORMModule',
     'ReverseForm',
     'Application',
+    'Auth',
     'Page',
     'SED',
 );

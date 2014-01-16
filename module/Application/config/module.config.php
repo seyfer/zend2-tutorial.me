@@ -20,6 +20,16 @@ return array(
                     ),
                 ),
             ),
+            'admin'       => array(
+                'type'    => 'Zend\Mvc\Router\Http\Literal',
+                'options' => array(
+                    'route'    => '/admin',
+                    'defaults' => array(
+                        'controller' => 'Application\Controller\Admin',
+                        'action'     => 'index',
+                    ),
+                ),
+            ),
             'contact'     => array(
                 'type'    => 'Zend\Mvc\Router\Http\Literal',
                 'options' => array(
@@ -35,8 +45,8 @@ return array(
 // module. Simply drop new controllers in, and you can access them
 // using the path /application/:controller/:action
             'application' => array(
-                'type'          => 'Literal',
-                'options'       => array(
+                'type'    => 'Literal',
+                'options' => array(
                     'route'    => '/application',
                     'defaults' => array(
                         '__NAMESPACE__' => 'Application\Controller',
@@ -85,6 +95,7 @@ return array(
             'Application\Controller\Index'   => 'Application\Controller\IndexController',
             'Application\Controller\Contact' => 'Application\Controller\ContactController',
             'Application\Controller\Auth'    => 'Application\Controller\AuthController',
+            'Application\Controller\Admin'   => 'Application\Controller\AdminController',
         ),
     ),
     'view_manager'    => array(

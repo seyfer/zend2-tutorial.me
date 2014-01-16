@@ -17,6 +17,7 @@
         "doctrine/doctrine-module": "0.7.2",
         "doctrine/doctrine-orm-module": "0.7.0",
         "zendframework/zend-developer-tools": "dev-master",
-        "bjyoungblood/BjyProfiler": "dev-master"
+        "bjyoungblood/BjyProfiler": "dev-master",
+        "zendframework/zftool": "dev-master"
     }
 }
