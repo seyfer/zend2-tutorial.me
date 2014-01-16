@@ -8,10 +8,10 @@ $modules = array(
     'DoctrineModule',
     'DoctrineORMModule',
     'ReverseForm',
-    'Application',
     'Auth',
     'Page',
     'SED',
+    'Application',
 );
 
 if ($env == 'development') {

@@ -6,6 +6,14 @@ $form->setAttribute('action', $this->url(
             'action' => 'authenticate',
                 )
 ));
+
+//$formRenderer = $this->formRenderer($form, 'renderer.bootstrap', 'horizontal');
+//$formRenderer->prepare();
+//
+//echo $formRenderer->openTag($form);
+//echo $formRenderer->formCollection($form);
+//echo $formRenderer->closeTag();
+
 $form->prepare();
 
 echo $this->form()->openTag($form);

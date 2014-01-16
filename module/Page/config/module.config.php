@@ -4,32 +4,33 @@ return array(
     'router'       => array(
         'routes' => array(
             'page'    => array(
-                'type'    => 'Segment',
-                'options' => array(
-                    'route'       => '/page[/:action][/:id]',
+                'type'          => 'Segment',
+                'options'       => array(
+                    'route'       => '/page',
                     'constraints' => array(
                         'controller' => '[a-zA-Z][a-zA-Z0-9_-]*',
-                        'action'     => '[a-zA-Z][a-zA-Z0-9_-]*',
-                        'id'         => '[0-9]+',
                     ),
                     'defaults'    => array(
                         'controller' => 'page',
                         'action'     => 'index',
                     ),
                 ),
-//                'may_terminate' => true,
-//                'child_routes'  => array(
-//                    'sitemap' => array(
-//                        "type"     => "Segment",
-//                        "options"  => array(
-//                            "route" => "/sitemap"
-//                        ),
-//                        'defaults' => array(
-//                            'controller' => 'sitemap',
-//                            'action'     => 'index',
-//                        ),
-//                    ),
-//                ),
+                'may_terminate' => true,
+                'child_routes'  => array(
+                    'actions' => array(
+                        "type"        => "Segment",
+                        "options"     => array(
+                            "route" => "[/:action][/][:id]"
+                        ),
+                        'constraints' => array(
+                            'controller' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                            'action'     => '[a-zA-Z][a-zA-Z0-9_-]*',
+                            'id'         => '[0-9]+',
+                        ),
+                        'defaults'    => array(
+                        ),
+                    ),
+                ),
             ),
             'sitemap' => array(
                 "type"    => "Literal",

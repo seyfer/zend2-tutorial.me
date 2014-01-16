@@ -9,7 +9,11 @@ echo $this->headTitle();
 <h1><?php echo $this->escapeHtml($title) ?></h1>
 
 <?php
-$form->setAttribute("action", "/page/add");
+$form->setAttribute('action', $this->url(
+                'page/actions', array(
+            'action' => 'add',
+                )
+));
 
 $formRenderer = $this->formRenderer($form, 'renderer.bootstrap', 'horizontal');
 $formRenderer->prepare();

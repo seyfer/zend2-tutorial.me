@@ -43,34 +43,40 @@ class IndexController extends AbstractActionController {
      */
     public function indexAction()
     {
-        $visible = FALSE;
 
-        $authStorage = $this->getServiceLocator()
-                ->get('Auth\Model\AuthStorage');
+        $adapter = new MyAdapter('seyferx', 'seed1212');
 
-        $login = $authStorage->read();
 
-        if ($login) {
-            $visible = TRUE;
-        }
-        else {
-            $this->redirect()->toRoute('login');
+//        $result  = $adapter->authenticate();
+//        $visible = $result->isValid();
+
+        if (! $this->getServiceLocator()
+                 ->get('AuthService')->hasIdentity()){
+            return $this->redirect()->toRoute('login');
         }
 
-        if ($visible) {
+//        $visible = FALSE;
+//
+//        $authStorage = $this->getServiceLocator()
+//                ->get('Auth\Model\AuthStorage');
+//
+//        $login = $authStorage->read();
+//
+//        if ($login) {
+//            $visible = TRUE;
+//        }
+//        else {
+//            $this->redirect()->toRoute('login');
+//        }
+//
+//        if ($visible) {
 
             return new ViewModel(
                     array(
                 "pages" => $this->getPageTable()->fetchAll()
                     )
             );
-        }
-        else {
-            $builder = new AnnotationBuilder();
-            $form    = $builder->createForm("Page\Model\User");
-
-            return array("form" => $form);
-        }
+//        }
     }
 
     /**
@@ -115,7 +121,7 @@ class IndexController extends AbstractActionController {
 
 //        Debug::dump($id);
         if ($id == NULL) {
-            $this->redirect()->toUrl("/page/add");
+            $this->redirect()->toRoute("page/actions", array("action" => "add"));
         }
 
         $page = $this->getPageTable()->getPage($id);
@@ -130,10 +136,11 @@ class IndexController extends AbstractActionController {
             $form->setData($this->request->getPost());
 
             if ($form->isValid()) {
+                //возвращает Page, т.к. выше bind
                 $page->exchangeArray($form->getData()->getArrayCopy());
                 $this->getPageTable()->savePage($page);
 
-                $this->redirect()->toUrl("/page");
+                $this->redirect()->toRoute("page");
             }
         }
 
@@ -162,7 +169,7 @@ class IndexController extends AbstractActionController {
                 $page->exchangeArray($form->getData());
                 $this->getPageTable()->savePage($page);
 
-                $this->redirect()->toUrl("/page");
+                $this->redirect()->toRoute("page");
             }
         }
 

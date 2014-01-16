@@ -19,20 +19,16 @@ class MyAdapter extends DbTable implements AdapterInterface {
      * @param type $username
      * @param type $password
      */
-    public $username = "seyfer";
-    public $password = "seesfsdsdf";
+    public $username;
+    public $password;
 
     public function __construct($username, $password)
     {
-        $dbConfigLocal = \Zend\Config\Factory::fromFile(__DIR__ .
-                '/../../../../../config/autoload/local.php')['db'];
+        $dbConfig = $this->loadDbConfig();
 
-        $dbConfigGlobal = \Zend\Config\Factory::fromFile(__DIR__ .
-                '/../../../../../config/autoload/global.php')['db'];
+        
 
-        $dbConfig = array_merge($dbConfigLocal, $dbConfigGlobal);
-
-//        \Zend\Debug\Debug::dump($dbConfig);
+        \Zend\Debug\Debug::dump($dbConfig);
 
         $dbAdapter = new Adapter($dbConfig);
 
@@ -41,6 +37,19 @@ class MyAdapter extends DbTable implements AdapterInterface {
         $this->password = $password;
 
         $this->setIdentity($username)->setCredential($password);
+    }
+
+    private function loadDbConfig()
+    {
+        $dbConfigLocal = \Zend\Config\Factory::fromFile(__DIR__ .
+                        '/../../../../../config/autoload/local.php')['db'];
+
+        $dbConfigGlobal = \Zend\Config\Factory::fromFile(__DIR__ .
+                        '/../../../../../config/autoload/global.php')['db'];
+
+        $dbConfig = array_merge($dbConfigLocal, $dbConfigGlobal);
+
+        return $dbConfig;
     }
 
     /**
