@@ -32,22 +32,22 @@ return array(
 //                ),
             ),
             'sitemap' => array(
-                "type"     => "Segment",
-                "options"  => array(
-                    "route" => "/sitemap"
-                ),
-                'defaults' => array(
-                    'controller' => 'Page\Controller\SitemapController',
-                    'action'     => 'index',
+                "type"    => "Literal",
+                "options" => array(
+                    "route"    => "/sitemap",
+                    'defaults' => array(
+                        'controller' => 'sitemap',
+                        'action'     => 'index',
+                    ),
                 ),
             ),
         ),
     ),
     'controllers'  => array(
         'invokables' => array(
-            'page'                    => 'Page\Controller\IndexController',
-            'sitemap'                 => 'Page\Controller\SitemapController',
-            'Page\Controller\Sitemap' => 'Page\Controller\SitemapController',
+            'page'    => 'Page\Controller\IndexController',
+            'sitemap' => 'Page\Controller\SitemapController',
+//            'Page\Controller\Sitemap' => 'Page\Controller\SitemapController',
         ),
     ),
     'view_manager' => array(

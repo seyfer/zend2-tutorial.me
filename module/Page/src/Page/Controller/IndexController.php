@@ -43,27 +43,18 @@ class IndexController extends AbstractActionController {
      */
     public function indexAction()
     {
-        ini_set("display_errors", 1);
         $visible = FALSE;
-        $request = $this->getRequest();
 
-//        $sessCont      = new Container("auth");
-//        $sessCont->foo = "bar";
+        $authStorage = $this->getServiceLocator()
+                ->get('Auth\Model\AuthStorage');
 
-        Debug::dump((new Container("auth"))->foo);
+        $login = $authStorage->read();
 
-        if ($request->isPost()) {
-
-            $login    = $request->getPost("login", "guest");
-            $password = $request->getPost("password");
-
-            Debug::dump($login, $password);
-
-            $adapter = new MyAdapter($login, $password);
-
-            $result = $adapter->authenticate();
-
-            $visible = $result->isValid();
+        if ($login) {
+            $visible = TRUE;
+        }
+        else {
+            $this->redirect()->toRoute('login');
         }
 
         if ($visible) {

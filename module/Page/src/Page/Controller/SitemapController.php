@@ -14,7 +14,6 @@ class SitemapController extends AbstractActionController {
 
     public function indexAction()
     {
-//        echo 1;
         return new ViewModel();
     }
 
