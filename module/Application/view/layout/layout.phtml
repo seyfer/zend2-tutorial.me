@@ -60,24 +60,28 @@
                         <li class="active"><a href="<?php echo $this->url('home') ?>">
                                 <?php echo $this->translate('Главная') ?></a>
                         </li>
-                        <li class="">
-                            <?php
-                            $store    = new \Auth\Model\AuthStorage("auth_storage");
-                            $username = $store->read();
 
-                            if ($username) {
-                                echo '<a href="' . $this->url("login/process", array(
-                                    "action" => "logout"))
-                                . '">' . $this->translate('Выйти') . "</a>";
-                            }
-                            else {
-                                echo '<a href="' . $this->url("login/process", array(
-                                    "action" => "login"))
-                                . '">' . $this->translate('Войти') . "</a>";
-                            }
-                            ?>
+                        <?php
+                        $store    = new \Auth\Model\AuthStorage("auth_storage");
+                        $username = $store->read();
 
-                        </li>
+                        if ($username) {
+
+                            echo '<li class=""><a href="' . $this->url("admin")
+                            . '">' . $this->translate('Админка') . "</a></li>";
+
+                            echo '<li class=""><a href="' . $this->url("login/process", array(
+                                "action" => "logout"))
+                            . '">' . $this->translate('Выйти') . "</a></li>";
+                        }
+                        else {
+                            echo '<li class=""><a href="' . $this->url("login/process", array(
+                                "action" => "login"))
+                            . '">' . $this->translate('Войти') . "</a></li>";
+                        }
+                        ?>
+
+
 
                     </ul>
                 </div><!--/.nav-collapse -->

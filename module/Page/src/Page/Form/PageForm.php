@@ -18,7 +18,7 @@ class PageForm extends Form {
         parent::__construct("page", $options);
 
         $this->setAttribute("method", "post");
-        $this->setAttribute("target", "__blank");
+//        $this->setAttribute("target", "__blank");
 //        $this->setAttribute("enctype", "application/x-www-form-urlencoded");
         $this->setAttribute("id", "pageform");
 

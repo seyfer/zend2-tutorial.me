@@ -1,18 +1,18 @@
-<h1>Hi there.</h1>
-
 <?php
 if (isset($pages)) {
 
-    $title = "Страницы";
+    $title = "Админка Страниц";
     $this->headTitle($title);
     ?>
-
 
     <h1>
         <?php echo $this->escapeHtml($title); ?>
     </h1>
 
-    <a href="/page/add">Добавить</a>
+    <a href="<?php
+    echo $this->url("page/actions", array("action" => "add"))
+    ?>">Добавить</a>
+
     <table class="table">
         <thead>
         <th>Название</th>
@@ -27,8 +27,15 @@ if (isset($pages)) {
                 <td><?= $page->date ?></td>
                 <td><?= $page->article ?></td>
                 <td>
-                    <a href="/page/edit/<?php echo $page->id ?>">Редактировать</a>
-                    <a href="/page/delete/<?php echo $page->id ?>">Удалить</a>
+                    <a href="<?php
+                    echo $this->url("page/actions", array("action" => "edit",
+                        "id" => $page->id))
+                    ?>">Редактировать</a>
+
+                    <a href="<?php
+                    echo $this->url("page/actions", array("action" => "delete",
+                        "id" => $page->id))
+                    ?>">Удалить</a>
                 </td>
             </tr>
         <?php endforeach; ?>

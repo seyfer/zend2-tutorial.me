@@ -30,6 +30,66 @@ class Module {
         $moduleRouteListener = new ModuleRouteListener();
         $moduleRouteListener->attach($eventManager);
 
+        //событие проверки авторизации на роутах
+        $eventManager->attach("dispatch", function($e) {
+
+            $match = $e->getRouteMatch();
+
+//            \Zend\Debug\Debug::dump($match->getMatchedRouteName());
+//            \Zend\Debug\Debug::dump(strpos($match->getMatchedRouteName(), 'login'));
+//            exit();
+//
+            //если логин, то не вешать
+            if (0 === strpos($match->getMatchedRouteName(), 'login')) {
+                return;
+            }
+
+            $app     = $e->getApplication();
+            $request = $app->getRequest();
+
+            $currentUrl = $request->getUri()->getPath();
+
+//            \Zend\Debug\Debug::dump($currentUrl);
+//            \Zend\Debug\Debug::dump(strpos($currentUrl, 'admin'));
+//            exit();
+            //не вешаем, если в пути нету Admin
+            if (FALSE === strpos($currentUrl, 'admin')) {
+                return;
+            }
+
+            if (!$app->getServiceManager()
+                            ->get('AuthService')->hasIdentity()) {
+//                return $this->redirect()->toRoute('login');
+
+                $url = $e->getRouter()
+                        ->assemble(array(), array('name' => 'login/login'));
+
+//                \Zend\Debug\Debug::dump($url);
+//                exit();
+
+                $response     = $e->getResponse();
+                $response->getHeaders()->addHeaderLine('Location', $url);
+                $response->setStatusCode(302);
+                $response->sendHeaders();
+                // When an MvcEvent Listener returns a Response object,
+                // It automatically short-circuit the Application running
+                // -> true only for Route Event propagation see Zend\Mvc\Application::run
+                // To avoid additional processing
+                // we can attach a listener for Event Route with a high priority
+                $stopCallBack = function($e) use ($response) {
+                    $e->stopPropagation();
+                    return $response;
+                };
+
+                //Attach the "break" as a listener with a high priority
+                $e->getApplication()
+                        ->getEventManager()
+                        ->attach(MvcEvent::EVENT_ROUTE, $stopCallBack, -10000);
+
+                return $response;
+            }
+        });
+
         //поднять сессию
         $this->bootstrapSession($e);
     }
@@ -49,18 +109,20 @@ class Module {
         $match      = $e->getRouteMatch();
         $controller = $e->getTarget();
 
-        \Zend\Debug\Debug::dump($match);
-        \Zend\Debug\Debug::dump(strpos($match->getMatchedRouteName(), 'admin'));
-        \Zend\Debug\Debug::dump($match instanceof RouteMatch);
+//        \Zend\Debug\Debug::dump($match);
+//        \Zend\Debug\Debug::dump(strpos($match->getMatchedRouteName(), 'admin'));
+//        \Zend\Debug\Debug::dump($match instanceof RouteMatch);
+//        \Zend\Debug\Debug::dump($config['adminPath']);
 
         if (!($match instanceof RouteMatch) ||
-                0 !== strpos($match->getMatchedRouteName(), 'admin') ||
+                !in_array($match->getMatchedRouteName(), $config['adminPath']['routes']) ||
+//                0 !== strpos($match->getMatchedRouteName(), 'admin') ||
                 $controller->getEvent()->getResult()->terminate()
         ) {
             return;
         }
 
-        $layout = $config['admin']['admin_layout_template'];
+        $layout = $config['adminPath']['admin_layout_template'];
         $controller->layout($layout);
     }
 

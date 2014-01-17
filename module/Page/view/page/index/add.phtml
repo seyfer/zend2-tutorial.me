@@ -9,48 +9,21 @@ echo $this->headTitle();
 <h1><?php echo $this->escapeHtml($title) ?></h1>
 
 <?php
-$form->setAttribute('action', $this->url(
-                'page/actions', array(
-            'action' => 'add',
-                )
-));
-
 $formRenderer = $this->formRenderer($form, 'renderer.bootstrap', 'horizontal');
 $formRenderer->prepare();
 
 echo $formRenderer->openTag($form);
 ?>
 
-<!--<div class="well">
-<?php print_r($form->getMessages()); ?>
-</div>-->
+<?php
 
-<!--<div class="control-group">
-    <label class="control-label" for="title">title</label>
-    <div class="controls">
-        <input type="text" id="title" placeholder="title">
-    </div>
-</div>
-<div class="control-group">
-    <label class="control-label" for="article">article</label>
-    <div class="controls">
-        <input type="text" id="article" placeholder="article">
-    </div>
-</div>
-<div class="control-group">
-    <label class="control-label" for="date">date</label>
-    <div class="controls">
-        <input type="password" id="date" placeholder="date">
-    </div>
-</div>
-<div class="control-group">
-    <div class="controls">
-                <label class="checkbox">
-                    <input type="checkbox"> Запомнить меня
-                </label>
-        <button type="submit" class="btn">submit</button>
-    </div>
-</div>-->
+//if ($messages = $form->getMessages()) {
+//    foreach ($messages as $message) {
+//        print_r($message);
+//    }
+//}
+
+?>
 
 <fieldset class="<?php echo $formRenderer->_formStyle; ?>">
 

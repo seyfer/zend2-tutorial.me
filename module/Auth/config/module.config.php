@@ -33,6 +33,17 @@ return array(
                             ),
                         ),
                     ),
+                    'login'   => array(
+                        'type'    => 'Segment',
+                        'options' => array(
+                            'route'    => '/login',
+                            'defaults' => array(
+                                '__NAMESPACE__' => 'Auth\Controller',
+                                'controller'    => 'Auth',
+                                'action'        => 'login',
+                            ),
+                        ),
+                    ),
                 ),
             ),
             'success' => array(

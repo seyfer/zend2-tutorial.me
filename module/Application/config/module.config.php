@@ -11,54 +11,109 @@ return array(
     'router'          => array(
         'routes' => array(
             'home'        => array(
-                'type'    => 'Zend\Mvc\Router\Http\Literal',
-                'options' => array(
+                'type'          => 'Zend\Mvc\Router\Http\Literal',
+                'options'       => array(
                     'route'    => '/',
                     'defaults' => array(
                         'controller' => 'Application\Controller\Index',
                         'action'     => 'index',
                     ),
                 ),
+                'may_terminate' => true,
+                'child_routes'  => array(
+                    'default' => array(
+                        'type'    => 'Segment',
+                        'options' => array(
+                            'route'       => '/[:controller[/:action]]',
+                            'constraints' => array(
+                                'controller' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                                'action'     => '[a-zA-Z][a-zA-Z0-9_-]*',
+                            ),
+                            'defaults'    => array(),
+                        ),
+                    ),
+                ),
             ),
             'admin'       => array(
-                'type'          => 'Zend\Mvc\Router\Http\Literal',
-                'options'       => array(
+                'type'    => 'Zend\Mvc\Router\Http\Literal',
+                'options' => array(
                     'route'    => '/admin',
                     'defaults' => array(
                         'controller' => 'Application\Controller\Admin',
                         'action'     => 'index',
                     ),
                 ),
+//                'may_terminate' => true,
+//                'child_routes'  => array(
+//                    'page' => array(
+//                        'type'          => 'Literal',
+//                        'options'       => array(
+//                            'route'       => '/page',
+//                            'constraints' => array(
+//                                'controller' => '[a-zA-Z][a-zA-Z0-9_-]*',
+//                            ),
+//                            'defaults'    => array(
+//                                'controller' => 'page',
+//                                'action'     => 'index',
+//                            ),
+//                        ),
+//                        'may_terminate' => true,
+//                        'child_routes'  => array(
+//                            'actions' => array(
+//                                "type"        => "Segment",
+//                                "options"     => array(
+//                                    "route" => "[/:action][/][:id]"
+//                                ),
+//                                'constraints' => array(
+//                                    'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+//                                    'id'     => '[0-9]+',
+//                                ),
+//                                'defaults'    => array(
+//                                ),
+//                            ),
+//                        ),
+//                    ),
+//                ),
+            ),
+            'page'        => array(
+                'type'          => 'Literal',
+                'options'       => array(
+                    'route'       => '/admin/page',
+                    'constraints' => array(
+                        'controller' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                    ),
+                    'defaults'    => array(
+                        'controller' => 'page',
+                        'action'     => 'index',
+                    ),
+                ),
                 'may_terminate' => true,
                 'child_routes'  => array(
-                    'page' => array(
-                        'type'          => 'Segment',
-                        'options'       => array(
-                            'route'       => '/page',
-                            'constraints' => array(
-                                'controller' => '[a-zA-Z][a-zA-Z0-9_-]*',
-                            ),
-                            'defaults'    => array(
-                                'controller' => 'page',
-                                'action'     => 'index',
-                            ),
+                    'actions' => array(
+                        "type"        => "Segment",
+                        "options"     => array(
+                            "route" => "[/:action][/][:id]"
                         ),
-                        'may_terminate' => true,
-                        'child_routes'  => array(
-                            'actions' => array(
-                                "type"        => "Segment",
-                                "options"     => array(
-                                    "route" => "[/:action][/][:id]"
-                                ),
-                                'constraints' => array(
-                                    'controller' => '[a-zA-Z][a-zA-Z0-9_-]*',
-                                    'action'     => '[a-zA-Z][a-zA-Z0-9_-]*',
-                                    'id'         => '[0-9]+',
-                                ),
-                                'defaults'    => array(
-                                ),
-                            ),
+                        'constraints' => array(
+                            'controller' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                            'action'     => '[a-zA-Z][a-zA-Z0-9_-]*',
+                            'id'         => '[0-9]+',
                         ),
+                        'defaults'    => array(
+                        ),
+                    ),
+                ),
+            ),
+            'contact'     => array(
+                'type'    => 'Literal',
+                'options' => array(
+                    'route'       => '/contact',
+                    'constraints' => array(
+                        'controller' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                    ),
+                    'defaults'    => array(
+                        'controller' => 'contact',
+                        'action'     => 'index',
                     ),
                 ),
             ),
@@ -117,6 +172,8 @@ return array(
             'Application\Controller\Index' => 'Application\Controller\IndexController',
             'Application\Controller\Auth'  => 'Application\Controller\AuthController',
             'Application\Controller\Admin' => 'Application\Controller\AdminController',
+            'page'                         => 'Page\Controller\IndexController',
+            'contact'                      => 'Application\Controller\ContactController',
         ),
     ),
     'view_manager'    => array(

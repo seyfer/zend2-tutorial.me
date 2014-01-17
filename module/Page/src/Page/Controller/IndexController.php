@@ -34,10 +34,10 @@ class IndexController extends AbstractActionController {
     {
         $this->acl = (new Acl())->getAcl();
 
-        if (!$this->getServiceLocator()
-                        ->get('AuthService')->hasIdentity()) {
-            return $this->redirect()->toRoute('login');
-        }
+//        if (!$this->getServiceLocator()
+//                        ->get('AuthService')->hasIdentity()) {
+//            return $this->redirect()->toRoute('login');
+//        }
 
         return parent::onDispatch($e);
     }
@@ -91,7 +91,7 @@ class IndexController extends AbstractActionController {
 
             if ($del == "Yes") {
                 $this->getPageTable()->deletePage($id);
-                $this->redirect()->toUrl("/page");
+                $this->redirect()->toRoute("page");
             }
         }
 

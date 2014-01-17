@@ -17,7 +17,7 @@ return array(
         "database" => "zend2_tutorial",
         'options'  => array('buffer_results' => true)
     ),
-    'admin'           => array(
+    'adminPath'           => array(
         "admin_layout_template" => "layout/admin",
     ),
     'service_manager' => array(
