@@ -26,9 +26,7 @@ class MyAdapter extends DbTable implements AdapterInterface {
     {
         $dbConfig = $this->loadDbConfig();
 
-        
-
-        \Zend\Debug\Debug::dump($dbConfig);
+//        \Zend\Debug\Debug::dump($dbConfig, $sm);
 
         $dbAdapter = new Adapter($dbConfig);
 

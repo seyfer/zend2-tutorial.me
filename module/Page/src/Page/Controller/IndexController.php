@@ -5,7 +5,8 @@ namespace Page\Controller;
 use Page\Model\Page,
     Page\Model\User,
     Page\Model\PageTable,
-    Page\Form\PageForm;
+    Page\Form\PageForm,
+    Page\Model\Acl;
 use Zend\Debug\Debug,
     Zend\Mvc\Controller\AbstractActionController,
     Zend\View\Model\ViewModel,
@@ -22,6 +23,19 @@ class IndexController extends AbstractActionController {
      * @var PageTable
      */
     protected $pageTable;
+
+    /**
+     *
+     * @var Acl
+     */
+    protected $acl;
+
+    public function onDispatch(\Zend\Mvc\MvcEvent $e)
+    {
+        $this->acl = (new Acl())->getAcl();
+
+        return parent::onDispatch($e);
+    }
 
     /**
      * тестирование билдера
@@ -44,39 +58,22 @@ class IndexController extends AbstractActionController {
     public function indexAction()
     {
 
-        $adapter = new MyAdapter('seyferx', 'seed1212');
-
-
+//        $adapter = new MyAdapter('sfsdf', 'sddf');
 //        $result  = $adapter->authenticate();
 //        $visible = $result->isValid();
 
-        if (! $this->getServiceLocator()
-                 ->get('AuthService')->hasIdentity()){
+//        Debug::dump($this->acl);
+
+        if (!$this->getServiceLocator()
+                        ->get('AuthService')->hasIdentity()) {
             return $this->redirect()->toRoute('login');
         }
 
-//        $visible = FALSE;
-//
-//        $authStorage = $this->getServiceLocator()
-//                ->get('Auth\Model\AuthStorage');
-//
-//        $login = $authStorage->read();
-//
-//        if ($login) {
-//            $visible = TRUE;
-//        }
-//        else {
-//            $this->redirect()->toRoute('login');
-//        }
-//
-//        if ($visible) {
-
-            return new ViewModel(
-                    array(
-                "pages" => $this->getPageTable()->fetchAll()
-                    )
-            );
-//        }
+        return new ViewModel(
+                array(
+            "pages" => $this->getPageTable()->fetchAll()
+                )
+        );
     }
 
     /**
