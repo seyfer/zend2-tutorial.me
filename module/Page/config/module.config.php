@@ -3,10 +3,10 @@
 return array(
     'router'       => array(
         'routes' => array(
-            'page'    => array(
+            'page' => array(
                 'type'          => 'Segment',
                 'options'       => array(
-                    'route'       => '/page',
+                    'route'       => '/admin/page',
                     'constraints' => array(
                         'controller' => '[a-zA-Z][a-zA-Z0-9_-]*',
                     ),
@@ -32,23 +32,11 @@ return array(
                     ),
                 ),
             ),
-//            'sitemap' => array(
-//                "type"    => "Literal",
-//                "options" => array(
-//                    "route"    => "/sitemap",
-//                    'defaults' => array(
-//                        'controller' => 'sitemap',
-//                        'action'     => 'index',
-//                    ),
-//                ),
-//            ),
         ),
     ),
     'controllers'  => array(
         'invokables' => array(
-            'page'    => 'Page\Controller\IndexController',
-//            'sitemap' => 'Page\Controller\SitemapController',
-//            'Page\Controller\Sitemap' => 'Page\Controller\SitemapController',
+            'page' => 'Page\Controller\IndexController',
         ),
     ),
     'view_manager' => array(

@@ -57,13 +57,6 @@ class IndexController extends AbstractActionController {
      */
     public function indexAction()
     {
-
-//        $adapter = new MyAdapter('sfsdf', 'sddf');
-//        $result  = $adapter->authenticate();
-//        $visible = $result->isValid();
-
-//        Debug::dump($this->acl);
-
         if (!$this->getServiceLocator()
                         ->get('AuthService')->hasIdentity()) {
             return $this->redirect()->toRoute('login');
