@@ -14,15 +14,54 @@ use Zend\Mvc\ModuleRouteListener;
 use Zend\Mvc\MvcEvent;
 use Zend\Session\SessionManager;
 use Zend\Session\Container;
+use Zend\Mvc\Router\Http\RouteMatch;
 
 class Module {
 
     public function onBootstrap(MvcEvent $e)
     {
+        //разные layout по роуту
+        $app = $e->getParam('application');
+        $em  = $app->getEventManager();
+        $em->attach(MvcEvent::EVENT_DISPATCH, array($this, 'selectLayoutBasedOnRoute'));
+
+        //стандартный роут слушатель
         $eventManager        = $e->getApplication()->getEventManager();
         $moduleRouteListener = new ModuleRouteListener();
         $moduleRouteListener->attach($eventManager);
+
+        //поднять сессию
         $this->bootstrapSession($e);
+    }
+
+    /**
+     * Select the admin layout based on route name
+     *
+     * @param  MvcEvent $e
+     * @return void
+     */
+    public function selectLayoutBasedOnRoute(MvcEvent $e)
+    {
+        $app    = $e->getParam('application');
+        $sm     = $app->getServiceManager();
+        $config = $sm->get('config');
+
+        $match      = $e->getRouteMatch();
+        $controller = $e->getTarget();
+
+        \Zend\Debug\Debug::dump($match);
+        \Zend\Debug\Debug::dump(strpos($match->getMatchedRouteName(), 'admin'));
+        \Zend\Debug\Debug::dump($match instanceof RouteMatch);
+
+        if (!($match instanceof RouteMatch) ||
+                0 !== strpos($match->getMatchedRouteName(), 'admin') ||
+                $controller->getEvent()->getResult()->terminate()
+        ) {
+            return;
+        }
+
+        $layout = $config['admin']['admin_layout_template'];
+        $controller->layout($layout);
     }
 
     public function bootstrapSession(MvcEvent $e)
@@ -94,7 +133,7 @@ class Module {
 
                 if (isset($session['validators'])) {
                     $chain = $sessionManager->getValidatorChain();
-                    
+
                     foreach ($session['validators'] as $validator) {
                         $validator = new $validator();
                         $chain->attach('session.validate', array($validator, 'isValid'));

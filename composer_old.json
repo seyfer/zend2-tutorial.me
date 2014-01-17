@@ -1,0 +1,77 @@
+{
+    "name": "zendframework/skeleton-application",
+    "description": "Skeleton Application for ZF2",
+    "license": "BSD-3-Clause",
+    "keywords": [
+        "framework",
+        "zf2"
+    ],
+    "homepage": "http://framework.zend.com/",
+    "require": {
+        "php": ">=5.3.3",
+        "zendframework/zendframework": "2.2.*",
+        "phpunit/phpunit": "3.7.28",
+        "silvester/reverse-form": "dev-master",
+        "doctrine/common": "2.3.*",
+        "doctrine/orm": "2.3.*",
+        "doctrine/doctrine-module": "0.7.2",
+        "doctrine/doctrine-orm-module": "0.7.0",
+        "zendframework/zend-developer-tools": "dev-master",
+        "bjyoungblood/BjyProfiler": "dev-master",
+        "zendframework/zftool": "dev-master",
+        "Zfc/Base": "0.0.1",
+        "Zfc/User": "0.0.1",
+        "Zfc/Admin": "0.0.1",
+        "Bjy/Authorize": "1.4"
+    },
+    "repositories": [
+        {
+            "type": "package",
+            "package": {
+                "name": "Zfc/Base",
+                "version": "0.0.1",
+                "source": {
+                    "type": "git",
+                    "url": "https://github.com/ZF-Commons/ZfcBase.git",
+                    "reference": "master"
+                }
+            }
+        },
+        {
+            "type": "package",
+            "package": {
+                "name": "Zfc/User",
+                "version": "0.0.1",
+                "source": {
+                    "type": "git",
+                    "url": "https://github.com/ZF-Commons/ZfcUser.git",
+                    "reference": "master"
+                }
+            }
+        },
+        {
+            "type": "package",
+            "package": {
+                "name": "Zfc/Admin",
+                "version": "0.0.1",
+                "source": {
+                    "type": "git",
+                    "url": "https://github.com/ZF-Commons/ZfcAdmin.git",
+                    "reference": "master"
+                }
+            }
+        },
+        {
+            "type": "package",
+            "package": {
+                "name": "Bjy/Authorize",
+                "version": "1.4",
+                "source": {
+                    "type": "git",
+                    "url": "https://github.com/bjyoungblood/BjyAuthorize.git",
+                    "reference": "master"
+                }
+            }
+        }
+    ]
+}

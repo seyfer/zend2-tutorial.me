@@ -34,6 +34,11 @@ class IndexController extends AbstractActionController {
     {
         $this->acl = (new Acl())->getAcl();
 
+        if (!$this->getServiceLocator()
+                        ->get('AuthService')->hasIdentity()) {
+            return $this->redirect()->toRoute('login');
+        }
+
         return parent::onDispatch($e);
     }
 
@@ -57,11 +62,6 @@ class IndexController extends AbstractActionController {
      */
     public function indexAction()
     {
-        if (!$this->getServiceLocator()
-                        ->get('AuthService')->hasIdentity()) {
-            return $this->redirect()->toRoute('login');
-        }
-
         return new ViewModel(
                 array(
             "pages" => $this->getPageTable()->fetchAll()

@@ -17,6 +17,9 @@ return array(
         "database" => "zend2_tutorial",
         'options'  => array('buffer_results' => true)
     ),
+    'admin'           => array(
+        "admin_layout_template" => "layout/admin",
+    ),
     'service_manager' => array(
         "factories" => array(
             'Zend\Db\Adapter\Adapter' => "Zend\Db\Adapter\AdapterServiceFactory"

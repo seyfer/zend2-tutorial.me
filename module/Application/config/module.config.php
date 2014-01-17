@@ -21,12 +21,44 @@ return array(
                 ),
             ),
             'admin'       => array(
-                'type'    => 'Zend\Mvc\Router\Http\Literal',
-                'options' => array(
+                'type'          => 'Zend\Mvc\Router\Http\Literal',
+                'options'       => array(
                     'route'    => '/admin',
                     'defaults' => array(
                         'controller' => 'Application\Controller\Admin',
                         'action'     => 'index',
+                    ),
+                ),
+                'may_terminate' => true,
+                'child_routes'  => array(
+                    'page' => array(
+                        'type'          => 'Segment',
+                        'options'       => array(
+                            'route'       => '/page',
+                            'constraints' => array(
+                                'controller' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                            ),
+                            'defaults'    => array(
+                                'controller' => 'page',
+                                'action'     => 'index',
+                            ),
+                        ),
+                        'may_terminate' => true,
+                        'child_routes'  => array(
+                            'actions' => array(
+                                "type"        => "Segment",
+                                "options"     => array(
+                                    "route" => "[/:action][/][:id]"
+                                ),
+                                'constraints' => array(
+                                    'controller' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                                    'action'     => '[a-zA-Z][a-zA-Z0-9_-]*',
+                                    'id'         => '[0-9]+',
+                                ),
+                                'defaults'    => array(
+                                ),
+                            ),
+                        ),
                     ),
                 ),
             ),
