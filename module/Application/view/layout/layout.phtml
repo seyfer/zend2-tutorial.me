@@ -53,7 +53,13 @@
                              alt="Zend Framework 2"/>&nbsp;
                     <?php echo $this->translate('Skeleton Application') ?>
                     </a>-->
-
+                    <?php
+                    // <-- Add this !!
+                    echo $this->navigation('navigation')->menu()
+                            ->setMinDepth(0)
+                            ->setMaxDepth(0)
+                            ->setUlClass('nav navbar-nav');
+                    ?>
                 </div>
                 <div class="collapse navbar-collapse">
                     <ul class="nav navbar-nav">
@@ -88,7 +94,10 @@
             </div>
         </nav>
         <div class="container">
-            <?php echo $this->navigation()->breadcrumbs(); ?>
+            <?php
+            echo $this->navigation('navigation')->breadcrumbs()->setMinDepth(0)
+                    ->setPartial(array('partial/breadcrumb.phtml', 'Application'));
+            ?>
             <?php echo $this->content; ?>
             <hr>
             <footer>

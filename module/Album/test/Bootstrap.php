@@ -1,12 +1,7 @@
 <?php
 
-//include '../../../vendor/autoload.php';
+namespace AlbumTest;
 
-/**
- * Description of Bootstrap
- *
- * @author seyfer
- */
 use Zend\Loader\AutoloaderFactory;
 use Zend\Mvc\Service\ServiceManagerConfig;
 use Zend\ServiceManager\ServiceManager;
@@ -40,8 +35,7 @@ class Bootstrap {
                 'module_paths' => $zf2ModulePaths,
             ),
             'modules'                 => array(
-                'Page',
-//                'Album'
+                'Album'
             )
         );
 
@@ -95,7 +89,12 @@ class Bootstrap {
             'Zend\Loader\StandardAutoloader' => array(
                 'autoregister_zf' => true,
                 'namespaces'      => array(
-                    __NAMESPACE__ => __DIR__ . '/' . __NAMESPACE__,
+                    __NAMESPACE__       => __DIR__ . '/' . __NAMESPACE__,
+//                    'Doctrine\Common'   => __DIR__ . '/vendor/doctrine/common',
+//                    'Doctrine\DBAL'     => __DIR__ . '/vendor/doctrine/dbal',
+//                    'Symfony\Console'   => __DIR__ . '/vendor/symfony/console',
+//                    'DoctrineModule'    => __DIR__ . '/vendor/doctrine/doctrine-module',
+//                    'DoctrineORMModule' => __DIR__ . '/vendor/doctrine/doctrine-orm-module',
                 ),
             ),
         ));
@@ -119,3 +118,23 @@ class Bootstrap {
 
 Bootstrap::init();
 Bootstrap::chroot();
+
+//putenv('ZF2_PATH=' . __DIR__ . '/../../../vendor/ZF2/library');
+//include_once __DIR__ . '/../../../init_autoloader.php';
+//set_include_path(implode(PATH_SEPARATOR, array(
+//    '.',
+//    __DIR__ . '/../src',
+//    __DIR__ . '/../../DoctrineModule/src',
+//    __DIR__ . '/../../DoctrineORMModule/src',
+//    __DIR__ . '/../../../vendor',
+//    get_include_path(),
+//)));
+//spl_autoload_register(function($class) {
+//    $file     = str_replace(array('\\', '_'), DIRECTORY_SEPARATOR, $class) . '.php';
+//    if (false === ($realpath = stream_resolve_include_path($file))) {
+//        return false;
+//    }
+//    include_once $realpath;
+//});
+//$loader = new \Mockery\Loader;
+//$loader->register();
