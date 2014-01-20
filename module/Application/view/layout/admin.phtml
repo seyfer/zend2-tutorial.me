@@ -51,21 +51,24 @@
                     <a class="navbar-brand" href="<?php echo $this->url('admin') ?>">
 <!--                        <img src="<?php echo $this->basePath('img/zf2-logo.png') ?>"
                              alt=""/>&nbsp;-->
-                             <?php echo $this->translate('Админка') ?>
+                        <?php echo $this->translate('Админка') ?>
                     </a>
 
                 </div>
-                <div class="collapse navbar-collapse">
+                <div class="navbar-collapse collapse">
                     <ul class="nav navbar-nav">
-                        <li class="active"><a href="<?php echo $this->url('home') ?>">
-                                <?php echo $this->translate('Главная') ?></a>
-                        </li>
-                        <li class="">
-                            <a href="<?php echo $this->url("page") ?>">
-                                <?php echo $this->translate('Страницы') ?>
+                        <li class="menu-item active">
+                            <a class="dropdown-toggle" href="<?php echo $this->url('home') ?>">
+                                <?php echo $this->translate('Главная') ?>
                             </a>
                         </li>
-                        <li class="">
+                        <li class="menu-item dropdown">
+                            <a class="dropdown-toggle"
+                               href="<?php echo $this->url("page") ?>">
+                                   <?php echo $this->translate('Страницы') ?>
+                            </a>
+                        </li>
+                        <li class="menu-item">
                             <?php
                             $store    = new \Auth\Model\AuthStorage("auth_storage");
                             $username = $store->read();
