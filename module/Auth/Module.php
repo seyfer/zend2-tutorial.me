@@ -2,10 +2,11 @@
 
 namespace Auth;
 
-use Zend\ModuleManager\Feature\AutoloaderProviderInterface;
-use Zend\Authentication\Storage;
-use Zend\Authentication\AuthenticationService;
-use Zend\Authentication\Adapter\DbTable as DbTableAuthAdapter;
+use Zend\ModuleManager\Feature\AutoloaderProviderInterface,
+    Zend\Authentication\Storage,
+    Zend\Authentication\AuthenticationService,
+    Zend\Authentication\Adapter\DbTable as DbTableAuthAdapter;
+use Auth\Model\GateAdapter;
 
 /**
  * Description of Module
@@ -17,9 +18,9 @@ class Module implements AutoloaderProviderInterface {
     public function getAutoloaderConfig()
     {
         return array(
-//            'Zend\Loader\ClassMapAutoloader' => array(
-//                __DIR__ . '/autoload_classmap.php',
-//            ),
+            'Zend\Loader\ClassMapAutoloader' => array(
+                __DIR__ . '/autoload_classmap.php',
+            ),
             'Zend\Loader\StandardAutoloader' => array(
                 'namespaces' => array(
                     // if we're in a namespace deeper than one level
@@ -47,11 +48,17 @@ class Module implements AutoloaderProviderInterface {
             //My assumption, you've alredy set dbAdapter
             //and has users table with columns : user_name and pass_word
             //that password hashed with md5
-            $dbAdapter          = $sm->get('Zend\Db\Adapter\Adapter');
-            $dbTableAuthAdapter = new DbTableAuthAdapter($dbAdapter, 'myuser', 'login', 'password', 'MD5(?)');
+//            $dbAdapter          = $sm->get('Zend\Db\Adapter\Adapter');
+//            $dbTableAuthAdapter = new DbTableAuthAdapter($dbAdapter, 'myuser', 'login', 'password', 'MD5(?)');
+//
+//            $authService = new AuthenticationService();
+//            $authService->setAdapter($dbTableAuthAdapter);
+//            $authService->setStorage($sm->get('Auth\Model\AuthStorage'));
+
+            $gateAdapter = new GateAdapter();
 
             $authService = new AuthenticationService();
-            $authService->setAdapter($dbTableAuthAdapter);
+            $authService->setAdapter($gateAdapter);
             $authService->setStorage($sm->get('Auth\Model\AuthStorage'));
 
             return $authService;

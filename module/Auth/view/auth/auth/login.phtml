@@ -11,13 +11,20 @@ $form->setAttribute('action', $this->url(
 //$formRenderer->prepare();
 //
 //echo $formRenderer->openTag($form);
+//echo $formRenderer->formRow($form->get("username")) . "<br>";
+//echo $formRenderer->formRow($form->get("password")) . "<br>";
+//echo $formRenderer->formRow($form->get("rememberme")) . "<br>";
 //echo $formRenderer->formCollection($form);
 //echo $formRenderer->closeTag();
 
 $form->prepare();
 
-echo $this->form()->openTag($form);
-echo $this->formCollection($form);
+echo $this->form()->openTag($form) . "<br>";
+echo $this->formRow($form->get("username")) . "<br>";
+echo $this->formRow($form->get("password")) . "<br>";
+echo $this->formRow($form->get("rememberme")) . "<br>";
+echo $this->formSubmit($form->get("submit")) . "<br>";
+//echo $this->formCollection($form) . "<br>";
 echo $this->form()->closeTag();
 
 if ($this->messages) {
@@ -27,4 +34,3 @@ if ($this->messages) {
     }
     echo '</ul>';
 }
-?>
