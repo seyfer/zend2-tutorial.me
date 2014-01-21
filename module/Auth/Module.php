@@ -48,7 +48,7 @@ class Module implements AutoloaderProviderInterface {
             //and has users table with columns : user_name and pass_word
             //that password hashed with md5
             $dbAdapter          = $sm->get('Zend\Db\Adapter\Adapter');
-            $dbTableAuthAdapter = new DbTableAuthAdapter($dbAdapter, 'user', 'login', 'password', 'MD5(?)');
+            $dbTableAuthAdapter = new DbTableAuthAdapter($dbAdapter, 'myuser', 'login', 'password', 'MD5(?)');
 
             $authService = new AuthenticationService();
             $authService->setAdapter($dbTableAuthAdapter);

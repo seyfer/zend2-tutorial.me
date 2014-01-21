@@ -38,7 +38,7 @@ $settings = array(
      *
      * Accepted values: boolean true or false
      */
-    //'enable_username' => false,
+//    'enable_username' => false,
 
     /**
      * Authentication Adapters
@@ -102,7 +102,7 @@ $settings = array(
      * Determines if a captcha should be utilized on the user registration form.
      * Default value is false.
      */
-    'use_registration_form_captcha' => false,
+    'use_registration_form_captcha' => true,
     /**
      * Form Captcha Options
      *
@@ -126,8 +126,7 @@ $settings = array(
      *
      * Accepted values: boolean true or false
      */
-    //'use_redirect_parameter_if_present' => true,
-
+    'use_redirect_parameter_if_present' => true,
     /**
      * Sets the view template for the user login widget
      *
@@ -144,8 +143,7 @@ $settings = array(
      * Accepted values: A valid route name within your application
      *
      */
-    //'login_redirect_route' => 'zfcuser',
-
+    'login_redirect_route'            => 'zfcuser',
     /**
      * Logout Redirect Route
      *
@@ -154,8 +152,7 @@ $settings = array(
      * Default value: 'zfcuser/login'
      * Accepted values: A valid route name within your application
      */
-    //'logout_redirect_route' => 'zfcuser/login',
-
+    'logout_redirect_route'           => 'zfcuser/login',
     /**
      * Password Security
      *
