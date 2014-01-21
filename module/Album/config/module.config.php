@@ -1,14 +1,31 @@
 <?php
 
+namespace Album;
+
 return array(
     'controllers'  => array(
         'invokables' => array(
             'Album\Controller\Album' => 'Album\Controller\AlbumController',
+            'AlbumDoc'               => 'Album\Controller\Doctrine\IndexController',
         ),
     ),
     'router'       => array(
         'routes' => array(
-            'album' => array(
+            'dalbum' => array(
+                'type'    => 'segment',
+                'options' => array(
+                    'route'       => '/dalbum[/][:action][/:id]',
+                    'constraints' => array(
+                        'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                        'id'     => '[0-9]+',
+                    ),
+                    'defaults'    => array(
+                        'controller' => 'AlbumDoc',
+                        'action'     => 'index',
+                    ),
+                ),
+            ),
+            'album'  => array(
                 'type'    => 'segment',
                 'options' => array(
                     'route'       => '/album[/][:action][/:id]',
@@ -21,6 +38,23 @@ return array(
                         'action'     => 'index',
                     ),
                 ),
+//                'may_terminate' => true,
+//                'child_routes'  => array(
+//                    'albumd' => array(
+//                        'type'    => 'literal',
+//                        'options' => array(
+//                            'route'       => '/album/doc',
+//                            'constraints' => array(
+//                                'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+//                                'id'     => '[0-9]+',
+//                            ),
+//                            'defaults'    => array(
+//                                'controller' => 'Album\Controller\Doctrine\Index',
+//                                'action'     => 'index',
+//                            ),
+//                        ),
+//                    ),
+//                ),
             ),
         ),
     ),
@@ -29,9 +63,18 @@ return array(
             'album' => __DIR__ . '/../view',
         ),
     ),
-    //настройка - для каких роутов использовать вид админки
-    'adminPath'    => array(
-        "admin_layout_template" => "layout/admin",
-        "routes"                => array("admin", "page"),
-    ),
+    'doctrine'     => array(
+        'driver' => array(
+            __NAMESPACE__ . '_driver' => array(
+                'class' => 'Doctrine\ORM\Mapping\Driver\AnnotationDriver',
+                'cache' => 'array',
+                'paths' => array(__DIR__ . '/../src/' . __NAMESPACE__ . '/Entity')
+            ),
+            'orm_default'             => array(
+                'drivers' => array(
+                    __NAMESPACE__ . '\Entity' => __NAMESPACE__ . '_driver'
+                )
+            )
+        )
+    )
 );

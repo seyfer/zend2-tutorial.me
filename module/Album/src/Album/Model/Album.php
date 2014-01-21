@@ -32,7 +32,6 @@ class Album implements InputFilterAwareInterface {
 
         $arr = [];
         foreach ($props as $prop) {
-//            Debug::dump($prop);
             if ($prop->isPublic()) {
                 $arr[$prop->name] = $this->{$prop->name};
             }

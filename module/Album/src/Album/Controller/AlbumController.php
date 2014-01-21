@@ -2,10 +2,10 @@
 
 namespace Album\Controller;
 
-use Zend\Mvc\Controller\AbstractActionController;
-use Zend\View\Model\ViewModel;
-use Album\Model\Album;
-use Album\Form\AlbumForm;
+use Zend\Mvc\Controller\AbstractActionController,
+    Zend\View\Model\ViewModel;
+use Album\Model\Album,
+    Album\Form\AlbumForm;
 
 class AlbumController extends AbstractActionController {
 
@@ -22,9 +22,7 @@ class AlbumController extends AbstractActionController {
 
     public function indexAction()
     {
-//        return new ViewModel(array(
-//            'albums' => $this->getAlbumTable()->fetchAll(),
-//        ));
+
         // grab the paginator from the AlbumTable
         $paginator = $this->getAlbumTable()->fetchAll(true);
         // set the current page to what has been passed in query string, or to 1 if none set
@@ -33,6 +31,7 @@ class AlbumController extends AbstractActionController {
         $paginator->setItemCountPerPage(10);
 
         return new ViewModel(array(
+//            'albums'    => $this->getAlbumTable()->fetchAll(),
             'paginator' => $paginator
         ));
     }

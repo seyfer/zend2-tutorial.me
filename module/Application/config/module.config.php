@@ -8,6 +8,11 @@
  * @license   http://framework.zend.com/license/new-bsd New BSD License
  */
 return array(
+    //настройка - для каких роутов использовать вид админки
+    'adminPath'       => array(
+        "admin_layout_template" => "layout/admin",
+        "routes"                => array("admin", "page"),
+    ),
     'router'          => array(
         'routes' => array(
             'home'        => array(

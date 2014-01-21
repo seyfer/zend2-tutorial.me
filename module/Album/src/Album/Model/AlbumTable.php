@@ -32,12 +32,14 @@ class AlbumTable {
     {
         if ($paginated) {
             // create a new Select object for the table album
-            $select             = new Select('album');
+            $select = new Select('album');
+
             // create a new result set based on the Album entity
             $resultSetPrototype = new ResultSet();
             $resultSetPrototype->setArrayObjectPrototype(new Album());
+
             // create a new pagination adapter object
-            $paginatorAdapter   = new DbSelect(
+            $paginatorAdapter = new DbSelect(
                     // our configured select object
                     $select,
                     // the adapter to run it against
@@ -45,9 +47,10 @@ class AlbumTable {
                     // the result set to hydrate
                     $resultSetPrototype
             );
-            $paginator          = new Paginator($paginatorAdapter);
+            $paginator        = new Paginator($paginatorAdapter);
             return $paginator;
         }
+
         $resultSet = $this->tableGateway->select();
         return $resultSet;
     }
