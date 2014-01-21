@@ -1,5 +1,4 @@
 <?php
-
 $form = $this->form;
 $form->setAttribute('action', $this->url(
                 'login/process', array(
@@ -23,6 +22,25 @@ echo $this->form()->openTag($form) . "<br>";
 echo $this->formRow($form->get("username")) . "<br>";
 echo $this->formRow($form->get("password")) . "<br>";
 echo $this->formRow($form->get("rememberme")) . "<br>";
+?>
+
+<?php if ($contracts) : ?>
+    <label for="contracts">Выберите договор</label>
+
+    <select name="contracts" id="contracts">
+        <?php
+        foreach ($contracts as $id => $name) {
+            echo "<option value='$id'>$name</option>";
+        }
+        ?>
+    </select>
+    <br>
+
+    <?php
+endif;
+?>
+
+<?php
 echo $this->formSubmit($form->get("submit")) . "<br>";
 //echo $this->formCollection($form) . "<br>";
 echo $this->form()->closeTag();

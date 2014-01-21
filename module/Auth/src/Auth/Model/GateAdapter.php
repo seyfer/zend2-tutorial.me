@@ -9,6 +9,8 @@ use Auth\Model\GateMcrypt;
 use Zend\Stdlib\Parameters;
 use Zend\Http\Request,
     Zend\Http\Client;
+use Zend\Session\SessionManager;
+use Zend\Session\Container;
 
 /**
  * Description of GateAdapter
@@ -16,6 +18,10 @@ use Zend\Http\Request,
  * @author seyfer
  */
 class GateAdapter implements AdapterInterface {
+
+    const STATUS_OK      = 2;
+    const STATUS_ERROR   = 3;
+    const STATUS_WARNING = 1;
 
     /**
      * FOR TEST
@@ -25,17 +31,47 @@ class GateAdapter implements AdapterInterface {
     public $username;
     public $password;
     public $passwordCrypted;
+    public $authStatus;
     private $site      = 137;
     private $contratId;
     private $secretKey = "303409u09ru459r5uhfgu498fu";
     private $url       = "http://gate.razlet.ru/port/querydata";
+    private $gateAuthContainer;
 
     public function __construct($username = null, $password = null)
     {
 //        $this->setIdentity($username)->setCredential($password);
     }
 
-    public function setContrat($contratId)
+    public function getStatus()
+    {
+        return $this->authStatus;
+    }
+
+    protected function setStatus($status)
+    {
+        switch ($status) {
+            case "error" :
+                $this->setStatusError();
+                break;
+            case "warning" :
+                $this->setStatusWarning();
+                break;
+            default : $this->authStatus = NULL;
+        }
+    }
+
+    protected function setStatusWarning()
+    {
+        $this->authStatus = self::STATUS_WARNING;
+    }
+
+    protected function setStatusError()
+    {
+        $this->authStatus = self::STATUS_ERROR;
+    }
+
+    public function setContract($contratId)
     {
         $this->contratId = $contratId;
     }
@@ -43,6 +79,11 @@ class GateAdapter implements AdapterInterface {
     public function getContract()
     {
         return $this->contratId;
+    }
+
+    public function getAvailableContracts()
+    {
+        return $this->getAuthContainer()->contracts;
     }
 
     public function setIdentity($username)
@@ -53,8 +94,11 @@ class GateAdapter implements AdapterInterface {
 
     public function setCredential($password)
     {
-        $this->password = $password;
-        $this->setPasswordCrypted();
+        if ($password) {
+            $this->password = $password;
+            $this->setPasswordCrypted();
+        }
+
         return $this;
     }
 
@@ -79,7 +123,7 @@ class GateAdapter implements AdapterInterface {
      */
     protected function sendPost(Parameters $post)
     {
-        \Zend\Debug\Debug::dump(__METHOD__);
+//        \Application\Debug::dump(__METHOD__);
 
         $authRequest = new Request();
         $authRequest->setMethod(Request::METHOD_POST);
@@ -92,18 +136,17 @@ class GateAdapter implements AdapterInterface {
         $client = new Client();
         $client->setAdapter('Zend\Http\Client\Adapter\Curl');
 
-        \Zend\Debug\Debug::dump($authRequest->getPost()->toArray());
+//        \Application\Debug::dump($authRequest->getPost()->toArray());
 
         try {
             $response = $client->send($authRequest);
             $result   = $response->getBody();
 
-            \Zend\Debug\Debug::dump($result);
+//            \Application\Debug::dump($result);
 
             return $result;
         }
         catch (\Exception $exc) {
-            \Zend\Debug\Debug::dump($exc->getMessage());
             throw $exc;
         }
     }
@@ -115,7 +158,7 @@ class GateAdapter implements AdapterInterface {
      */
     protected function actionLoginAccount()
     {
-        \Zend\Debug\Debug::dump(__METHOD__);
+//        \Application\Debug::dump(__METHOD__);
 
         $authRequestParams = array(
             'type' => 'LoginAccount',
@@ -128,33 +171,64 @@ class GateAdapter implements AdapterInterface {
 
         $post = new Parameters($authRequestParams);
 
-        try {
-            $result = $this->sendPost($post);
-            \Zend\Debug\Debug::dump($result);
-        }
-        catch (\Exception $exc) {
-            throw $exc;
-        }
+        $result = $this->sendPost($post);
+//        \Application\Debug::dump($result);
 
         $resultUnser = unserialize($result);
-        \Zend\Debug\Debug::dump($resultUnser);
-
+//        \Application\Debug::dump($resultUnser, "resultUnser");
         //ошибка это конец
         if ($resultUnser['error']) {
 
             $error = iconv("cp1251", "utf8", $resultUnser['error']);
-            \Zend\Debug\Debug::dump($error);
 
+            $this->setStatusError();
             throw new \Exception($error);
         }
 
         //выбрать контракт
         if ($resultUnser['warning']) {
-            $warning = iconv("cp1251", "utf8", $resultUnser['error']);
-            \Zend\Debug\Debug::dump($warning);
+
+            $warning = iconv("cp1251", "utf8", $resultUnser['warning']);
+            $this->setStatusWarning();
+
+            $this->setAvailableContracts($resultUnser['contracts']);
+
+            \Application\Debug::dump($warning);
 
             throw new \Exception($warning);
         }
+
+        $this->getAuthContainer()->user = $resultUnser;
+
+        return TRUE;
+    }
+
+    private function setAvailableContracts($contracts)
+    {
+        foreach ($contracts as $id => $contract) {
+            $contractEnc[$id] = iconv("cp1251", "utf8", $contract);
+        }
+
+        $this->getAuthContainer()->contracts = $contractEnc;
+    }
+
+    public function clearAvailableContracts()
+    {
+        $this->getAuthContainer()->contracts = NULL;
+    }
+
+    private function getAuthContainer()
+    {
+        if (!$this->gateAuthContainer) {
+            $this->gateAuthContainer = new Container("gateAuth");
+        }
+
+        return $this->gateAuthContainer;
+    }
+
+    public function actionLogoutAccount()
+    {
+        $this->getAuthContainer()->user = NULL;
     }
 
     /**
@@ -164,23 +238,18 @@ class GateAdapter implements AdapterInterface {
      */
     public function authenticate()
     {
-        \Zend\Debug\Debug::dump(__METHOD__);
+//        \Application\Debug::dump(__METHOD__);
 
         try {
 
-            $this->actionLoginAccount();
+            $result = $this->actionLoginAccount();
 
-//            \Zend\Debug\Debug::dump($this->username, $this->password);
-//            if ($this->username == "seyfer" &&
-//                    $this->password == "sessfsf") {
-//
-//                $identity = "user";
-//                $code     = Result::SUCCESS;
-//                return new Result($code, $identity);
-//            }
-//            else {
-//                throw new \Exception("Authentication Failed");
-//            }
+            if ($result) {
+
+                $identity = "user";
+                $code     = Result::SUCCESS;
+                return new Result($code, $identity, array("Success"));
+            }
 
             throw new \Exception("Authentication Failed");
         }

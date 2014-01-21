@@ -20,14 +20,14 @@ class AuthController extends AbstractActionController {
 
     public function getAuthService()
     {
-        \Zend\Debug\Debug::dump(__METHOD__);
+//        \Application\Debug::dump(__METHOD__);
 
         if (!$this->authservice) {
             $this->authservice = $this->getServiceLocator()
                     ->get('AuthService');
         }
 
-        \Zend\Debug\Debug::dump(get_class($this->authservice->getAdapter()));
+//        \Zend\Debug\Debug::dump(get_class($this->authservice->getAdapter()));
 
         return $this->authservice;
     }
@@ -53,18 +53,35 @@ class AuthController extends AbstractActionController {
         return $this->form;
     }
 
+    private function redirectToSuccess()
+    {
+        \Application\Debug::dump(__METHOD__);
+
+        $adapter = $this->getAuthService()->getAdapter();
+        $adapter->clearAvailableContracts();
+
+        $this->redirect()->toUrl('/success');
+    }
+
     public function loginAction()
     {
         //if already login, redirect to success page
         if ($this->getAuthService()->hasIdentity()) {
-            return $this->redirect()->toRoute('success');
+            $this->redirectToSuccess();
         }
 
         $form = $this->getForm();
 
+        if ($this->params()->fromQuery("warning")) {
+            $adapter = $this->getAuthService()->getAdapter();
+
+            $contracts = $adapter->getAvailableContracts();
+        }
+
         return array(
-            'form'     => $form,
-            'messages' => $this->flashmessenger()->getMessages()
+            'form'      => $form,
+            'contracts' => $contracts,
+            'messages'  => $this->flashmessenger()->getMessages()
         );
     }
 
@@ -73,49 +90,72 @@ class AuthController extends AbstractActionController {
         $form     = $this->getForm();
         $redirect = 'login';
 
+        \Application\Debug::dump($this->getRequest()->getPost());
+
         $request = $this->getRequest();
         if ($request->isPost()) {
             $form->setData($request->getPost());
 
             if ($form->isValid()) {
 
-                //check authentication...
-                $this->getAuthService()->getAdapter()
-                        ->setIdentity($request->getPost('username'))
-                        ->setCredential($request->getPost('password'));
+                try {
 
-                $result = $this->getAuthService()->authenticate();
-                exit();
+                    //check authentication...
+                    $this->getAuthService()->getAdapter()
+                            ->setIdentity($request->getPost('username'))
+                            ->setCredential($request->getPost('password'))
+                            ->setContract($request->getPost('contracts'));
 
-                foreach ($result->getMessages() as $message) {
-                    //save message temporary into flashmessenger
-                    $this->flashmessenger()->addMessage($message);
-                }
+                    $result = $this->getAuthService()->authenticate();
 
-                if ($result->isValid()) {
-                    $redirect = 'success';
-
-                    //check if it has rememberMe :
-                    if ($request->getPost('rememberme') == 1) {
-                        $this->getSessionStorage()
-                                ->setRememberMe(1);
-
-                        //set storage again
-                        $this->getAuthService()->setStorage($this->getSessionStorage());
+                    foreach ($result->getMessages() as $message) {
+                        //save message temporary into flashmessenger
+                        $this->flashmessenger()->addMessage($message);
                     }
 
-                    $this->getAuthService()
-                            ->getStorage()->write($request->getPost('username'));
+                    if ($result->isValid()) {
+                        //check if it has rememberMe :
+                        if ($request->getPost('rememberme') == 1) {
+
+                            $this->getSessionStorage()
+                                    ->setRememberMe(1);
+
+                            //set storage again
+                            $this->getAuthService()
+                                    ->setStorage($this->getSessionStorage());
+                        }
+
+                        $this->getAuthService()
+                                ->getStorage()->write($request->getPost('username'));
+
+                        $this->redirectToSuccess();
+                    }
+                    else {
+                        $adapter = $this->getAuthService()->getAdapter();
+                        $code    = $adapter->getStatus();
+
+                        if ($code == \Auth\Model\GateAdapter::STATUS_WARNING) {
+                            return $this->redirect()->toRoute($redirect, array(), array(
+                                        "query" => array(
+                                            "warning" => "1",
+                                        )
+                            ));
+                        }
+                    }
+                }
+                catch (\Exception $e) {
+                    \Application\Debug::dump($e->getMessage());
                 }
             }
         }
 
-        return $this->redirect()->toRoute($redirect);
+        $this->redirect()->toRoute($redirect);
     }
 
     public function logoutAction()
     {
-        $this->getSessionStorage()->forgetMe();
+        $this->
+                getSessionStorage()->forgetMe();
         $this->getAuthService()->clearIdentity();
 
         $this->flashmessenger()->addMessage("You've been logged out");
