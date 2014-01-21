@@ -20,10 +20,14 @@ class AuthController extends AbstractActionController {
 
     public function getAuthService()
     {
+        \Zend\Debug\Debug::dump(__METHOD__);
+
         if (!$this->authservice) {
             $this->authservice = $this->getServiceLocator()
                     ->get('AuthService');
         }
+
+        \Zend\Debug\Debug::dump(get_class($this->authservice->getAdapter()));
 
         return $this->authservice;
     }
@@ -72,13 +76,17 @@ class AuthController extends AbstractActionController {
         $request = $this->getRequest();
         if ($request->isPost()) {
             $form->setData($request->getPost());
+
             if ($form->isValid()) {
+
                 //check authentication...
                 $this->getAuthService()->getAdapter()
                         ->setIdentity($request->getPost('username'))
                         ->setCredential($request->getPost('password'));
 
                 $result = $this->getAuthService()->authenticate();
+                exit();
+
                 foreach ($result->getMessages() as $message) {
                     //save message temporary into flashmessenger
                     $this->flashmessenger()->addMessage($message);
@@ -86,13 +94,16 @@ class AuthController extends AbstractActionController {
 
                 if ($result->isValid()) {
                     $redirect = 'success';
+
                     //check if it has rememberMe :
                     if ($request->getPost('rememberme') == 1) {
                         $this->getSessionStorage()
                                 ->setRememberMe(1);
+
                         //set storage again
                         $this->getAuthService()->setStorage($this->getSessionStorage());
                     }
+
                     $this->getAuthService()
                             ->getStorage()->write($request->getPost('username'));
                 }
