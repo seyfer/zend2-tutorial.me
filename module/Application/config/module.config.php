@@ -210,43 +210,6 @@ $config = array(
     ),
     'navigation'      => array(
         'default' => array(),
-
-        'admin'   => array(
-            array(
-                'label' => 'Админка',
-                'route' => 'admin',
-            ),
-            array(
-                'label' => 'Страницы',
-                'route' => 'page',
-                'pages' => array(
-                    array(
-                        'label'  => 'Добавить',
-                        'route'  => 'page',
-                        'action' => 'add',
-                    ),
-                    array(
-                        'label'  => 'Редактировать',
-                        'route'  => 'page',
-                        'action' => 'edit',
-                    ),
-                    array(
-                        'label'  => 'Удалить',
-                        'route'  => 'page',
-                        'action' => 'delete',
-                    ),
-                ),
-            ),
-            array(
-                'label' => 'На главную',
-                'route' => 'home',
-            ),
-            array(
-                "label"  => "Выйти",
-                'route'  => "login/process",
-                'action' => "logout",
-            ),
-        ),
     ),
 );
 

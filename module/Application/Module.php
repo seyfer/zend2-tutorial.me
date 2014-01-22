@@ -222,7 +222,7 @@ class Module {
 
             return $sessionManager;
         },
-                'index_navigation' => function ($sm) {
+                'index_navigation' => function (\Zend\ServiceManager\ServiceManager $sm) {
 
             $pages = array(
                 array(
@@ -295,8 +295,51 @@ class Module {
             return $navigation;
         },
                 'admin_navigation' => function ($sm) {
-                
-                },
+            $pages = array(
+//                array(
+//                    'label' => 'Админка',
+//                    'route' => 'admin',
+//                ),
+                array(
+                    'label' => 'Страницы',
+                    'route' => 'page',
+                    'pages' => array(
+                        array(
+                            'label'  => 'Добавить',
+                            'route'  => 'page',
+                            'action' => 'add',
+                        ),
+                        array(
+                            'label'  => 'Редактировать',
+                            'route'  => 'page',
+                            'action' => 'edit',
+                        ),
+                        array(
+                            'label'  => 'Удалить',
+                            'route'  => 'page',
+                            'action' => 'delete',
+                        ),
+                    ),
+                ),
+                array(
+                    'label' => 'На главную',
+                    'route' => 'home',
+                ),
+                array(
+                    "label"  => "Выйти",
+                    'route'  => "login/process",
+                    'action' => "logout",
+                ),
+            );
+
+            $navigation = new \Zend\Navigation\Navigation($pages);
+
+            $router     = $sm->get('router');
+            $module     = new \Application\Navigation\Injecter();
+            $navigation = $module->injectRouter($navigation, $router);
+
+            return $navigation;
+        },
             ),
         );
     }

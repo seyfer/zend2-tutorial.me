@@ -63,28 +63,6 @@
                             ->setUlClass('nav navbar-nav');
 //
                     ?>
-
-                    <ul class="nav navbar-nav">
-                        <li class="menu-item">
-                            <?php
-                            $store    = new \Auth\Model\AuthStorage("auth_storage");
-                            $username = $store->read();
-
-                            if ($username) {
-                                echo '<a href="' . $this->url("login/process", array(
-                                    "action" => "logout"))
-                                . '">' . $this->translate('Выйти') . "</a>";
-                            }
-                            else {
-                                echo '<a href="' . $this->url("login/process", array(
-                                    "action" => "login"))
-                                . '">' . $this->translate('Войти') . "</a>";
-                            }
-                            ?>
-
-                        </li>
-
-                    </ul>
                 </div><!--/.nav-collapse -->
             </div>
         </nav>
