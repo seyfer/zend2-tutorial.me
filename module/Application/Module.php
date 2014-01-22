@@ -229,27 +229,6 @@ class Module {
                     'label' => 'Главная',
                     'route' => 'home',
                 ),
-                array(
-                    'label' => 'Альбом',
-                    'route' => 'album',
-                    'pages' => array(
-                        array(
-                            'label'  => 'Добавить',
-                            'route'  => 'album',
-                            'action' => 'add',
-                        ),
-                        array(
-                            'label'  => 'Редактировать',
-                            'route'  => 'album',
-                            'action' => 'edit',
-                        ),
-                        array(
-                            'label'  => 'Удалить',
-                            'route'  => 'album',
-                            'action' => 'delete',
-                        ),
-                    ),
-                ),
             );
 
             $navigation = new \Zend\Navigation\Navigation($pages);
@@ -317,6 +296,27 @@ class Module {
                         array(
                             'label'  => 'Удалить',
                             'route'  => 'page',
+                            'action' => 'delete',
+                        ),
+                    ),
+                ),
+                array(
+                    'label' => 'Альбомы',
+                    'route' => 'album',
+                    'pages' => array(
+                        array(
+                            'label'  => 'Добавить',
+                            'route'  => 'album',
+                            'action' => 'add',
+                        ),
+                        array(
+                            'label'  => 'Редактировать',
+                            'route'  => 'album',
+                            'action' => 'edit',
+                        ),
+                        array(
+                            'label'  => 'Удалить',
+                            'route'  => 'album',
                             'action' => 'delete',
                         ),
                     ),

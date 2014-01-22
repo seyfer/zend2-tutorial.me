@@ -15,7 +15,7 @@ $config = array(
     ),
     'router'          => array(
         'routes' => array(
-            'home'        => array(
+            'home'  => array(
                 'type'          => 'Zend\Mvc\Router\Http\Literal',
                 'options'       => array(
                     'route'    => '/',
@@ -39,7 +39,7 @@ $config = array(
                     ),
                 ),
             ),
-            'admin'       => array(
+            'admin' => array(
                 'type'    => 'Zend\Mvc\Router\Http\Literal',
                 'options' => array(
                     'route'    => '/admin',
@@ -80,7 +80,7 @@ $config = array(
 //                    ),
 //                ),
             ),
-            'page'        => array(
+            'page'  => array(
                 'type'          => 'Literal',
                 'options'       => array(
                     'route'       => '/admin/page',
@@ -106,6 +106,34 @@ $config = array(
                         ),
                         'defaults'    => array(
                         ),
+                    ),
+                ),
+            ),
+            'dalbum' => array(
+                'type'    => 'segment',
+                'options' => array(
+                    'route'       => '/admin/dalbum[/][:action][/:id]',
+                    'constraints' => array(
+                        'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                        'id'     => '[0-9]+',
+                    ),
+                    'defaults'    => array(
+                        'controller' => 'AlbumDoc',
+                        'action'     => 'index',
+                    ),
+                ),
+            ),
+            'album'  => array(
+                'type'    => 'segment',
+                'options' => array(
+                    'route'       => '/admin/album[/][:action][/:id]',
+                    'constraints' => array(
+                        'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                        'id'     => '[0-9]+',
+                    ),
+                    'defaults'    => array(
+                        'controller' => 'Album\Controller\Album',
+                        'action'     => 'index',
                     ),
                 ),
             ),
@@ -162,7 +190,7 @@ $config = array(
             'translator' => 'MvcTranslator',
         ),
         'factories'          => array(
-            'navigation'       => 'Zend\Navigation\Service\DefaultNavigationFactory',
+            'navigation' => 'Zend\Navigation\Service\DefaultNavigationFactory',
 //            'admin_navigation' => 'Application\Navigation\Service\AdminNavigationFactory',
 //            'index_navigation' => 'Application\Navigation\Service\IndexNavigationFactory',
         ),
@@ -208,9 +236,9 @@ $config = array(
             'routes' => array(),
         ),
     ),
-    'navigation'      => array(
-        'default' => array(),
-    ),
+//    'navigation'      => array(
+//        'default' => array(),
+//    ),
 );
 
 return $config;
