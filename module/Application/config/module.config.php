@@ -11,11 +11,11 @@ $config = array(
     //настройка - для каких роутов использовать вид админки
     'adminPath'       => array(
         "admin_layout_template" => "layout/admin",
-        "routes"                => array("admin", "page"),
+        "routes"                => array("admin", "page", 'album', 'dalbum'),
     ),
     'router'          => array(
         'routes' => array(
-            'home'  => array(
+            'home'        => array(
                 'type'          => 'Zend\Mvc\Router\Http\Literal',
                 'options'       => array(
                     'route'    => '/',
@@ -39,7 +39,7 @@ $config = array(
                     ),
                 ),
             ),
-            'admin' => array(
+            'admin'       => array(
                 'type'    => 'Zend\Mvc\Router\Http\Literal',
                 'options' => array(
                     'route'    => '/admin',
@@ -80,7 +80,7 @@ $config = array(
 //                    ),
 //                ),
             ),
-            'page'  => array(
+            'page'        => array(
                 'type'          => 'Literal',
                 'options'       => array(
                     'route'       => '/admin/page',
@@ -109,7 +109,7 @@ $config = array(
                     ),
                 ),
             ),
-            'dalbum' => array(
+            'dalbum'      => array(
                 'type'    => 'segment',
                 'options' => array(
                     'route'       => '/admin/dalbum[/][:action][/:id]',
@@ -123,7 +123,7 @@ $config = array(
                     ),
                 ),
             ),
-            'album'  => array(
+            'album'       => array(
                 'type'    => 'segment',
                 'options' => array(
                     'route'       => '/admin/album[/][:action][/:id]',
