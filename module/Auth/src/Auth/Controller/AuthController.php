@@ -76,6 +76,8 @@ class AuthController extends AbstractActionController {
             $adapter = $this->getAuthService()->getAdapter();
 
             $contracts = $adapter->getAvailableContracts();
+
+//            \Application\Debug::dump($_SESSION);
         }
 
         return array(

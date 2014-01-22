@@ -7,7 +7,7 @@
  * @copyright Copyright (c) 2005-2013 Zend Technologies USA Inc. (http://www.zend.com)
  * @license   http://framework.zend.com/license/new-bsd New BSD License
  */
-return array(
+$config = array(
     //настройка - для каких роутов использовать вид админки
     'adminPath'       => array(
         "admin_layout_template" => "layout/admin",
@@ -162,8 +162,9 @@ return array(
             'translator' => 'MvcTranslator',
         ),
         'factories'          => array(
-//            'translator' => 'Zend\I18n\Translator\TranslatorServiceFactory',
-            'navigation' => 'Zend\Navigation\Service\DefaultNavigationFactory',
+            'navigation'       => 'Zend\Navigation\Service\DefaultNavigationFactory',
+//            'admin_navigation' => 'Application\Navigation\Service\AdminNavigationFactory',
+//            'index_navigation' => 'Application\Navigation\Service\IndexNavigationFactory',
         ),
     ),
     'translator'      => array(
@@ -208,32 +209,45 @@ return array(
         ),
     ),
     'navigation'      => array(
-        'default' => array(
+        'default' => array(),
+
+        'admin'   => array(
             array(
-                'label' => 'Home',
-                'route' => 'home',
+                'label' => 'Админка',
+                'route' => 'admin',
             ),
             array(
-                'label' => 'Album',
-                'route' => 'album',
+                'label' => 'Страницы',
+                'route' => 'page',
                 'pages' => array(
                     array(
-                        'label'  => 'Add',
-                        'route'  => 'album',
+                        'label'  => 'Добавить',
+                        'route'  => 'page',
                         'action' => 'add',
                     ),
                     array(
-                        'label'  => 'Edit',
-                        'route'  => 'album',
+                        'label'  => 'Редактировать',
+                        'route'  => 'page',
                         'action' => 'edit',
                     ),
                     array(
-                        'label'  => 'Delete',
-                        'route'  => 'album',
+                        'label'  => 'Удалить',
+                        'route'  => 'page',
                         'action' => 'delete',
                     ),
                 ),
             ),
+            array(
+                'label' => 'На главную',
+                'route' => 'home',
+            ),
+            array(
+                "label"  => "Выйти",
+                'route'  => "login/process",
+                'action' => "logout",
+            ),
         ),
     ),
 );
+
+return $config;

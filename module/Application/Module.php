@@ -222,6 +222,81 @@ class Module {
 
             return $sessionManager;
         },
+                'index_navigation' => function ($sm) {
+
+            $pages = array(
+                array(
+                    'label' => 'Главная',
+                    'route' => 'home',
+                ),
+                array(
+                    'label' => 'Альбом',
+                    'route' => 'album',
+                    'pages' => array(
+                        array(
+                            'label'  => 'Добавить',
+                            'route'  => 'album',
+                            'action' => 'add',
+                        ),
+                        array(
+                            'label'  => 'Редактировать',
+                            'route'  => 'album',
+                            'action' => 'edit',
+                        ),
+                        array(
+                            'label'  => 'Удалить',
+                            'route'  => 'album',
+                            'action' => 'delete',
+                        ),
+                    ),
+                ),
+            );
+
+            $navigation = new \Zend\Navigation\Navigation($pages);
+
+            $store    = new \Auth\Model\AuthStorage("auth_storage");
+            $username = $store->read();
+
+            if (!$username) {
+                $pageAuth = new \Zend\Navigation\Page\Mvc(array(
+                    "label" => "Войти",
+                    'route' => "login",
+                    "pages" => array(
+                        array(
+                            "label"  => "Войти",
+                            'route'  => "login/login",
+                            'action' => 'login',
+                        ),
+                    )
+                ));
+
+                $navigation->addPage($pageAuth);
+            }
+            else {
+                $pageAdmin  = new \Zend\Navigation\Page\Mvc(array(
+                    'label' => 'Админка',
+                    'route' => 'admin',
+                        )
+                );
+                $pageLogout = new \Zend\Navigation\Page\Mvc(array(
+                    "label"  => "Выйти",
+                    'route'  => "login/process",
+                    'action' => "logout",
+                ));
+
+                $navigation->addPage($pageAdmin);
+                $navigation->addPage($pageLogout);
+            }
+
+            $router     = $sm->get('router');
+            $module     = new \Application\Navigation\Injecter();
+            $navigation = $module->injectRouter($navigation, $router);
+
+            return $navigation;
+        },
+                'admin_navigation' => function ($sm) {
+                
+                },
             ),
         );
     }

@@ -53,58 +53,37 @@
                              alt="Zend Framework 2"/>&nbsp;
                     <?php echo $this->translate('Skeleton Application') ?>
                     </a>-->
+
+                </div>
+                <div class="collapse navbar-collapse">
+
                     <?php
-                    // <-- Add this !!
-                    echo $this->navigation('navigation')->menu()
+                    echo $this->navigation("index_navigation")
+                            ->menu()
                             ->setMinDepth(0)
                             ->setMaxDepth(0)
                             ->setUlClass('nav navbar-nav');
+//
                     ?>
-                </div>
-                <div class="collapse navbar-collapse">
-                    <ul class="nav navbar-nav">
-                        <li class="active"><a href="<?php echo $this->url('home') ?>">
-                                <?php echo $this->translate('Главная') ?></a>
-                        </li>
-
-                        <?php
-                        $store    = new \Auth\Model\AuthStorage("auth_storage");
-                        $username = $store->read();
-
-                        if ($username) {
-
-                            echo '<li class=""><a href="' . $this->url("admin")
-                            . '">' . $this->translate('Админка') . "</a></li>";
-
-                            echo '<li class=""><a href="' . $this->url("login/process", array(
-                                "action" => "logout"))
-                            . '">' . $this->translate('Выйти') . "</a></li>";
-                        }
-                        else {
-                            echo '<li class=""><a href="' . $this->url("login/process", array(
-                                "action" => "login"))
-                            . '">' . $this->translate('Войти') . "</a></li>";
-                        }
-                        ?>
-
-
-
-                    </ul>
                 </div><!--/.nav-collapse -->
             </div>
         </nav>
         <div class="container">
             <?php
-            echo $this->navigation('navigation')->breadcrumbs()->setMinDepth(0)
+            echo $this->navigation('index_navigation')->breadcrumbs()->setMinDepth(0)
                     ->setPartial(array('partial/breadcrumb.phtml', 'Application'));
             ?>
+
             <?php echo $this->content; ?>
             <hr>
+
             <footer>
                 <p>&copy; <?php echo date('Y') ?> by Razlet.RU
                     <?php echo $this->translate('All rights reserved.') ?></p>
             </footer>
         </div> <!-- /container -->
+
         <?php echo $this->inlineScript() ?>
+
     </body>
 </html>
