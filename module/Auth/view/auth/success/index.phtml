@@ -1,4 +1,10 @@
-Login Success.
-<br />
+<div class="jumbotron">
+    <h1>Login Success.</h1>
+    <p>
+        <?php
+        echo $this->partial("partial/login_logout.phtml");
+        ?>
 
-<a href="<?php echo $this->url('login/process', array('action' => 'logout')); ?>">Logout</a>
+    </p>
+    <br />
+</div>

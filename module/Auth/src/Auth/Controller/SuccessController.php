@@ -10,14 +10,14 @@ use Zend\View\Model\ViewModel;
  *
  * @author seyfer
  */
-class SuccessController extends AbstractActionController {
+class SuccessController extends BaseController {
 
     public function indexAction()
     {
-//        \Zend\Debug\Debug::dump($_SESSION);
+//        \Application\Debug::dump($_SESSION);
+//        \Application\Debug::dump($_COOKIE);
 
-        if (!$this->getServiceLocator()
-                        ->get('AuthService')->hasIdentity()) {
+        if (!$this->getAuthService()->hasIdentity()) {
 
             return $this->redirect()->toRoute('login');
         }

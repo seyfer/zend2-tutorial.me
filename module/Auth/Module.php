@@ -5,7 +5,8 @@ namespace Auth;
 use Zend\ModuleManager\Feature\AutoloaderProviderInterface,
     Zend\Authentication\Storage,
     Zend\Authentication\AuthenticationService,
-    Zend\Authentication\Adapter\DbTable as DbTableAuthAdapter;
+    Zend\Authentication\Adapter\DbTable as DbTableAuthAdapter,
+    Zend\Mvc\MvcEvent;
 use Auth\Model\GateAdapter;
 
 /**
@@ -14,6 +15,20 @@ use Auth\Model\GateAdapter;
  * @author seyfer
  */
 class Module implements AutoloaderProviderInterface {
+
+    public function onBootstrap(MvcEvent $e)
+    {
+        $sm = $e->getApplication()->getServiceManager();
+
+        $manager = $sm->get('ModuleManager');
+        $modules = $manager->getLoadedModules();
+
+//        \Application\Debug::dump($modules);
+
+        if (!array_key_exists("Sender", $modules)) {
+            throw new \Exception(__METHOD__ . " need Sender module");
+        }
+    }
 
     public function getAutoloaderConfig()
     {

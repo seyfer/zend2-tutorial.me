@@ -5,43 +5,22 @@ namespace Auth\Controller;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\Form\Annotation\AnnotationBuilder;
 use Zend\View\Model\ViewModel;
-use Auth\Model\User;
+use Auth\Entity\User;
 
 /**
  * Description of AuthController
  *
  * @author seyfer
  */
-class AuthController extends AbstractActionController {
+class AuthController extends BaseController
+{
 
     protected $form;
-    protected $storage;
-    protected $authservice;
 
-    public function getAuthService()
-    {
-//        \Application\Debug::dump(__METHOD__);
-
-        if (!$this->authservice) {
-            $this->authservice = $this->getServiceLocator()
-                    ->get('AuthService');
-        }
-
-//        \Zend\Debug\Debug::dump(get_class($this->authservice->getAdapter()));
-
-        return $this->authservice;
-    }
-
-    public function getSessionStorage()
-    {
-        if (!$this->storage) {
-            $this->storage = $this->getServiceLocator()
-                    ->get('Auth\Model\AuthStorage');
-        }
-
-        return $this->storage;
-    }
-
+    /**
+     * получить форму с аннотаций
+     * @return type
+     */
     public function getForm()
     {
         if (!$this->form) {
@@ -53,6 +32,9 @@ class AuthController extends AbstractActionController {
         return $this->form;
     }
 
+    /**
+     * в случае успеха - редирект
+     */
     private function redirectToSuccess()
     {
         \Application\Debug::dump(__METHOD__);
@@ -63,6 +45,10 @@ class AuthController extends AbstractActionController {
         $this->redirect()->toUrl('/success');
     }
 
+    /**
+     * форма авторизации
+     * @return type
+     */
     public function loginAction()
     {
         //if already login, redirect to success page
@@ -87,12 +73,17 @@ class AuthController extends AbstractActionController {
         );
     }
 
+    /**
+     * экшн авторизации
+     * @return type
+     */
     public function authenticateAction()
     {
         $form     = $this->getForm();
         $redirect = 'login';
 
-        \Application\Debug::dump($this->getRequest()->getPost());
+//        \Application\Debug::dump($this->getRequest()->getPost());
+//        exit();
 
         $request = $this->getRequest();
         if ($request->isPost()) {
@@ -131,8 +122,8 @@ class AuthController extends AbstractActionController {
                                 ->getStorage()->write($request->getPost('username'));
 
                         $this->redirectToSuccess();
-                    }
-                    else {
+                    } else {
+                        
                         $adapter = $this->getAuthService()->getAdapter();
                         $code    = $adapter->getStatus();
 
@@ -144,8 +135,7 @@ class AuthController extends AbstractActionController {
                             ));
                         }
                     }
-                }
-                catch (\Exception $e) {
+                } catch (\Exception $e) {
                     \Application\Debug::dump($e->getMessage());
                 }
             }
@@ -156,11 +146,10 @@ class AuthController extends AbstractActionController {
 
     public function logoutAction()
     {
-        $this->
-                getSessionStorage()->forgetMe();
+        $this->getSessionStorage()->forgetMe();
         $this->getAuthService()->clearIdentity();
 
-        $this->flashmessenger()->addMessage("You've been logged out");
+        $this->flashmessenger()->addMessage("Вы вышли из системы");
         return $this->redirect()->toRoute('login');
     }
 

@@ -1,28 +1,32 @@
 <?php
-$form = $this->form;
 $form->setAttribute('action', $this->url(
                 'login/process', array(
             'action' => 'authenticate',
                 )
 ));
-
-//$formRenderer = $this->formRenderer($form, 'renderer.bootstrap', 'horizontal');
-//$formRenderer->prepare();
-//
-//echo $formRenderer->openTag($form);
-//echo $formRenderer->formRow($form->get("username")) . "<br>";
-//echo $formRenderer->formRow($form->get("password")) . "<br>";
-//echo $formRenderer->formRow($form->get("rememberme")) . "<br>";
-//echo $formRenderer->formCollection($form);
-//echo $formRenderer->closeTag();
-
 $form->prepare();
 
-echo $this->form()->openTag($form) . "<br>";
-echo $this->formRow($form->get("username")) . "<br>";
-echo $this->formRow($form->get("password")) . "<br>";
-echo $this->formRow($form->get("rememberme")) . "<br>";
+echo $this->form()->openTag($form->setAttribute("role", "form")) . "<br>";
 ?>
+<div class = "form-group">
+    <?php
+    echo $this->formRow($form->get("username")
+                    ->setAttribute("class", "form-control")) . "<br>";
+    ?>
+</div>
+<div class = "form-group">
+    <?php
+    echo $this->formRow($form->get("password")
+                    ->setAttribute("class", "form-control")) . "<br>";
+    ?>
+</div>
+<div class="checkbox">
+    <label>
+        <?php
+        echo $this->formRow($form->get("rememberme")) . "<br>";
+        ?>
+    </label>
+</div>
 
 <?php if ($contracts) : ?>
     <label for="contracts">Выберите договор</label>
@@ -41,14 +45,14 @@ endif;
 ?>
 
 <?php
-echo $this->formSubmit($form->get("submit")) . "<br>";
+echo $this->formSubmit($form->get("submit")
+                ->setAttribute('class', 'btn btn-primary')) . "<br>";
 //echo $this->formCollection($form) . "<br>";
 echo $this->form()->closeTag();
 
 if ($this->messages) {
-    echo '<ul>';
+
     foreach ($this->messages as $message) {
-        echo '<li>' . $message . '</li>';
+        echo '<div class="alert alert-warning">' . $message . '</div>';
     }
-    echo '</ul>';
 }

@@ -9,20 +9,28 @@ use Zend\Authentication\Storage;
  *
  * @author seyfer
  */
-class AuthStorage extends Storage\Session {
+class AuthStorage extends Storage\Session
+{
 
     /**
-     * minutes
+     * minutes by default
      * @var type
      */
     private $expTime;
 
-    public function setRememberMe($rememberMe = 0, $time = 1209600)
+    public function __construct($namespace = null, $member = null, \Zend\Session\ManagerInterface $manager = null)
     {
-        $this->expTime = 15 * 60;
+        parent::__construct($namespace, $member, $manager);
+
+        $this->expTime = 2 * 60 * 60;
+    }
+
+    public function setRememberMe($rememberMe = 0, $time = 0)
+    {
+        $expTime = $time ? $time : $this->expTime;
 
         if ($rememberMe == 1) {
-            $this->session->getManager()->rememberMe($this->expTime);
+            $this->session->getManager()->rememberMe($expTime);
         }
     }
 

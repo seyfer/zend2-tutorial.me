@@ -3,13 +3,12 @@
 namespace Auth\Model;
 
 use Zend\Authentication\Adapter\AdapterInterface,
-    Zend\Authentication\Result,
-    Zend\Db\Adapter\Adapter;
+    Zend\Authentication\Result;
 use Auth\Model\GateMcrypt;
+use Sender\Sender;
 use Zend\Stdlib\Parameters;
 use Zend\Http\Request,
     Zend\Http\Client;
-use Zend\Session\SessionManager;
 use Zend\Session\Container;
 
 /**
@@ -17,7 +16,8 @@ use Zend\Session\Container;
  *
  * @author seyfer
  */
-class GateAdapter implements AdapterInterface {
+class GateAdapter implements AdapterInterface
+{
 
     const STATUS_OK      = 2;
     const STATUS_ERROR   = 3;
@@ -81,6 +81,10 @@ class GateAdapter implements AdapterInterface {
         return $this->contratId;
     }
 
+    /**
+     * контракты из сессии
+     * @return type
+     */
     public function getAvailableContracts()
     {
         return $this->getAuthContainer()->contracts;
@@ -116,42 +120,6 @@ class GateAdapter implements AdapterInterface {
     }
 
     /**
-     * отправить пост
-     * @param \Zend\Stdlib\Parameters $post
-     * @return type
-     * @throws \Auth\Model\Exception
-     */
-    protected function sendPost(Parameters $post)
-    {
-//        \Application\Debug::dump(__METHOD__);
-
-        $authRequest = new Request();
-        $authRequest->setMethod(Request::METHOD_POST);
-        $authRequest->setPost($post);
-        $authRequest->setUri($this->url);
-        $authRequest->getHeaders()->addHeaders([
-            'Content-Type' => 'application/x-www-form-urlencoded; charset=UTF-8'
-        ]);
-
-        $client = new Client();
-        $client->setAdapter('Zend\Http\Client\Adapter\Curl');
-
-//        \Application\Debug::dump($authRequest->getPost()->toArray());
-
-        try {
-            $response = $client->send($authRequest);
-            $result   = $response->getBody();
-
-//            \Application\Debug::dump($result);
-
-            return $result;
-        }
-        catch (\Exception $exc) {
-            throw $exc;
-        }
-    }
-
-    /**
      * попытка авторизации
      * @throws \Auth\Model\Exception
      * @throws \Exception
@@ -169,13 +137,12 @@ class GateAdapter implements AdapterInterface {
                 'contract_id' => $this->getContract()
         ));
 
-        $post = new Parameters($authRequestParams);
-
-        $result = $this->sendPost($post);
-//        \Application\Debug::dump($result);
+        $result = (new Sender())
+                ->sendPost($this->url, $authRequestParams);
 
         $resultUnser = unserialize($result);
 //        \Application\Debug::dump($resultUnser, "resultUnser");
+//        
         //ошибка это конец
         if ($resultUnser['error']) {
 
@@ -203,6 +170,10 @@ class GateAdapter implements AdapterInterface {
         return TRUE;
     }
 
+    /**
+     * записать в сессию
+     * @param type $contracts
+     */
     private function setAvailableContracts($contracts)
     {
         foreach ($contracts as $id => $contract) {
@@ -212,11 +183,18 @@ class GateAdapter implements AdapterInterface {
         $this->getAuthContainer()->contracts = $contractEnc;
     }
 
+    /**
+     * очистить контракты
+     */
     public function clearAvailableContracts()
     {
         $this->getAuthContainer()->contracts = NULL;
     }
 
+    /**
+     * контейнер для авторизации
+     * @return Container
+     */
     private function getAuthContainer()
     {
         if (!$this->gateAuthContainer) {
@@ -228,7 +206,7 @@ class GateAdapter implements AdapterInterface {
 
     public function actionLogoutAccount()
     {
-        $this->getAuthContainer()->user = NULL;
+        $this->gateAuthContainer = NULL;
     }
 
     /**
@@ -252,8 +230,7 @@ class GateAdapter implements AdapterInterface {
             }
 
             throw new \Exception("Authentication Failed");
-        }
-        catch (\Exception $e) {
+        } catch (\Exception $e) {
             $code     = Result::FAILURE;
             $identity = "guest";
             return new Result($code, $identity, array($e->getMessage()));

@@ -7,23 +7,46 @@
         "zf2"
     ],
     "homepage": "http://framework.zend.com/",
-    "require": {
-        "php": ">=5.3.3",
-        "zendframework/zendframework": "2.2.*",
-        "phpunit/phpunit": "3.7.28",
-        "silvester/reverse-form": "dev-master",
-        "doctrine/common": "2.3.*",
-        "doctrine/orm": "2.3.*",
-        "doctrine/doctrine-module": "0.7.2",
-        "doctrine/doctrine-orm-module": "0.7.0",
+    "require-dev": {
+        "cgm/zf2-file-upload-examples": "dev-master",
+        "phpunit/phpunit": "4.*",
         "zendframework/zend-developer-tools": "dev-master",
         "bjyoungblood/BjyProfiler": "dev-master",
         "zendframework/zftool": "dev-master",
         "zf-commons/zfc-base": "v0.1.2",
         "zf-commons/zfc-user": "0.1.2",
         "zf-commons/zfc-user-doctrine-orm": "0.1.1",
-        "zf-commons/zfc-admin": "v0.1.1",
-        "bjyoungblood/bjy-authorize": "1.4.0"
-    }
+        "zf-commons/zfc-admin": "v0.1.2",
+        "bjyoungblood/bjy-authorize": "1.4.0",
+        "digitalkaoz/yuml-php": "0.7.1"
+    },
+    "require": {
+        "php": ">=5.4",
+        "zendframework/zendframework": "2.*",
+        "silvester/reverse-form": "dev-master",
+        "neilime/zf2-twb-bundle": "2.*",
+        "doctrine/common": "2.4.*",
+        "doctrine/orm": "2.4.*",
+        "doctrine/doctrine-module": "0.8.*",
+        "doctrine/doctrine-orm-module": "0.8.*"
+    },
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "https://packages.zendframework.com/"
+        },
+        {
+            "type": "package",
+            "package": {
+                "name": "chosen",
+                "version": "1.0.0",
+                "dist": {
+                    "url": "https://github.com/harvesthq/chosen/releases/download/1.0.0/chosen_v1.0.0.zip",
+                    "type": "zip"
+                }
+
+            }
+        }
+    ]
 
 }

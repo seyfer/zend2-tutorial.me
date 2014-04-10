@@ -1,6 +1,10 @@
 <?php
 
 return array(
+    "auth" => array(
+        "adapter" => "GateAdapter",
+        "adapter" => "",
+    ),
     'controllers'  => array(
         'invokables' => array(
             'Auth\Controller\Auth'    => 'Auth\Controller\AuthController',
