@@ -20,6 +20,7 @@ $modules = array(
     'Album',
     'SED',
     'Application',
+    'Users'
 );
 
 if ($env == 'development') {
