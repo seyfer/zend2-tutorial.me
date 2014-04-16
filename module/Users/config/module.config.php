@@ -28,18 +28,34 @@ return array(
                     // as you solidify the routes for your module, however,
                     // you may want to remove it and replace it with more
                     // specific routes.
-                    'default' => array(
+                    'default'  => array(
                         'type'    => 'Segment',
                         'options' => array(
-                            'route'       => '/[:controller[/:action]]',
+                            'route'       => '/[:controller[/][:action]]',
                             'constraints' => array(
                                 'controller' => '[a-zA-Z][a-zA-Z0-9_-]*',
                                 'action'     => '[a-zA-Z][a-zA-Z0-9_-]*',
                             ),
                             'defaults'    => array(
+                                '__NAMESPACE__' => 'Users\Controller',
+                                'action'        => 'index'
                             ),
                         ),
                     ),
+//                    'register' => array(
+//                        'type'    => 'Segment',
+//                        'options' => array(
+//                            'route'       => '/register[/][:action]',
+//                            'constraints' => array(
+//                                'controller' => '[a-zA-Z][a-zA-Z0-9_-]*',
+//                                'action'     => '[a-zA-Z][a-zA-Z0-9_-]*',
+//                            ),
+//                            'defaults'    => array(
+//                                '__NAMESPACE__' => 'Users\Controller',
+//                                'action'        => 'index'
+//                            ),
+//                        ),
+//                    )
                 ),
             ),
         ),
