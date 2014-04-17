@@ -5,6 +5,7 @@ return array(
         'invokables' => array(
             'Users\Controller\Index'    => 'Users\Controller\IndexController',
             'Users\Controller\Register' => 'Users\Controller\RegisterController',
+            'Users\Controller\Login'    => 'Users\Controller\LoginController',
         ),
     ),
     'router'       => array(
@@ -28,7 +29,7 @@ return array(
                     // as you solidify the routes for your module, however,
                     // you may want to remove it and replace it with more
                     // specific routes.
-                    'default'  => array(
+                    'default' => array(
                         'type'    => 'Segment',
                         'options' => array(
                             'route'       => '/[:controller[/][:action]]',

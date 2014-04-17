@@ -10,7 +10,7 @@ use Zend\Form\Form,
  *
  * @author seyfer
  */
-class LoginForm
+class LoginForm extends Form
 {
 
     public function __construct($name = null)
