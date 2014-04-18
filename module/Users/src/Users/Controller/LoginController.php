@@ -32,10 +32,8 @@ class LoginController extends AbstractActionController
             ));
         }
 
-        $post        = $this->request->getPost();
-        $form        = new \Users\Form\LoginForm();
-        $inputFilter = new \Users\Form\Filter\LoginFilter();
-        $form->setInputFilter($inputFilter);
+        $post = $this->request->getPost();
+        $form = $this->getServiceLocator()->get('LoginForm');
 
         $form->setData($post);
         if ($form->isValid()) {
