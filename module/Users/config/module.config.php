@@ -6,10 +6,11 @@ return array(
     ),
     'controllers'   => array(
         'invokables' => array(
-            'Users\Controller\Index'       => 'Users\Controller\IndexController',
-            'Users\Controller\Register'    => 'Users\Controller\RegisterController',
-            'Users\Controller\Login'       => 'Users\Controller\LoginController',
-            'Users\Controller\UserManager' => 'Users\Controller\UserManagerController',
+            'Users\Controller\Index'         => 'Users\Controller\IndexController',
+            'Users\Controller\Register'      => 'Users\Controller\RegisterController',
+            'Users\Controller\Login'         => 'Users\Controller\LoginController',
+            'Users\Controller\UserManager'   => 'Users\Controller\UserManagerController',
+            'Users\Controller\UploadManager' => 'Users\Controller\UploadManagerController',
         ),
     ),
     'router'        => array(
@@ -60,6 +61,20 @@ return array(
                     'defaults'    => array(
                         'controller' => 'Users\Controller\UserManager',
                         'action'     => 'index',
+                    ),
+                ),
+            ),
+            'uploads'      => array(
+                'type'    => 'Segment',
+                'options' => array(
+                    // Change this to something specific to your module
+                    'route'    => '/uploads[/][:action]',
+                    'defaults' => array(
+                        // Change this value to reflect the namespace in which
+                        // the controllers for your module are found
+                        '__NAMESPACE__' => 'Users\Controller',
+                        'controller'    => 'Users\Controller\UploadManager',
+                        'action'        => 'index',
                     ),
                 ),
             ),

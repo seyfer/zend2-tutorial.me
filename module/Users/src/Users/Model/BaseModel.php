@@ -7,10 +7,10 @@ namespace Users\Model;
  *
  * @author seyfer
  */
-class BaseModel
+abstract class BaseModel
 {
 
-    function getArrayCopy()
+    public function getArrayCopy()
     {
         return get_object_vars($this);
     }

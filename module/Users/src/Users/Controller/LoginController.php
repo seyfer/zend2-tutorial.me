@@ -2,7 +2,7 @@
 
 namespace Users\Controller;
 
-use Zend\Mvc\Controller\AbstractActionController;
+use Users\Controller\BaseController;
 use Zend\View\Model\ViewModel;
 use Users\Form\LoginForm;
 
@@ -11,7 +11,7 @@ use Users\Form\LoginForm;
  *
  * @author seyfer
  */
-class LoginController extends AbstractActionController
+class LoginController extends BaseController
 {
 
     public function indexAction()
@@ -68,15 +68,6 @@ class LoginController extends AbstractActionController
             'user_email' => $user_email
         ));
         return $viewModel;
-    }
-
-    // Определение класса
-    public function getAuthService()
-    {
-        if (!$this->authservice) {
-            $this->authservice = $this->getServiceLocator()->get('AuthService');
-        }
-        return $this->authservice;
     }
 
 }

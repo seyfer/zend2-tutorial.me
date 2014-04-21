@@ -13,8 +13,7 @@ namespace Users;
 use Zend\ModuleManager\Feature\AutoloaderProviderInterface;
 use Zend\Mvc\ModuleRouteListener;
 use Zend\Mvc\MvcEvent;
-use Users\Model\User;
-use Users\Model\UserTable;
+use Users\Model;
 use Zend\Db\ResultSet\ResultSet;
 use Zend\Db\TableGateway\TableGateway;
 use Zend\Authentication\AuthenticationService,
@@ -61,14 +60,25 @@ class Module implements AutoloaderProviderInterface
                 // база данных
                 'UserTable' => function($sm) {
             $tableGateway = $sm->get('UserTableGateway');
-            $table        = new UserTable($tableGateway);
+            $table        = new Model\UserTable($tableGateway);
             return $table;
         },
                 'UserTableGateway'   => function ($sm) {
             $dbAdapter          = $sm->get('Zend\Db\Adapter\Adapter');
             $resultSetPrototype = new ResultSet();
-            $resultSetPrototype->setArrayObjectPrototype(new User());
+            $resultSetPrototype->setArrayObjectPrototype(new Model\User());
             return new TableGateway('myuser', $dbAdapter, null, $resultSetPrototype);
+        },
+                'UploadTable' => function($sm) {
+            $tableGateway = $sm->get('UploadTableGateway');
+            $table        = new Model\UploadTable($tableGateway);
+            return $table;
+        },
+                'UploadTableGateway' => function ($sm) {
+            $dbAdapter          = $sm->get('Zend\Db\Adapter\Adapter');
+            $resultSetPrototype = new ResultSet();
+            $resultSetPrototype->setArrayObjectPrototype(new Model\Upload());
+            return new TableGateway('uploads', $dbAdapter, null, $resultSetPrototype);
         },
                 // Формы
                 'LoginForm' => function ($sm) {

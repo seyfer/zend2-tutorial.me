@@ -3,7 +3,6 @@
 namespace Users\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
-use Users\Model\User;
 use Zend\View\Model\ViewModel;
 
 /**
@@ -26,7 +25,7 @@ class UserManagerController extends AbstractActionController
     {
         $userTable = $this->getServiceLocator()->get('UserTable');
 
-        $user = $userTable->getUser($this->params()->fromRoute('id'));
+        $user = $userTable->getById($this->params()->fromRoute('id'));
 
         $form = $this->getServiceLocator()->get('UserEditForm');
         $form->bind($user);
@@ -45,7 +44,7 @@ class UserManagerController extends AbstractActionController
         $post      = $this->request->getPost();
         $userTable = $this->getServiceLocator()->get('UserTable');
         // Загрузка сущности User
-        $user      = $userTable->getUser($post->id);
+        $user      = $userTable->getById($post->id);
         // Привязка сущности User к Form
         $form      = $this->getServiceLocator()->get('UserEditForm');
         $form->bind($user);
@@ -54,7 +53,7 @@ class UserManagerController extends AbstractActionController
         if ($form->isValid()) {
 
             // Сохранение пользователя
-            $this->getServiceLocator()->get('UserTable')->saveUser($user);
+            $this->getServiceLocator()->get('UserTable')->save($user);
 
             return $this->redirect()->toRoute('user-manager');
         }
@@ -63,7 +62,7 @@ class UserManagerController extends AbstractActionController
     public function deleteAction()
     {
         $this->getServiceLocator()->get('UserTable')
-                ->deleteUser($this->params()->fromRoute('id'));
+                ->deleteById($this->params()->fromRoute('id'));
 
         return $this->redirect()->toRoute('user-manager');
     }

@@ -12,4 +12,13 @@ use Users\Model\BaseTable;
 class UploadTable extends BaseTable
 {
 
+    public function getUploadsByUserId($userId)
+    {
+        $userId = (int) $userId;
+
+        $rowset = $this->tableGateway->select(
+                array('user_id' => $userId));
+        return $rowset;
+    }
+
 }

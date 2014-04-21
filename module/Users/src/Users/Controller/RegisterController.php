@@ -64,7 +64,7 @@ class RegisterController extends AbstractActionController
         $user->exchangeArray($data);
 
         $userTable = $this->getServiceLocator()->get('UserTable');
-        $userTable->saveUser($user);
+        $userTable->save($user);
         return true;
     }
 
