@@ -4,8 +4,6 @@ namespace Users\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
-use Zend\Authentication\AuthenticationService;
-use Zend\Authentication\Adapter\DbTable as DbTableAuthAdapter;
 use Users\Form\LoginForm;
 
 /**
@@ -76,13 +74,7 @@ class LoginController extends AbstractActionController
     public function getAuthService()
     {
         if (!$this->authservice) {
-            $dbAdapter          = $this->getServiceLocator()->get(
-                    'Zend\Db\Adapter\Adapter');
-            $dbTableAuthAdapter = new DbTableAuthAdapter(
-                    $dbAdapter, 'myuser', 'email', 'password', 'MD5(?)');
-            $authService        = new AuthenticationService();
-            $authService->setAdapter($dbTableAuthAdapter);
-            $this->authservice  = $authService;
+            $this->authservice = $this->getServiceLocator()->get('AuthService');
         }
         return $this->authservice;
     }

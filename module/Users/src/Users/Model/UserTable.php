@@ -51,4 +51,26 @@ class UserTable
         return $row;
     }
 
+    public function fetchAll()
+    {
+        $resultSet = $this->tableGateway->select();
+        return $resultSet;
+    }
+
+    public function getUserByEmail($userEmail)
+    {
+        $rowset = $this->tableGateway->select(array('email' =>
+            $userEmail));
+        $row    = $rowset->current();
+        if (!$row) {
+            throw new \Exception("Could not find row $ userEmail");
+        }
+        return $row;
+    }
+
+    public function deleteUser($id)
+    {
+        $this->tableGateway->delete(array('id' => $id));
+    }
+
 }

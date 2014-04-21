@@ -3,10 +3,8 @@
 namespace Users\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
-use Users\Form\RegisterForm,
-    Users\Form\Filter\RegisterFilter;
-use Users\Model\User,
-    Users\Model\UserTable;
+use Users\Form\RegisterForm;
+use Users\Model\User;
 use Zend\View\Model\ViewModel;
 
 /**

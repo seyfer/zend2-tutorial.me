@@ -17,6 +17,8 @@ use Users\Model\User;
 use Users\Model\UserTable;
 use Zend\Db\ResultSet\ResultSet;
 use Zend\Db\TableGateway\TableGateway;
+use Zend\Authentication\AuthenticationService,
+    Zend\Authentication\Adapter\DbTable as DbTableAuthAdapter;
 
 class Module implements AutoloaderProviderInterface
 {
@@ -86,6 +88,15 @@ class Module implements AutoloaderProviderInterface
                 'RegisterFilter' => function ($sm) {
             return new \Users\Form\Filter\RegisterFilter();
         },
+                'AuthService' => function ($sm) {
+            $dbAdapter          = $sm->get('Zend\Db\Adapter\Adapter');
+            $dbTableAuthAdapter = new DbTableAuthAdapter(
+                    $dbAdapter, 'myuser', 'email', 'password', 'MD5(?)');
+            $authService        = new AuthenticationService();
+            $authService->setAdapter($dbTableAuthAdapter);
+
+            return $authService;
+        }
             ),
             'invokables' => array(),
             'services'   => array(),
