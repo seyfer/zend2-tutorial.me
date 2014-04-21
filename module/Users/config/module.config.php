@@ -3,14 +3,15 @@
 return array(
     'controllers'  => array(
         'invokables' => array(
-            'Users\Controller\Index'    => 'Users\Controller\IndexController',
-            'Users\Controller\Register' => 'Users\Controller\RegisterController',
-            'Users\Controller\Login'    => 'Users\Controller\LoginController',
+            'Users\Controller\Index'       => 'Users\Controller\IndexController',
+            'Users\Controller\Register'    => 'Users\Controller\RegisterController',
+            'Users\Controller\Login'       => 'Users\Controller\LoginController',
+            'Users\Controller\UserManager' => 'Users\Controller\UserManagerController',
         ),
     ),
     'router'       => array(
         'routes' => array(
-            'users' => array(
+            'users'        => array(
                 'type'          => 'Literal',
                 'options'       => array(
                     // Change this to something specific to your module
@@ -43,20 +44,20 @@ return array(
                             ),
                         ),
                     ),
-//                    'register' => array(
-//                        'type'    => 'Segment',
-//                        'options' => array(
-//                            'route'       => '/register[/][:action]',
-//                            'constraints' => array(
-//                                'controller' => '[a-zA-Z][a-zA-Z0-9_-]*',
-//                                'action'     => '[a-zA-Z][a-zA-Z0-9_-]*',
-//                            ),
-//                            'defaults'    => array(
-//                                '__NAMESPACE__' => 'Users\Controller',
-//                                'action'        => 'index'
-//                            ),
-//                        ),
-//                    )
+                ),
+            ),
+            'user-manager' => array(
+                'type'    => 'Segment',
+                'options' => array(
+                    'route'       => '/user-manager[/:action[/:id]]',
+                    'constraints' => array(
+                        'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                        'id'     => '[a-zA-Z0-9_-]*',
+                    ),
+                    'defaults'    => array(
+                        'controller' => 'Users\Controller\UserManager',
+                        'action'     => 'index',
+                    ),
                 ),
             ),
         ),

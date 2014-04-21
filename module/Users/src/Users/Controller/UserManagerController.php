@@ -39,4 +39,33 @@ class UserManagerController extends AbstractActionController
         return $viewModel;
     }
 
+    public function processAction()
+    {
+        // Получение идентификатора пользователя из POST
+        $post      = $this->request->getPost();
+        $userTable = $this->getServiceLocator()->get('UserTable');
+        // Загрузка сущности User
+        $user      = $userTable->getUser($post->id);
+        // Привязка сущности User к Form
+        $form      = $this->getServiceLocator()->get('UserEditForm');
+        $form->bind($user);
+        $form->setData($post);
+
+        if ($form->isValid()) {
+
+            // Сохранение пользователя
+            $this->getServiceLocator()->get('UserTable')->saveUser($user);
+
+            return $this->redirect()->toRoute('user-manager');
+        }
+    }
+
+    public function deleteAction()
+    {
+        $this->getServiceLocator()->get('UserTable')
+                ->deleteUser($this->params()->fromRoute('id'));
+
+        return $this->redirect()->toRoute('user-manager');
+    }
+
 }

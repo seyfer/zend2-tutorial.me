@@ -1,0 +1,42 @@
+<h1>Users</h1>
+
+<a href="<?php
+echo $this->url('users/default', array(
+    'controller' => 'register'))
+?>">Register new</a>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+
+        <?php foreach ($users as $user) { ?>
+
+            <tr>
+                <td>
+                    <?php echo $user->getName(); ?>
+                </td>
+                <td>
+                    <?php echo $user->getEmail(); ?>
+                </td>
+                <td>
+                    <a href ="<?php
+                    echo $this->url('user-manager', array('action' => 'edit',
+                        'id'     => $user->getId()))
+                    ?>">Edit</a>
+
+                    <a href ="<?php
+                    echo $this->url('user-manager', array('action' => 'delete',
+                        'id'     => $user->getId()))
+                    ?>">Delete</a>
+                </td>
+            </tr>
+
+        <?php } ?>
+
+    </tbody>
+</table>
