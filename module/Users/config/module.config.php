@@ -1,7 +1,10 @@
 <?php
 
 return array(
-    'controllers'  => array(
+    'module_config' => array(
+        'upload_location' => __DIR__ . '/../data/uploads',
+    ),
+    'controllers'   => array(
         'invokables' => array(
             'Users\Controller\Index'       => 'Users\Controller\IndexController',
             'Users\Controller\Register'    => 'Users\Controller\RegisterController',
@@ -9,7 +12,7 @@ return array(
             'Users\Controller\UserManager' => 'Users\Controller\UserManagerController',
         ),
     ),
-    'router'       => array(
+    'router'        => array(
         'routes' => array(
             'users'        => array(
                 'type'          => 'Literal',
@@ -62,7 +65,7 @@ return array(
             ),
         ),
     ),
-    'view_manager' => array(
+    'view_manager'  => array(
         'template_path_stack' => array(
             'users' => __DIR__ . '/../view',
         ),

@@ -2,18 +2,20 @@
 
 namespace Users\Model;
 
+use Users\Model\BaseModel;
+
 /**
  * Description of User
  *
  * @author seyfer
  */
-class User
+class User extends BaseModel
 {
 
-    public $id;
-    public $name;
-    public $email;
-    public $password;
+    protected $id;
+    protected $name;
+    protected $email;
+    protected $password;
 
     public function setPassword($clear_password)
     {
@@ -31,11 +33,6 @@ class User
         if (isset($data["password"])) {
             $this->setPassword($data["password"]);
         }
-    }
-
-    function getArrayCopy()
-    {
-        return get_object_vars($this);
     }
 
     public function getId()
