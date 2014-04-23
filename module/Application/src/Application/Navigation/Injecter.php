@@ -9,6 +9,10 @@ namespace Application\Navigation;
  */
 class Injecter {
 
+    //            $navigation = new \Zend\Navigation\Navigation($pages);
+    //            $router     = $sm->get('router');
+    //            $module     = new \Application\Navigation\Injecter();
+    //            $navigation = $module->injectRouter($navigation, $router);
     public function injectRouter($navigation, $router)
     {
         foreach ($navigation->getPages() as $page) {

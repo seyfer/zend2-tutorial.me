@@ -12,7 +12,6 @@ namespace Application;
 
 use Zend\Mvc\ModuleRouteListener;
 use Zend\Mvc\MvcEvent;
-use Zend\Session\SessionManager;
 use Zend\Session\Container;
 use Zend\Mvc\Router\Http\RouteMatch;
 
@@ -152,7 +151,11 @@ class Module {
 
     public function getConfig()
     {
-        return include __DIR__ . '/config/module.config.php';
+        $moduleConfig = include __DIR__ . '/config/module.config.php';
+        $routerConfig = include __DIR__ . '/config/router.config.php';
+
+        $config = array_merge($moduleConfig, $routerConfig);
+        return $config;
     }
 
     public function getAutoloaderConfig()
@@ -169,174 +172,48 @@ class Module {
     public function getServiceConfig()
     {
         return array(
-            'factories' => array(
-                //инициализация менеджера сессии
-                'Zend\Session\SessionManager' => function ($sm) {
+            'factories'                             => array(
+                'Zend\Cache\Storage\Adapter\Apc' => function($sm) {
+            $cache = new Zend\Cache\Storage\Adapter\Apc();
+            $cache->getOptions()->setTtl(3600);
 
-            $config = $sm->get('config');
-            if (isset($config['session'])) {
-                $session = $config['session'];
+            $plugin = new Zend\Cache\Storage\Plugin\ExceptionHandler();
+            $plugin->getOptions()->setThrowExceptions(false);
+            $cache->addPlugin($plugin);
 
-                $sessionConfig = null;
-                if (isset($session['config'])) {
-                    $class = isset($session['config']['class']) ?
-                            $session['config']['class'] : 'Zend\Session\Config\SessionConfig';
-
-                    $options = isset($session['config']['options']) ?
-                            $session['config']['options'] : array();
-
-                    $sessionConfig = new $class();
-                    $sessionConfig->setOptions($options);
-                }
-
-                $sessionStorage = null;
-                if (isset($session['storage'])) {
-                    $class          = $session['storage'];
-                    $sessionStorage = new $class();
-                }
-
-                $sessionSaveHandler = null;
-                if (isset($session['save_handler'])) {
-                    // class should be fetched from service manager since
-                    // it will require constructor arguments
-                    $sessionSaveHandler = $sm->get($session['save_handler']);
-                }
-
-                $sessionManager = new SessionManager($sessionConfig, $sessionStorage, $sessionSaveHandler);
-
-                if (isset($session['validators'])) {
-                    $chain = $sessionManager->getValidatorChain();
-
-                    foreach ($session['validators'] as $validator) {
-                        $validator = new $validator();
-                        $chain->attach('session.validate', array($validator, 'isValid'));
-                    }
-                }
-            }
-            else {
-                $sessionManager = new SessionManager();
-            }
-
-            //установка для контейнеров
-            Container::setDefaultManager($sessionManager);
-
-            return $sessionManager;
+            return $cache;
         },
-                'index_navigation' => function (\Zend\ServiceManager\ServiceManager $sm) {
+                'Zend\Cache\Storage\Adapter\Filesystem' => function($sm) {
+            $cache = new \Zend\Cache\Storage\Adapter\Filesystem();
+            $cache->getOptions()->setWritable(TRUE)
+                    ->setReadable(TRUE)
+                    ->setTtl(3600)
+                    ->setCacheDir('./data/cache/filesystem')
+                    ->setDirPermission("777")->setFilePermission('666');
 
-            $pages = array(
-                array(
-                    'label' => 'Главная',
-                    'route' => 'home',
-                ),
-            );
+            $plugin = new \Zend\Cache\Storage\Plugin\ExceptionHandler();
+            $plugin->getOptions()->setThrowExceptions(false);
+            $cache->addPlugin($plugin);
 
-            $navigation = new \Zend\Navigation\Navigation($pages);
+            $pluginSerializer = new \Zend\Cache\Storage\Plugin\Serializer();
+            $cache->addPlugin($pluginSerializer);
 
-            $store    = new \Auth\Model\AuthStorage("auth_storage");
-            $username = $store->read();
+            return $cache;
+        },
+                //инициализация менеджера сессии
+                'Zend\Session\SessionManager' => new \Application\Session\Service\AppSessionManagerFactory(),
+                'index_navigation'            => function (\Zend\ServiceManager\ServiceManager $sm) {
 
-            if (!$username) {
-                $pageAuth = new \Zend\Navigation\Page\Mvc(array(
-                    "label" => "Войти",
-                    'route' => "login",
-                    "pages" => array(
-                        array(
-                            "label"  => "Войти",
-                            'route'  => "login/login",
-                            'action' => 'login',
-                        ),
-                    )
-                ));
-
-                $navigation->addPage($pageAuth);
-            }
-            else {
-                $pageAdmin  = new \Zend\Navigation\Page\Mvc(array(
-                    'label' => 'Админка',
-                    'route' => 'admin',
-                        )
-                );
-                $pageLogout = new \Zend\Navigation\Page\Mvc(array(
-                    "label"  => "Выйти",
-                    'route'  => "login/process",
-                    'action' => "logout",
-                ));
-
-                $navigation->addPage($pageAdmin);
-                $navigation->addPage($pageLogout);
-            }
-
-            $router     = $sm->get('router');
-            $module     = new \Application\Navigation\Injecter();
-            $navigation = $module->injectRouter($navigation, $router);
+            $navigationF = new Navigation\Service\CIndexNavidationFactory();
+            $navigation  = $navigationF->createService($sm);
 
             return $navigation;
         },
+//                'index_navigation' => new Navigation\Service\CIndexNavidationFactory(),
                 'admin_navigation' => function ($sm) {
-            $pages = array(
-//                array(
-//                    'label' => 'Админка',
-//                    'route' => 'admin',
-//                ),
-                array(
-                    'label' => 'Страницы',
-                    'route' => 'page',
-                    'pages' => array(
-                        array(
-                            'label'  => 'Добавить',
-                            'route'  => 'page',
-                            'action' => 'add',
-                        ),
-                        array(
-                            'label'  => 'Редактировать',
-                            'route'  => 'page',
-                            'action' => 'edit',
-                        ),
-                        array(
-                            'label'  => 'Удалить',
-                            'route'  => 'page',
-                            'action' => 'delete',
-                        ),
-                    ),
-                ),
-                array(
-                    'label' => 'Альбомы',
-                    'route' => 'album',
-                    'pages' => array(
-                        array(
-                            'label'  => 'Добавить',
-                            'route'  => 'album',
-                            'action' => 'add',
-                        ),
-                        array(
-                            'label'  => 'Редактировать',
-                            'route'  => 'album',
-                            'action' => 'edit',
-                        ),
-                        array(
-                            'label'  => 'Удалить',
-                            'route'  => 'album',
-                            'action' => 'delete',
-                        ),
-                    ),
-                ),
-                array(
-                    'label' => 'На главную',
-                    'route' => 'home',
-                ),
-                array(
-                    "label"  => "Выйти",
-                    'route'  => "login/process",
-                    'action' => "logout",
-                ),
-            );
 
-            $navigation = new \Zend\Navigation\Navigation($pages);
-
-            $router     = $sm->get('router');
-            $module     = new \Application\Navigation\Injecter();
-            $navigation = $module->injectRouter($navigation, $router);
+            $navigationF = new Navigation\Service\CAdminNavidationFactory();
+            $navigation  = $navigationF->createService($sm);
 
             return $navigation;
         },

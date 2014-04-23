@@ -9,179 +9,14 @@
  */
 $config = array(
     //настройка - для каких роутов использовать вид админки
-    'adminPath'       => array(
+    'adminPath'          => array(
         "admin_layout_template" => "layout/admin",
-        "routes"                => array("admin", "page", 'album', 'dalbum'),
-    ),
-    'router'          => array(
-        'routes' => array(
-            'home'        => array(
-                'type'          => 'Zend\Mvc\Router\Http\Literal',
-                'options'       => array(
-                    'route'    => '/',
-                    'defaults' => array(
-                        'controller' => 'Application\Controller\Index',
-                        'action'     => 'index',
-                    ),
-                ),
-                'may_terminate' => true,
-                'child_routes'  => array(
-                    'default' => array(
-                        'type'    => 'Segment',
-                        'options' => array(
-                            'route'       => '/[:controller[/:action]]',
-                            'constraints' => array(
-                                'controller' => '[a-zA-Z][a-zA-Z0-9_-]*',
-                                'action'     => '[a-zA-Z][a-zA-Z0-9_-]*',
-                            ),
-                            'defaults'    => array(),
-                        ),
-                    ),
-                ),
-            ),
-            'admin'       => array(
-                'type'    => 'Zend\Mvc\Router\Http\Literal',
-                'options' => array(
-                    'route'    => '/admin',
-                    'defaults' => array(
-                        'controller' => 'Application\Controller\Admin',
-                        'action'     => 'index',
-                    ),
-                ),
-//                'may_terminate' => true,
-//                'child_routes'  => array(
-//                    'page' => array(
-//                        'type'          => 'Literal',
-//                        'options'       => array(
-//                            'route'       => '/page',
-//                            'constraints' => array(
-//                                'controller' => '[a-zA-Z][a-zA-Z0-9_-]*',
-//                            ),
-//                            'defaults'    => array(
-//                                'controller' => 'page',
-//                                'action'     => 'index',
-//                            ),
-//                        ),
-//                        'may_terminate' => true,
-//                        'child_routes'  => array(
-//                            'actions' => array(
-//                                "type"        => "Segment",
-//                                "options"     => array(
-//                                    "route" => "[/:action][/][:id]"
-//                                ),
-//                                'constraints' => array(
-//                                    'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
-//                                    'id'     => '[0-9]+',
-//                                ),
-//                                'defaults'    => array(
-//                                ),
-//                            ),
-//                        ),
-//                    ),
-//                ),
-            ),
-            'page'        => array(
-                'type'          => 'Literal',
-                'options'       => array(
-                    'route'       => '/admin/page',
-                    'constraints' => array(
-                        'controller' => '[a-zA-Z][a-zA-Z0-9_-]*',
-                    ),
-                    'defaults'    => array(
-                        'controller' => 'page',
-                        'action'     => 'index',
-                    ),
-                ),
-                'may_terminate' => true,
-                'child_routes'  => array(
-                    'actions' => array(
-                        "type"        => "Segment",
-                        "options"     => array(
-                            "route" => "[/:action][/][:id]"
-                        ),
-                        'constraints' => array(
-                            'controller' => '[a-zA-Z][a-zA-Z0-9_-]*',
-                            'action'     => '[a-zA-Z][a-zA-Z0-9_-]*',
-                            'id'         => '[0-9]+',
-                        ),
-                        'defaults'    => array(
-                        ),
-                    ),
-                ),
-            ),
-            'dalbum'      => array(
-                'type'    => 'segment',
-                'options' => array(
-                    'route'       => '/admin/dalbum[/][:action][/:id]',
-                    'constraints' => array(
-                        'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
-                        'id'     => '[0-9]+',
-                    ),
-                    'defaults'    => array(
-                        'controller' => 'AlbumDoc',
-                        'action'     => 'index',
-                    ),
-                ),
-            ),
-            'album'       => array(
-                'type'    => 'segment',
-                'options' => array(
-                    'route'       => '/admin/album[/][:action][/:id]',
-                    'constraints' => array(
-                        'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
-                        'id'     => '[0-9]+',
-                    ),
-                    'defaults'    => array(
-                        'controller' => 'Album\Controller\Album',
-                        'action'     => 'index',
-                    ),
-                ),
-            ),
-            'contact'     => array(
-                'type'    => 'Literal',
-                'options' => array(
-                    'route'       => '/contact',
-                    'constraints' => array(
-                        'controller' => '[a-zA-Z][a-zA-Z0-9_-]*',
-                    ),
-                    'defaults'    => array(
-                        'controller' => 'contact',
-                        'action'     => 'index',
-                    ),
-                ),
-            ),
-            // The following is a route to simplify getting started creating
-// new controllers and actions without needing to create a new
-// module. Simply drop new controllers in, and you can access them
-// using the path /application/:controller/:action
-            'application' => array(
-                'type'          => 'Literal',
-                'options'       => array(
-                    'route'    => '/application',
-                    'defaults' => array(
-                        '__NAMESPACE__' => 'Application\Controller',
-                        'controller'    => 'Index',
-                        'action'        => 'index',
-                    ),
-                ),
-                'may_terminate' => true,
-                'child_routes'  => array(
-                    'default' => array(
-                        'type'    => 'Segment',
-                        'options' => array(
-                            'route'       => '/[:controller[/:action]]',
-                            'constraints' => array(
-                                'controller' => '[a-zA-Z][a-zA-Z0-9_-]*',
-                                'action'     => '[a-zA-Z][a-zA-Z0-9_-]*',
-                            ),
-                            'defaults'    => array(),
-                        ),
-                    ),
-                ),
-            ),
+        "routes"                => array(
+            "admin", "page",
+            'album', 'dalbum', 'page/actions',
         ),
     ),
-    'service_manager' => array(
+    'service_manager'    => array(
         'abstract_factories' => array(
             'Zend\Cache\Service\StorageCacheAbstractServiceFactory',
             'Zend\Log\LoggerAbstractServiceFactory',
@@ -195,7 +30,7 @@ $config = array(
 //            'index_navigation' => 'Application\Navigation\Service\IndexNavigationFactory',
         ),
     ),
-    'translator'      => array(
+    'translator'         => array(
         'locale'                    => 'en_US',
         'translation_file_patterns' => array(
             array(
@@ -205,16 +40,19 @@ $config = array(
             ),
         ),
     ),
-    'controllers'     => array(
+    'controllers'        => array(
         'invokables' => array(
             'Application\Controller\Index' => 'Application\Controller\IndexController',
             'Application\Controller\Auth'  => 'Application\Controller\AuthController',
             'Application\Controller\Admin' => 'Application\Controller\AdminController',
-            'page'                         => 'Page\Controller\IndexController',
-            'contact'                      => 'Application\Controller\ContactController',
-        ),
+            'contact'                      => 'Application\Controller\ContactController',),
     ),
-    'view_manager'    => array(
+    'controller_plugins' => array(
+        'invokables' => array(
+//            'Head' => 'Application\Controller\Plugin\Head',
+        )
+    ),
+    'view_manager'       => array(
         'display_not_found_reason' => true,
         'display_exceptions'       => true,
         'doctype'                  => 'HTML5',
@@ -231,7 +69,7 @@ $config = array(
         ),
     ),
     // Placeholder for console routes
-    'console'         => array(
+    'console'            => array(
         'router' => array(
             'routes' => array(),
         ),

@@ -16,7 +16,7 @@ class BaseController extends AbstractActionController
     public function getAuthService()
     {
         if (!$this->authservice) {
-            $this->authservice = $this->getServiceLocator()->get('AuthService');
+            $this->authservice = $this->getServiceLocator()->get('AuthServiceUsers');
         }
         return $this->authservice;
     }

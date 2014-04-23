@@ -1,28 +1,15 @@
 <div class="jumbotron">
-    <h1>
-        <?php echo sprintf('Welcome to %sSED%s', '<span class="zf-green">', '</span>')
-        ?>
-    </h1>
-    <p>
-    </p>
-    <p>
-        <?php
-        $store    = new \Auth\Model\AuthStorage("auth_storage");
-        $username = $store->read();
-
-        if ($username) {
-            echo '<a class="btn btn-success btn-lg" '
-            . 'href="' . $this->url("login/process", array(
-                "action" => "logout"))
-            . '">' . $this->translate('Выйти') . "</a>";
-        }
-        else {
-            echo '<a class="btn btn-success btn-lg" '
-            . 'href="' . $this->url("login/process", array(
-                "action" => "login"))
-            . '">' . $this->translate('Войти') . "</a>";
-        }
-        ?>
-
-    </p>
+    <div class="container">
+        <h1>
+            <?php echo sprintf('Welcome to %sSED%s', '<span class="zf-green">', '</span>')
+            ?>
+        </h1>
+        <p>
+        </p>
+        <p>
+            <?php
+            echo $this->partial("partial/login_logout.phtml");
+            ?>
+        </p>
+    </div>
 </div>
