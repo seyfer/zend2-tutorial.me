@@ -9,7 +9,8 @@ use Zend\Navigation\Service\ConstructedNavigationFactory;
  *
  * @author seyfer
  */
-class CIndexNavidationFactory extends ConstructedNavigationFactory {
+class CIndexNavidationFactory extends ConstructedNavigationFactory
+{
 
     public function __construct($config = null)
     {
@@ -32,8 +33,37 @@ class CIndexNavidationFactory extends ConstructedNavigationFactory {
             array(
                 'label'   => "Авторизован",
                 'route'   => "success",
-                'visible' => "false",
-                'class'   => "not-display",
+                'visible' => FALSE,
+//                'class'   => "not-display",
+            ),
+            array(
+                'label' => "Users route",
+                'route' => 'users',
+                'pages' => array(
+                    array(
+                        'label'      => "Users login",
+                        'route'      => 'users/default',
+                        'action'     => 'index',
+                        'controller' => 'login'
+                    ),
+                    array(
+                        'label'      => "Users register",
+                        'route'      => 'users/default',
+                        'action'     => 'index',
+                        'controller' => 'register'
+                    ),
+                )
+            ),
+            array(
+                'label' => "User manager",
+                'route' => 'user-manager',
+                'pages' => array(
+                    array(
+                        'label'  => "Users login",
+                        'route'  => 'user-manager',
+                        'action' => 'edit',
+                    ),
+                ),
             ),
         );
 
@@ -52,8 +82,7 @@ class CIndexNavidationFactory extends ConstructedNavigationFactory {
                     ),
                 )
             );
-        }
-        else {
+        } else {
 
             $pages[] = array(
                 'label' => 'Админка',
