@@ -2,7 +2,7 @@
 
 return array(
     'module_config' => array(
-        'upload_location' => __DIR__ . '/../data/uploads',
+        'upload_location' => __DIR__ . '/../../../data/uploads',
     ),
     'controllers'   => array(
         'invokables' => array(

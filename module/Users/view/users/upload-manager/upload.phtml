@@ -1,0 +1,19 @@
+<?php
+
+$form = $this->form;
+$form->prepare();
+$form->setAttribute('action', $this->url('uploads', array(
+            'action' => 'process')));
+$form->setAttribute('method', 'post');
+echo $this->form()->openTag($form);
+?>
+
+<?php
+
+//echo $this->formRow($form->get('id'));
+echo $this->formRow($form->get('label'));
+echo $this->formRow($form->get('fileupload')->setAttribute('class', 'btn btn-default'));
+echo $this->formSubmit($form->get('submit')->setAttribute('class', 'btn btn-default'));
+?>
+
+<?php echo $this->form()->closeTag() ?>
