@@ -1,2 +1,33 @@
 <?php echo $this->flashMessenger()->render('error', array('alert', 'alert-danger')); ?>
 
+<div>
+    <?php if ($myUploads) { ?>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Label</th>
+                    <th>FileName</th>
+                    <th>Link</th>
+                </tr>
+            </thead>
+            <?php foreach ($myUploads as $myUpload) { ?>
+                <tr>
+                    <td><?php echo $myUpload->getLabel() ?></td>
+                    <td><?php echo $myUpload->getFilename() ?></td>
+                    <td>
+                        <a href="<?php
+                        echo $this->url("uploads", array(
+                            "action" => "download",
+                            "id"     => $myUpload->getId()));
+                        ?>">
+                               <?php echo $myUpload->getFilename() ?>
+                        </a>
+                    </td>
+                </tr>
+            <?php } ?>
+        </table>
+
+    <?php } ?>
+</div>
+
+

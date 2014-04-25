@@ -28,7 +28,8 @@ class UploadManagerController extends BaseController
 
         $user      = $userTable->getUserByEmail($userEmail);
         $viewModel = new ViewModel(array(
-            'myUploads' => $uploadTable->getUploadsByUserId($user->getId()),
+            'myUploads'  => $uploadTable->getUploadsByUserId($user->getId()),
+            'uploadPath' => $this->getFileUploadLocation()
         ));
 
         return $viewModel;
@@ -97,6 +98,41 @@ class UploadManagerController extends BaseController
 //        exit();
 
         return $config['module_config']['upload_location'];
+    }
+
+    /**
+     * Загрузка файла
+     * @return \Zend\Http\Response\Stream
+     */
+    public function downloadAction()
+    {
+        if ($this->request->isGet()) {
+
+            $fileId = $this->params("id");
+
+            $uploadTable = $this->getServiceLocator()->get('UploadTable');
+            $upload      = $uploadTable->getById($fileId);
+
+            $fileName        = $upload->getFileName();
+            $fileInitialName = $upload->getFileName();
+
+            $fileNameP = $this->getFileUploadLocation() . DIRECTORY_SEPARATOR .
+                    $fileName;
+
+            $response = new \Zend\Http\Response\Stream();
+            $response->setStream(fopen($fileNameP, 'r'));
+            $response->setStatusCode(200);
+
+            $finfo   = finfo_open(FILEINFO_MIME_TYPE);
+            $headers = new \Zend\Http\Headers();
+            $headers->addHeaderLine('Content-Type', finfo_file($finfo, $fileNameP))
+                    ->addHeaderLine('Content-Disposition', 'attachment; filename="' .
+                            $fileInitialName . '"')
+                    ->addHeaderLine('Content-Length', filesize($fileNameP));
+
+            $response->setHeaders($headers);
+            return $response;
+        }
     }
 
 }

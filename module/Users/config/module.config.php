@@ -68,7 +68,7 @@ return array(
                 'type'    => 'Segment',
                 'options' => array(
                     // Change this to something specific to your module
-                    'route'    => '/uploads[/][:action]',
+                    'route'    => '/uploads[/][:action][/:id]',
                     'defaults' => array(
                         // Change this value to reflect the namespace in which
                         // the controllers for your module are found
