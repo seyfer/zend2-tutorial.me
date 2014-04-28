@@ -8,17 +8,14 @@ $modules = array(
     'DoctrineModule',
     'DoctrineORMModule',
     'TwbBundle',
-//    'ReverseForm',
 //    'ZfcBase',
 //    'ZfcUser',
 //    'ZfcUserDoctrineORM',
-//    'GateAuth',
 //    'ZfcAdmin',
     'Sender',
     'Auth',
     'Page',
     'Album',
-    'SED',
     'Application',
     'Users'
 );
