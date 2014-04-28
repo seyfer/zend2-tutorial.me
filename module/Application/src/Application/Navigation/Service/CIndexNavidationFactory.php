@@ -69,14 +69,14 @@ class CIndexNavidationFactory extends ConstructedNavigationFactory
             array(
                 'label' => "Upload manager",
                 'route' => 'uploads',
-//                'pages' => array(
-//                    array(
-//                        'label'   => "Upload edit",
-//                        'route'   => 'user-manager',
-//                        'visible' => FALSE,
-//                        'action'  => 'edit',
-//                    ),
-//                ),
+                'pages' => array(
+                    array(
+                        'label'   => "Upload",
+                        'route'   => 'uploads',
+                        'visible' => TRUE,
+                        'action'  => 'upload',
+                    ),
+                ),
             ),
         );
 

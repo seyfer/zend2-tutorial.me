@@ -8,6 +8,7 @@
                     <th>Label</th>
                     <th>FileName</th>
                     <th>Link</th>
+                    <th>Actions</th>
                 </tr>
             </thead>
             <?php foreach ($myUploads as $myUpload) { ?>
@@ -22,6 +23,14 @@
                         ?>">
                                <?php echo $myUpload->getFilename() ?>
                         </a>
+                    </td>
+                    <td>
+                        <a href="<?php
+                        echo $this->url('uploads', array(
+                            "action" => "delete",
+                            "id"     => $myUpload->getId()
+                        ))
+                        ?>" class="btn btn-danger">Delete</a>
                     </td>
                 </tr>
             <?php } ?>

@@ -135,4 +135,26 @@ class UploadManagerController extends BaseController
         }
     }
 
+    public function deleteAction()
+    {
+        $fileId = $this->params("id");
+
+        $uploadTable = $this->getServiceLocator()->get('UploadTable');
+        $upload      = $uploadTable->getById($fileId);
+
+        $fileName = $upload->getFileName();
+
+        $fileNameP = $this->getFileUploadLocation() . DIRECTORY_SEPARATOR .
+                $fileName;
+
+        if (file_exists($fileNameP)) {
+            unlink($fileNameP);
+        }
+
+        $uploadTable->deleteById($fileId);
+
+        return $this->redirect()->
+                        toRoute('uploads', array('action' => 'index'));
+    }
+
 }
