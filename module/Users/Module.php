@@ -71,8 +71,9 @@ class Module implements AutoloaderProviderInterface
             return new TableGateway('myuser', $dbAdapter, null, $resultSetPrototype);
         },
                 'UploadTable' => function($sm) {
-            $tableGateway = $sm->get('UploadTableGateway');
-            $table        = new Model\UploadTable($tableGateway);
+            $tableGateway              = $sm->get('UploadTableGateway');
+            $uploadSharingTableGateway = $sm->get('UploadSharingTableGateway');
+            $table                     = new Model\UploadTable($tableGateway, $uploadSharingTableGateway);
             return $table;
         },
                 'UploadTableGateway' => function ($sm) {
@@ -111,7 +112,11 @@ class Module implements AutoloaderProviderInterface
             $authService->setAdapter($dbTableAuthAdapter);
 
             return $authService;
-        }
+        },
+                'UploadSharingTableGateway' => function ($sm) {
+            $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
+            return new TableGateway('uploads_sharing', $dbAdapter);
+        },
             ),
             'invokables' => array(),
             'services'   => array(),
