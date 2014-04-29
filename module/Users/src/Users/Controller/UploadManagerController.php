@@ -30,9 +30,16 @@ class UploadManagerController extends BaseController
         $sharedUploads = $uploadTable->getSharedUploadsForUserId($user->getId());
         $myUploads     = $uploadTable->getUploadsByUserId($user->getId());
 
+        $sharedUploads->buffer();
+        foreach ($sharedUploads as $sharedUpload) {
+            $userOwner                        = $userTable->getById($sharedUpload['user_id']);
+            $usersOwners[$sharedUpload['id']] = $userOwner->getEmail();
+        }
+
         $viewModel = new ViewModel(array(
             'myUploads'     => $myUploads,
             'sharedUploads' => $sharedUploads,
+            'usersOwners'   => $usersOwners,
             'uploadPath'    => $this->getFileUploadLocation()
         ));
 

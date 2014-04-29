@@ -57,6 +57,7 @@
                     <th>Label</th>
                     <th>FileName</th>
                     <th>Link</th>
+                    <th>Shared By</th>
                 </tr>
             </thead>
             <?php foreach ($sharedUploads as $sharedUpload) { ?>
@@ -67,10 +68,13 @@
                         <a href="<?php
                         echo $this->url("uploads", array(
                             "action" => "download",
-                            "id"     => $sharedUpload->id));
+                            "id"     => $sharedUpload->upload_id));
                         ?>">
                                <?php echo $sharedUpload->filename ?>
                         </a>
+                    </td>
+                    <td>
+                        <?php echo $usersOwners[$sharedUpload->id] ?>
                     </td>
                 </tr>
             <?php } ?>
