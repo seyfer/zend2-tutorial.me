@@ -3,6 +3,8 @@
 namespace Users\Model;
 
 use Users\Model\BaseTable;
+use Zend\Db\TableGateway\TableGateway,
+    Zend\Db\Sql\Select;
 
 /**
  * Description of UploadTable
@@ -53,6 +55,7 @@ class UploadTable extends BaseTable
 
         $rowset = $this->uploadSharingTableGateway->select(
                 array('upload_id' => $uploadId));
+
         return $rowset;
     }
 

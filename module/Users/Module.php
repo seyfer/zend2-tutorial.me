@@ -104,6 +104,15 @@ class Module implements AutoloaderProviderInterface
                 'RegisterFilter' => function ($sm) {
             return new \Users\Form\Filter\RegisterFilter();
         },
+                'UploadForm' => function($sm) {
+            $form        = new Form\UploadForm();
+            $uploadTable = $sm->get('UploadTable');
+            $userTable   = $sm->get('UserTable');
+            $form->setUploadTable($uploadTable);
+            $form->setUserTable($userTable);
+
+            return $form;
+        },
                 'AuthServiceUsers' => function ($sm) {
             $dbAdapter          = $sm->get('Zend\Db\Adapter\Adapter');
             $dbTableAuthAdapter = new DbTableAuthAdapter(

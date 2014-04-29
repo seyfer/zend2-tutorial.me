@@ -1,7 +1,8 @@
 <?php echo $this->flashMessenger()->render('error', array('alert', 'alert-danger')); ?>
 
-<div>
+<div class="col-md-12">
     <?php if ($myUploads) { ?>
+        <h1>My Uploads</h1>
         <table class="table">
             <thead>
                 <tr>
@@ -25,12 +26,51 @@
                         </a>
                     </td>
                     <td>
+                        <div class="btn-group">
+                            <a href="<?php
+                            echo $this->url('uploads', array(
+                                "action" => "edit",
+                                "id"     => $myUpload->getId()
+                            ))
+                            ?>" class="btn btn-warning">Edit</a>
+                            <a href="<?php
+                            echo $this->url('uploads', array(
+                                "action" => "delete",
+                                "id"     => $myUpload->getId()
+                            ))
+                            ?>" class="btn btn-danger">Delete</a>
+                        </div>
+                    </td>
+                </tr>
+            <?php } ?>
+        </table>
+
+    <?php } ?>
+</div>
+
+<div class="col-md-12">
+    <?php if ($sharedUploads) { ?>
+        <h1>Shared Uploads</h1>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Label</th>
+                    <th>FileName</th>
+                    <th>Link</th>
+                </tr>
+            </thead>
+            <?php foreach ($sharedUploads as $sharedUpload) { ?>
+                <tr>
+                    <td><?php echo $sharedUpload->label ?></td>
+                    <td><?php echo $sharedUpload->filename ?></td>
+                    <td>
                         <a href="<?php
-                        echo $this->url('uploads', array(
-                            "action" => "delete",
-                            "id"     => $myUpload->getId()
-                        ))
-                        ?>" class="btn btn-danger">Delete</a>
+                        echo $this->url("uploads", array(
+                            "action" => "download",
+                            "id"     => $sharedUpload->id));
+                        ?>">
+                               <?php echo $sharedUpload->filename ?>
+                        </a>
                     </td>
                 </tr>
             <?php } ?>

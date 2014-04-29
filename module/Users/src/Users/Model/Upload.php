@@ -44,7 +44,7 @@ class Upload extends BaseModel
         return $this->label;
     }
 
-    public function getUser_id()
+    public function getUserId()
     {
         return $this->user_id;
     }

@@ -1,0 +1,21 @@
+<?php
+
+$form = $this->form;
+$form->prepare();
+$form->setAttribute('action', $this->url('uploads', array(
+            'action' => 'edit',
+            'id'     => $uploadId,
+)));
+$form->setAttribute('method', 'post');
+echo $this->form()->openTag($form);
+?>
+
+<?php
+
+echo $this->formRow($form->get('id'));
+echo $this->formRow($form->get('label'));
+echo $this->formRow($form->get('shared_user_ids'));
+echo $this->formSubmit($form->get('submit')->setAttribute('class', 'btn btn-default'));
+?>
+
+<?php echo $this->form()->closeTag() ?>

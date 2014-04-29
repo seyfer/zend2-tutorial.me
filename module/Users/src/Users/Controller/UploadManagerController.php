@@ -26,10 +26,14 @@ class UploadManagerController extends BaseController
         $uploadTable = $this->getServiceLocator()->get('UploadTable');
         $userTable   = $this->getServiceLocator()->get('UserTable');
 
-        $user      = $userTable->getUserByEmail($userEmail);
+        $user          = $userTable->getUserByEmail($userEmail);
+        $sharedUploads = $uploadTable->getSharedUploadsForUserId($user->getId());
+        $myUploads     = $uploadTable->getUploadsByUserId($user->getId());
+
         $viewModel = new ViewModel(array(
-            'myUploads'  => $uploadTable->getUploadsByUserId($user->getId()),
-            'uploadPath' => $this->getFileUploadLocation()
+            'myUploads'     => $myUploads,
+            'sharedUploads' => $sharedUploads,
+            'uploadPath'    => $this->getFileUploadLocation()
         ));
 
         return $viewModel;
@@ -89,13 +93,36 @@ class UploadManagerController extends BaseController
         );
     }
 
+    public function editAction()
+    {
+        $uploadId = $this->params('id');
+
+        $form = $this->getServiceLocator()->get('UploadForm');
+        $form->initSharedUsersSelect($uploadId);
+
+        $uploadTable = $this->getServiceLocator()->get('UploadTable');
+        $upload      = $uploadTable->getById($uploadId);
+
+        $form->setData($upload->getArrayCopy());
+
+        if ($this->request->isPost()) {
+            $post = $this->request->getPost()->toArray();
+
+            foreach ($post['shared_user_ids'] as $idToShare) {
+                $uploadTable->addSharing($uploadId, $idToShare);
+            }
+        }
+
+        return array(
+            'form'     => $form,
+            'uploadId' => $uploadId,
+        );
+    }
+
     private function getFileUploadLocation()
     {
         // Получение конфигурации из конфигурационных данных модуля
         $config = $this->getServiceLocator()->get('config');
-
-//        echo $config['module_config']['upload_location'];
-//        exit();
 
         return $config['module_config']['upload_location'];
     }
