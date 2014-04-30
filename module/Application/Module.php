@@ -15,7 +15,8 @@ use Zend\Mvc\MvcEvent;
 use Zend\Session\Container;
 use Zend\Mvc\Router\Http\RouteMatch;
 
-class Module {
+class Module
+{
 
     public function onBootstrap(MvcEvent $e)
     {
@@ -34,7 +35,7 @@ class Module {
 
             $match = $e->getRouteMatch();
             //если роут логин, то не вешать
-            if (0 === strpos($match->getMatchedRouteName(), 'login')) {
+            if (0 === strpos($match->getMatchedRouteName(), 'users/default')) {
                 return;
             }
 
@@ -48,7 +49,7 @@ class Module {
             }
 
             if (!$app->getServiceManager()
-                            ->get('AuthService')->hasIdentity()) {
+                            ->get('AuthServiceUsers')->hasIdentity()) {
 
                 $response = $this->formNotAuthResponse($e);
                 $this->setBreakEvent($e, $response);
@@ -67,7 +68,7 @@ class Module {
     private function formNotAuthResponse($e)
     {
         $url = $e->getRouter()
-                ->assemble(array(), array('name' => 'login/login'));
+                ->assemble(array(), array('name' => 'users/default'));
 
         $response = $e->getResponse();
         $response->getHeaders()->addHeaderLine('Location', $url);
@@ -204,7 +205,7 @@ class Module {
                 'Zend\Session\SessionManager' => new \Application\Session\Service\AppSessionManagerFactory(),
                 'index_navigation'            => function (\Zend\ServiceManager\ServiceManager $sm) {
 
-            $navigationF = new Navigation\Service\CIndexNavidationFactory();
+            $navigationF = new Navigation\Service\CIndexNavidationFactory(null, $sm);
             $navigation  = $navigationF->createService($sm);
 
             return $navigation;

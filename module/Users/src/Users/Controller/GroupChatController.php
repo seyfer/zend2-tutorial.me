@@ -57,6 +57,10 @@ class GroupChatController extends BaseController
         $authService = $this->getAuthService();
         $email       = $authService->getStorage()->read();
 
+        if (!$email) {
+            throw new \Exception("not auhorized");
+        }
+
         $userTable = $this->getServiceLocator()->get('UserTable');
         $user      = $userTable->getUserByEmail($email);
 

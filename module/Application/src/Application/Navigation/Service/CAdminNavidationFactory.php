@@ -34,11 +34,11 @@ class CAdminNavidationFactory extends ConstructedNavigationFactory
                 'label' => 'На главную',
                 'route' => 'home',
             ),
-            array(
-                "label"  => "Выйти",
-                'route'  => "login/process",
-                'action' => "logout",
-            ),
+//            array(
+//                "label"  => "Выйти",
+//                'route'  => "login/process",
+//                'action' => "logout",
+//            ),
         );
 
         return $pages;

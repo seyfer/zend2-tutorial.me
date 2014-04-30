@@ -13,7 +13,6 @@ $modules = array(
 //    'ZfcUserDoctrineORM',
 //    'ZfcAdmin',
     'Sender',
-    'Auth',
     'Page',
     'Album',
     'Application',

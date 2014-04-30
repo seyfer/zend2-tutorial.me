@@ -3,6 +3,7 @@
 namespace Application\Navigation\Service;
 
 use Zend\Navigation\Service\ConstructedNavigationFactory;
+use Zend\ServiceManager\ServiceManager;
 
 /**
  * Description of CIndexNavidationFactory
@@ -12,8 +13,16 @@ use Zend\Navigation\Service\ConstructedNavigationFactory;
 class CIndexNavidationFactory extends ConstructedNavigationFactory
 {
 
-    public function __construct($config = null)
+    /**
+     *
+     * @var ServiceManager
+     */
+    private $serviceManager;
+
+    public function __construct($config = null, ServiceManager $serviceManager)
     {
+        $this->serviceManager = $serviceManager;
+
         $config = $config ? $config : $this->getDefaultPages();
         parent::__construct($config);
     }
@@ -78,6 +87,10 @@ class CIndexNavidationFactory extends ConstructedNavigationFactory
                     ),
                 ),
             ),
+            array(
+                'label' => "Group chat",
+                'route' => 'group-chat',
+            ),
         );
 
         $username = $this->getUsername();
@@ -85,36 +98,39 @@ class CIndexNavidationFactory extends ConstructedNavigationFactory
         if (!$username) {
 
             $pages[] = array(
-                "label" => "Войти",
-                'route' => "login",
-                "pages" => array(
-                    array(
-                        "label"  => "Войти",
-                        'route'  => "login/login",
-                        'action' => 'login',
-                    ),
-                )
-            );
-        } else {
-
-            $pages[] = array(
-                'label' => 'Админка',
-                'route' => 'admin',
-            );
-
-            $pages[] = array(
-                "label"  => "Выйти",
-                'route'  => "login/process",
-                'action' => "logout",
+                "label"      => "Войти",
+                'route'      => "users/default",
+                'action'     => 'index',
+                'controller' => 'login',
+//                "pages"  => array(
+//                    array(
+//                        "label"  => "Войти",
+//                        'route'  => "login/login",
+//                        'action' => 'login',
+//                    ),
+//                )
             );
         }
+//        else {
+//
+//            $pages[] = array(
+//                'label' => 'Админка',
+//                'route' => 'admin',
+//            );
+//
+//            $pages[] = array(
+//                "label"  => "Выйти",
+//                'route'  => "login/process",
+//                'action' => "logout",
+//            );
+//        }
 
         return $pages;
     }
 
     protected function getUsername()
     {
-        $store    = new \Auth\Model\AuthStorage("auth_storage");
+        $store    = $this->serviceManager->get('AuthServiceUsers')->getStorage();
         $username = $store->read();
 
         return $username;
