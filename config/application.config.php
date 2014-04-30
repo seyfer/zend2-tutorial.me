@@ -20,10 +20,10 @@ $modules = array(
     'Users'
 );
 
-if ($env == 'development') {
-    $modules[] = 'ZendDeveloperTools';
-    $modules[] = 'BjyProfiler';
-}
+//if ($env == 'development') {
+//    $modules[] = 'ZendDeveloperTools';
+//    $modules[] = 'BjyProfiler';
+//}
 
 $stringKeyCache     = 'app_config';
 $stringKeyCachePath = 'data/cache/config/';

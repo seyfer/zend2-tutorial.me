@@ -12,4 +12,18 @@ $(document).ready(function() {
         }
     });
 
+    $(function() {
+        $("a.ui-button").button();
+    });
+
+//    console.log($("a.ui-button").button());
+//
+//    $(function() {
+//        $("input[type=submit], a, button")
+//                .button()
+//                .click(function(event) {
+//                    event.preventDefault();
+//                });
+//    });
+
 });
