@@ -13,24 +13,29 @@ $this->headStyle()->appendStyle('
 ');
 ?>
 
-<h3>Group Chat</h3>
-<iframe src="<?php
-echo $this->url('group-chat', array(
-    'action' => 'messageList'
-))
-?>" width="80%" height="400px"
-        id="messageListFrame"></iframe>
+<div class="col-md-10">
+    <h3>Group Chat</h3>
+    <iframe src="<?php
+    echo $this->url('group-chat', array(
+        'action' => 'messageList'
+    ))
+    ?>" width="100%" height="400px"
+            id="messageListFrame"></iframe>
 
 
-<?php
-// Визуализация открывающего тега
-echo $this->form()->openTag($form);
-// ... цикл визуализации элементов формы...
-echo '<label id="userName">' . $userName . ': </label>';
-foreach ($form as $element) {
-    echo $this->formElement($element); // <-- Magic!
-    echo $this->formElementErrors($element);
-}
-// Визуализация закрывающего тега
-echo $this->form()->closeTag();
-?>
+    <?php
+    // Визуализация открывающего тега
+    echo $this->form()->openTag($form);
+
+    // ... цикл визуализации элементов формы...
+    echo '<label id="userName">' . $userName . ': </label>';
+    foreach ($form as $element) {
+        echo $this->formElement($element); // <-- Magic!
+        echo $this->formElementErrors($element);
+    }
+
+    // Визуализация закрывающего тега
+    echo $this->form()->closeTag();
+    ?>
+
+</div>
