@@ -2,17 +2,16 @@
 
 namespace Users\Form;
 
-use Zend\Form\Form;
 use Zend\Form\Element;
-use Users\Model\UploadTable,
-    Users\Model\UserTable;
+use Users\Model\UploadTable;
+use Users\Form\BaseForm;
 
 /**
  * Description of UploadForm
  *
  * @author seyfer
  */
-class UploadForm extends Form
+class UploadForm extends BaseForm
 {
 
     /**
@@ -21,20 +20,9 @@ class UploadForm extends Form
      */
     private $uploadTable;
 
-    /**
-     *
-     * @var UserTable
-     */
-    private $userTable;
-
     public function setUploadTable(UploadTable $uploadTable)
     {
         $this->uploadTable = $uploadTable;
-    }
-
-    public function setUserTable(UserTable $userTable)
-    {
-        $this->userTable = $userTable;
     }
 
     public function __construct($name = null)

@@ -13,6 +13,36 @@ use Zend\View\Model\ViewModel;
 class GroupChatController extends BaseController
 {
 
+    public function sendMailAction()
+    {
+        $user = $this->getLoggedInUser();
+        $form = $this->getServiceLocator()->get('SendMailForm');
+        $form->initUsersSelect($user);
+
+        if ($this->request->isPost()) {
+            $post = $this->request->getPost();
+        }
+
+        return array('form' => $form);
+    }
+
+    protected function sendOfflineMessage(
+    $msgSubj, $msgText, $fromUserId, $toUserId)
+    {
+        $userTable = $this->getServiceLocator()->get('UserTable');
+        $fromUser  = $userTable->getUser($fromUserId);
+        $toUser    = $userTable->getUser($toUserId);
+        $mail      = new Mail\Message();
+        $mail->setFrom($fromUser->email, $fromUser->name);
+        $mail->addTo($toUser->email, $toUser->name);
+        $mail->setSubject($msgSubj);
+        $mail->setBody($msgText);
+        $transport = new Mail\Transport\Sendmail();
+        $transport->send($mail);
+
+        return true;
+    }
+
     public function messageListAction()
     {
         $userTable     = $this->getServiceLocator()->get('UserTable');

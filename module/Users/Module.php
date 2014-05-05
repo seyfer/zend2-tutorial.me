@@ -113,6 +113,13 @@ class Module implements AutoloaderProviderInterface
 
             return $form;
         },
+                'SendMailForm' => function($sm) {
+            $form      = new Form\SendMailForm();
+            $userTable = $sm->get('UserTable');
+            $form->setUserTable($userTable);
+
+            return $form;
+        },
                 'AuthServiceUsers' => function ($sm) {
             $dbAdapter          = $sm->get('Zend\Db\Adapter\Adapter');
             $dbTableAuthAdapter = new DbTableAuthAdapter(

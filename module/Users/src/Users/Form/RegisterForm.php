@@ -15,7 +15,7 @@ class RegisterForm extends Form
 
     public function __construct($name = null)
     {
-        parent::__construct('Register');
+        parent::__construct(__CLASS__);
         $this->setAttribute('method', 'post');
         $this->setAttribute('enctype', 'multipart/form-data');
 

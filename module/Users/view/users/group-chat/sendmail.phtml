@@ -1,0 +1,20 @@
+<?php
+
+$form = $this->form;
+$form->prepare();
+$form->setAttribute('action', $this->url('group-chat', array(
+            'action' => 'sendmail',
+)));
+$form->setAttribute('method', 'post');
+echo $this->form()->openTag($form);
+?>
+
+<?php
+
+echo $this->formRow($form->get('user'));
+echo $this->formRow($form->get('subject'));
+echo $this->formRow($form->get('message'));
+echo $this->formSubmit($form->get('send')->setAttribute('class', 'btn btn-default'));
+?>
+
+<?php echo $this->form()->closeTag() ?>
