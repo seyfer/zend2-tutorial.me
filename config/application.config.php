@@ -16,6 +16,7 @@ $modules = array(
     'Page',
     'Album',
     'Application',
+    'WebinoImageThumb',
     'Users'
 );
 

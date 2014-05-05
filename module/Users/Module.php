@@ -50,6 +50,20 @@ class Module implements AutoloaderProviderInterface
         $eventManager        = $e->getApplication()->getEventManager();
         $moduleRouteListener = new ModuleRouteListener();
         $moduleRouteListener->attach($eventManager);
+
+        $sharedEventManager = $eventManager->getSharedManager();
+        // менеджер событий
+        $sharedEventManager->attach(__NAMESPACE__, MvcEvent::EVENT_DISPATCH, function($e) {
+            $controller     = $e->getTarget(); // обслуживаемый контроллер
+            $controllerName = $controller->getEvent()
+                            ->getRouteMatch()->getParam('controller');
+
+            if (!in_array($controllerName, array(
+                        'Users\Controller\Index', 'Users\Controller\Register',
+                        'Users\Controller\Login'))) {
+                $controller->layout('layout/admin');
+            }
+        });
     }
 
     public function getServiceConfig()

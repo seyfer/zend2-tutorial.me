@@ -28,7 +28,9 @@
         "doctrine/common": "2.4.*",
         "doctrine/orm": "2.4.*",
         "doctrine/doctrine-module": "0.8.*",
-        "doctrine/doctrine-orm-module": "0.8.*"
+        "doctrine/doctrine-orm-module": "0.8.*",
+        "webino/webino-image-thumb": "dev-master",
+        "zendframework/zendgdata": "dev-master"
     },
     "repositories": [
         {
