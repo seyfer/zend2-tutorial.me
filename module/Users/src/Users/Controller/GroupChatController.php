@@ -4,6 +4,7 @@ namespace Users\Controller;
 
 use Users\Controller\BaseController;
 use Zend\View\Model\ViewModel;
+use Zend\Mail;
 
 /**
  * Description of GroupChatController
@@ -21,6 +22,20 @@ class GroupChatController extends BaseController
 
         if ($this->request->isPost()) {
             $post = $this->request->getPost();
+
+//            \Zend\Debug\Debug::dump($post);
+            $form->setData($post);
+
+            if ($form->isValid()) {
+                $data = $form->getData();
+
+                $fromUserId = $user->getId();
+                $toUserId   = $data['user'];
+                $msgSubj    = $data['subject'];
+                $msgText    = $data['message'];
+
+                $result = $this->sendOfflineMessage($msgSubj, $msgText, $fromUserId, $toUserId);
+            }
         }
 
         return array('form' => $form);
@@ -30,14 +45,29 @@ class GroupChatController extends BaseController
     $msgSubj, $msgText, $fromUserId, $toUserId)
     {
         $userTable = $this->getServiceLocator()->get('UserTable');
-        $fromUser  = $userTable->getUser($fromUserId);
-        $toUser    = $userTable->getUser($toUserId);
-        $mail      = new Mail\Message();
-        $mail->setFrom($fromUser->email, $fromUser->name);
-        $mail->addTo($toUser->email, $toUser->name);
+        $fromUser  = $userTable->getById($fromUserId);
+        $toUser    = $userTable->getById($toUserId);
+
+        $mail = new Mail\Message();
+        $mail->setFrom($fromUser->getEmail(), $fromUser->getName());
+        $mail->addTo($toUser->getEmail(), $toUser->getName());
         $mail->setSubject($msgSubj);
         $mail->setBody($msgText);
+
         $transport = new Mail\Transport\Sendmail();
+
+//        $transport = new Mail\Transport\Smtp();
+//        $options   = new Mail\Transport\SmtpOptions(array(
+//            'name'              => 'smtp.gmail.com',
+//            'host'              => 'smtp.gmail.com',
+//            'connection_class'  => 'login',
+//            'connection_config' => array(
+//                'ssl'      => 'tls',
+//                'username' => 'seyferseed@gmail.com',
+//                'password' => '',
+//            ),
+//        ));
+//        $transport->setOptions($options);
         $transport->send($mail);
 
         return true;
