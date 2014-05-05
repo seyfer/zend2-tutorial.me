@@ -88,6 +88,18 @@ class CIndexNavidationFactory extends ConstructedNavigationFactory
                 ),
             ),
             array(
+                'label' => "Media manager",
+                'route' => 'media',
+                'pages' => array(
+                    array(
+                        'label'   => "Upload",
+                        'route'   => 'media',
+                        'visible' => TRUE,
+                        'action'  => 'upload',
+                    ),
+                ),
+            ),
+            array(
                 'label' => "Group chat",
                 'route' => 'group-chat',
             ),

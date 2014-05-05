@@ -1,2 +1,64 @@
-<?php
+<?php echo $this->flashMessenger()->render('error', array('alert', 'alert-danger')); ?>
 
+<div class="col-md-12">
+    <?php if ($myUploads) { ?>
+        <h1>My Images</h1>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Image</th>
+                    <th>FileName</th>
+                    <th>Link</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <?php foreach ($myUploads as $myUpload) { ?>
+                <tr>
+                    <td>
+                        <img src="<?php
+                        echo $this->url('media', array('action'    => 'showImage',
+                            'id'        => $myUpload->getId(),
+                            'subaction' => 'thumb'));
+                        ?>" />
+                        <br>
+                        <?php echo $myUpload->getLabel() ?>
+                        <br>
+                        <a href="<?php
+                        echo $this->url('media', array(
+                            'action' => 'view',
+                            'id'     => $myUpload->getId()
+                        ))
+                        ?>">View Full</a>
+                    </td>
+                    <td><?php echo $myUpload->getFilename() ?></td>
+                    <td>
+                        <a href="<?php
+                        echo $this->url("uploads", array(
+                            "action" => "download",
+                            "id"     => $myUpload->getId()));
+                        ?>">
+                               <?php echo $myUpload->getFilename() ?>
+                        </a>
+                    </td>
+                    <td>
+                        <div class="btn-group">
+                            <a href="<?php
+                            echo $this->url('uploads', array(
+                                "action" => "edit",
+                                "id"     => $myUpload->getId()
+                            ))
+                            ?>" class="btn btn-warning">Edit</a>
+                            <a href="<?php
+                            echo $this->url('uploads', array(
+                                "action" => "delete",
+                                "id"     => $myUpload->getId()
+                            ))
+                            ?>" class="btn btn-danger">Delete</a>
+                        </div>
+                    </td>
+                </tr>
+            <?php } ?>
+        </table>
+
+    <?php } ?>
+</div>

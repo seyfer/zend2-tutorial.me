@@ -96,6 +96,17 @@ class Module implements AutoloaderProviderInterface
             $resultSetPrototype->setArrayObjectPrototype(new Model\Upload());
             return new TableGateway('uploads', $dbAdapter, null, $resultSetPrototype);
         },
+                'ImageUploadTable' => function($sm) {
+            $tableGateway = $sm->get('ImageUploadTableGateway');
+            $table        = new Model\ImageUploadTable($tableGateway);
+            return $table;
+        },
+                'ImageUploadTableGateway' => function ($sm) {
+            $dbAdapter          = $sm->get('Zend\Db\Adapter\Adapter');
+            $resultSetPrototype = new ResultSet();
+            $resultSetPrototype->setArrayObjectPrototype(new Model\ImageUpload());
+            return new TableGateway('image_uploads', $dbAdapter, null, $resultSetPrototype);
+        },
                 // Формы
                 'LoginForm' => function ($sm) {
             $form = new \Users\Form\LoginForm();

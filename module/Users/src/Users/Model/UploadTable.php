@@ -16,7 +16,7 @@ class UploadTable extends BaseTable
 
     protected $uploadSharingTableGateway;
 
-    public function __construct(TableGateway $tableGateway, TableGateway $uploadSharingTableGateway)
+    public function __construct(TableGateway $tableGateway, TableGateway $uploadSharingTableGateway = null)
     {
         $this->tableGateway              = $tableGateway;
         $this->uploadSharingTableGateway = $uploadSharingTableGateway;
