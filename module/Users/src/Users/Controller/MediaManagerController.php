@@ -15,7 +15,7 @@ class MediaManagerController extends BaseController
 {
 
     const GOOGLE_USER_ID  = 'seyferseed@mail.ru';
-    const GOOGLE_PASSWORD = '164413scissorSx21';
+    const GOOGLE_PASSWORD = '';
 
     public function indexAction()
     {
