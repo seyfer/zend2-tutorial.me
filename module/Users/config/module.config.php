@@ -2,7 +2,9 @@
 
 return array(
     'module_config' => array(
-        'upload_location' => __DIR__ . '/../../../data/uploads',
+        'upload_location'       => __DIR__ . '/../../../data/uploads',
+        'image_upload_location' => __DIR__ . '/../../../data/images',
+        'search_index'          => __DIR__ . '/../../../data/search_index',
     ),
     'controllers'   => array(
         'invokables' => array(

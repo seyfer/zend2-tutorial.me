@@ -34,7 +34,7 @@ class MediaManagerController extends BaseController
 
         if (self::GOOGLE_PASSWORD) {
             $googleAlbums = $this->getGooglePhotos();
-            $googleVideos = $this->getYoutubeVideos();
+            $googleVideos = $this->getGoogleVideos();
         }
 
         $viewModel = new ViewModel(array(
@@ -240,7 +240,12 @@ class MediaManagerController extends BaseController
         ));
     }
 
-    private function getYoutubeVideos()
+    /**
+     * @deprecated since version number
+     * not maintained
+     * @return type
+     */
+    private function getGoogleVideos()
     {
         $yVideo = [];
         $cache  = $this->getApcCache();

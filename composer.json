@@ -30,7 +30,8 @@
         "doctrine/doctrine-module": "0.8.*",
         "doctrine/doctrine-orm-module": "0.8.*",
         "webino/webino-image-thumb": "dev-master",
-        "zendframework/zendgdata": "dev-master"
+        "zendframework/zendgdata": "dev-master",
+        "zendframework/zendsearch": "dev-master"
     },
     "repositories": [
         {
