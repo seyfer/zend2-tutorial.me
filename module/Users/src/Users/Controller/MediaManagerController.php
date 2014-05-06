@@ -210,61 +210,96 @@ class MediaManagerController extends BaseController
                         toRoute('media', array('action' => 'index'));
     }
 
+    /**
+     *
+     * @return Zend\Cache\Storage\Adapter\Apc
+     */
+    private function getApcCache()
+    {
+        return \Zend\Cache\StorageFactory::factory(array(
+                    'adapter' => array(
+                        'name'    => 'apc',
+                        // With a namespace we can indicate the same type of items
+                        // -> So we can simple use the db id as cache key
+                        'options' => array(
+                            'namespace' => 'dbtable'
+                        ),
+                    ),
+                    'plugins' => array(
+                        // Don't throw exceptions on cache errors
+                        'exception_handler' => array(
+                            'throw_exceptions' => false
+                        ),
+                        // We store database rows on filesystem so we need to serialize them
+                        'Serializer'
+                    )
+        ));
+    }
+
     public function getGooglePhotos()
     {
-        $adapter    = new \Zend\Http\Client\Adapter\Curl();
-        $adapter->setOptions(array(
-            'curloptions' => array(
-                CURLOPT_SSL_VERIFYPEER => false,
-            )
-        ));
-        $httpClient = new \ZendGData\HttpClient();
-        $httpClient->setAdapter($adapter);
-        $client     = \ZendGData\ClientLogin::getHttpClient(
-                        self::GOOGLE_USER_ID, self::GOOGLE_PASSWORD, \ZendGData\Photos::AUTH_SERVICE_NAME, $httpClient);
+        $gAlbums = [];
+        $cache   = $this->getApcCache();
+        $key     = 'google_photos';
+        if (!$cache->getItem($key)) {
+
+            $adapter    = new \Zend\Http\Client\Adapter\Curl();
+            $adapter->setOptions(array(
+                'curloptions' => array(
+                    CURLOPT_SSL_VERIFYPEER => false,
+                )
+            ));
+            $httpClient = new \ZendGData\HttpClient();
+            $httpClient->setAdapter($adapter);
+            $client     = \ZendGData\ClientLogin::getHttpClient(
+                            self::GOOGLE_USER_ID, self::GOOGLE_PASSWORD, \ZendGData\Photos::AUTH_SERVICE_NAME, $httpClient);
 
 //        \Zend\Debug\Debug::dump($client);
 
-        $gp = new \ZendGData\Photos($client);
-
-        $gAlbums  = [];
-        $userFeed = $gp->getUserFeed(self::GOOGLE_USER_ID);
+            $gp       = new \ZendGData\Photos($client);
+            $userFeed = $gp->getUserFeed(self::GOOGLE_USER_ID);
 
 //        \Zend\Debug\Debug::dump($userFeed);
 
-        foreach ($userFeed as $userEntry) {
-            $albumId                    = $userEntry->getGphotoId()->getText();
-            $gAlbums[$albumId]['label'] = $userEntry->getTitle()->getText();
+            foreach ($userFeed as $userEntry) {
+                $albumId                    = $userEntry->getGphotoId()->getText();
+                $gAlbums[$albumId]['label'] = $userEntry->getTitle()->getText();
 
-            $query     = $gp->newAlbumQuery();
-            $query->setUser(self::GOOGLE_USER_ID);
-            $query->setAlbumId($albumId);
-            $albumFeed = $gp->getAlbumFeed($query);
+                $query     = $gp->newAlbumQuery();
+                $query->setUser(self::GOOGLE_USER_ID);
+                $query->setAlbumId($albumId);
+                $albumFeed = $gp->getAlbumFeed($query);
 
 //            \Zend\Debug\Debug::dump($albumFeed);
 
-            foreach ($albumFeed as $photoEntry) {
-                $photoId = $photoEntry->getGphotoId()->getText();
+                foreach ($albumFeed as $photoEntry) {
+                    $photoId = $photoEntry->getGphotoId()->getText();
 
-                if ($photoEntry->getMediaGroup()->getContent() != null) {
-                    $mediaContentArray = $photoEntry->getMediaGroup()->getContent();
-                    $photoUrl          = $mediaContentArray[0]->getUrl();
+                    if ($photoEntry->getMediaGroup()->getContent() != null) {
+                        $mediaContentArray = $photoEntry->getMediaGroup()->getContent();
+                        $photoUrl          = $mediaContentArray[0]->getUrl();
+                    }
+
+                    if ($photoEntry->getMediaGroup()->getThumbnail() != null) {
+                        $mediaThumbnailArray = $photoEntry->getMediaGroup()
+                                ->getThumbnail();
+                        $thumbUrl            = $mediaThumbnailArray[0]->getUrl();
+                    }
+
+                    $albumPhoto             = array();
+                    $albumPhoto['id']       = $photoId;
+                    $albumPhoto['photoUrl'] = $photoUrl;
+                    $albumPhoto['thumbUrl'] = $thumbUrl;
                 }
 
-                if ($photoEntry->getMediaGroup()->getThumbnail() != null) {
-                    $mediaThumbnailArray = $photoEntry->getMediaGroup()
-                            ->getThumbnail();
-                    $thumbUrl            = $mediaThumbnailArray[0]->getUrl();
-                }
-
-                $albumPhoto             = array();
-                $albumPhoto['id']       = $photoId;
-                $albumPhoto['photoUrl'] = $photoUrl;
-                $albumPhoto['thumbUrl'] = $thumbUrl;
+                $gAlbums[$albumId]['photos'][] = $albumPhoto;
             }
 
-            $gAlbums[$albumId]['photos'][] = $albumPhoto;
+            $cache->setItem($key, $gAlbums);
+        } else {
+            $gAlbums = $cache->getItem($key);
         }
+
         // Возвращение объединенного массива в представление для визуализации
         return $gAlbums;
     }
