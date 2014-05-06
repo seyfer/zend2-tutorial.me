@@ -106,6 +106,47 @@ class MediaManagerController extends BaseController
         return array('upload' => $upload);
     }
 
+    public function rotateAction()
+    {
+        $uploadId    = $this->params()->fromRoute('id');
+        $uploadTable = $this->getServiceLocator()->get('ImageUploadTable');
+        $upload      = $uploadTable->getById($uploadId);
+
+        // Выборка конфигурации из модуля
+        $uploadPath = $this->getFileUploadLocation();
+        $subAction  = $this->params()->fromRoute('subaction');
+
+        $thumbName = $uploadPath . DIRECTORY_SEPARATOR . $upload->getThumbnail();
+        $fileName  = $uploadPath . DIRECTORY_SEPARATOR . $upload->getFilename();
+
+        $imageThumb = $this->getServiceLocator()->get('WebinoImageThumb');
+        if ($subAction == 'left') {
+
+            $thumb   = $imageThumb
+                    ->create($thumbName, $options = array());
+            $thumb->rotateImageNDegrees(-90);
+            $thumb->save($thumbName);
+            $file    = $imageThumb
+                    ->create($fileName, $options = array());
+            $file->rotateImageNDegrees(-90);
+            $file->save($fileName);
+        } else if ($subAction == 'right') {
+            $thumb   = $imageThumb
+                    ->create($thumbName, $options = array());
+            $thumb->rotateImageNDegrees(90);
+            $thumb->save($thumbName);
+            $file    = $imageThumb
+                    ->create($fileName, $options = array());
+            $file->rotateImageNDegrees(90);
+            $file->save($fileName);
+        }
+
+        return $this->redirect()->toRoute('media', array(
+                    'action' => 'view',
+                    'id'     => $uploadId,
+        ));
+    }
+
     private function getFileUploadLocation()
     {
         // Получение конфигурации из конфигурационных данных модуля

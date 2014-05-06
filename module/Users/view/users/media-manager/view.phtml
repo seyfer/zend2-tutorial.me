@@ -1,9 +1,26 @@
 <section class="upload">
     <h2><?php echo $this->escapeHtml($upload->getLabel()); ?></h2>
     <h4><?php echo $this->escapeHtml($upload->getFilename()); ?></h4>
+    <a href="<?php
+    echo $this->url('media', array(
+        'action'    => 'rotate',
+        'id'        => $upload->getId(),
+        'subaction' => 'left'
+    ));
+    ?>">Rotate Left</a>
+
+    <a href="<?php
+    echo $this->url('media', array(
+        'action'    => 'rotate',
+        'id'        => $upload->getId(),
+        'subaction' => 'right'
+    ));
+    ?>">Rotate Right</a>
+    <br>
 
     <img src="<?php
-    echo $this->url('media', array('action'    => 'showImage',
+    echo $this->url('media', array(
+        'action'    => 'showImage',
         'id'        => $upload->getId(),
         'subaction' => 'full'));
     ?>" />
