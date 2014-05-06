@@ -62,3 +62,28 @@
 
     <?php } ?>
 </div>
+
+<div class="col-md-12">
+    <?php if ($googleAlbums) : ?>
+        <h1>My Google Images</h1>
+
+        <?php foreach ($googleAlbums as $googleAlbum) : ?>
+            <h4> <?php echo $this->escapeHtml($googleAlbum['label']); ?></h4>
+
+            <?php foreach ($googleAlbum['photos'] as $googleAlbumPhoto) : ?>
+                <div class = "googleAlbumPhoto" style="padding:10px;display:inline">
+                    <a href="<?php
+                    echo $this->escapeHtml(
+                            $googleAlbumPhoto['photoUrl']);
+                    ?>">
+                        <img src="<?php
+                        echo $this->escapeHtml(
+                                $googleAlbumPhoto['thumbUrl']);
+                        ?>" />
+                    </a>
+                </div>
+            <?php endforeach; ?>
+        <?php endforeach; ?>
+    <?php endif; ?>
+    <hr />
+</div>

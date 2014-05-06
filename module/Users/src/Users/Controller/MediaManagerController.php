@@ -14,6 +14,9 @@ use Users\Form\UploadForm;
 class MediaManagerController extends BaseController
 {
 
+    const GOOGLE_USER_ID  = 'seyferseed@mail.ru';
+    const GOOGLE_PASSWORD = '164413scissorSx21';
+
     public function indexAction()
     {
         // Получение информации о пользователе от сеанса
@@ -29,9 +32,12 @@ class MediaManagerController extends BaseController
         $user      = $userTable->getUserByEmail($userEmail);
         $myUploads = $uploadTable->getUploadsByUserId($user->getId());
 
+        $googleAlbums = $this->getGooglePhotos();
+
         $viewModel = new ViewModel(array(
-            'myUploads'  => $myUploads,
-            'uploadPath' => $this->getFileUploadLocation()
+            'myUploads'    => $myUploads,
+            'uploadPath'   => $this->getFileUploadLocation(),
+            'googleAlbums' => $googleAlbums,
         ));
 
         return $viewModel;
@@ -202,6 +208,65 @@ class MediaManagerController extends BaseController
 
         return $this->redirect()->
                         toRoute('media', array('action' => 'index'));
+    }
+
+    public function getGooglePhotos()
+    {
+        $adapter    = new \Zend\Http\Client\Adapter\Curl();
+        $adapter->setOptions(array(
+            'curloptions' => array(
+                CURLOPT_SSL_VERIFYPEER => false,
+            )
+        ));
+        $httpClient = new \ZendGData\HttpClient();
+        $httpClient->setAdapter($adapter);
+        $client     = \ZendGData\ClientLogin::getHttpClient(
+                        self::GOOGLE_USER_ID, self::GOOGLE_PASSWORD, \ZendGData\Photos::AUTH_SERVICE_NAME, $httpClient);
+
+//        \Zend\Debug\Debug::dump($client);
+
+        $gp = new \ZendGData\Photos($client);
+
+        $gAlbums  = [];
+        $userFeed = $gp->getUserFeed(self::GOOGLE_USER_ID);
+
+//        \Zend\Debug\Debug::dump($userFeed);
+
+        foreach ($userFeed as $userEntry) {
+            $albumId                    = $userEntry->getGphotoId()->getText();
+            $gAlbums[$albumId]['label'] = $userEntry->getTitle()->getText();
+
+            $query     = $gp->newAlbumQuery();
+            $query->setUser(self::GOOGLE_USER_ID);
+            $query->setAlbumId($albumId);
+            $albumFeed = $gp->getAlbumFeed($query);
+
+//            \Zend\Debug\Debug::dump($albumFeed);
+
+            foreach ($albumFeed as $photoEntry) {
+                $photoId = $photoEntry->getGphotoId()->getText();
+
+                if ($photoEntry->getMediaGroup()->getContent() != null) {
+                    $mediaContentArray = $photoEntry->getMediaGroup()->getContent();
+                    $photoUrl          = $mediaContentArray[0]->getUrl();
+                }
+
+                if ($photoEntry->getMediaGroup()->getThumbnail() != null) {
+                    $mediaThumbnailArray = $photoEntry->getMediaGroup()
+                            ->getThumbnail();
+                    $thumbUrl            = $mediaThumbnailArray[0]->getUrl();
+                }
+
+                $albumPhoto             = array();
+                $albumPhoto['id']       = $photoId;
+                $albumPhoto['photoUrl'] = $photoUrl;
+                $albumPhoto['thumbUrl'] = $thumbUrl;
+            }
+
+            $gAlbums[$albumId]['photos'][] = $albumPhoto;
+        }
+        // Возвращение объединенного массива в представление для визуализации
+        return $gAlbums;
     }
 
 }
