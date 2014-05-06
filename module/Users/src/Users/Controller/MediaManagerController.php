@@ -32,12 +32,16 @@ class MediaManagerController extends BaseController
         $user      = $userTable->getUserByEmail($userEmail);
         $myUploads = $uploadTable->getUploadsByUserId($user->getId());
 
-        $googleAlbums = $this->getGooglePhotos();
+        if (self::GOOGLE_PASSWORD) {
+            $googleAlbums = $this->getGooglePhotos();
+            $googleVideos = $this->getYoutubeVideos();
+        }
 
         $viewModel = new ViewModel(array(
             'myUploads'    => $myUploads,
             'uploadPath'   => $this->getFileUploadLocation(),
             'googleAlbums' => $googleAlbums,
+            'googleVideos' => $googleVideos,
         ));
 
         return $viewModel;
@@ -222,7 +226,7 @@ class MediaManagerController extends BaseController
                         // With a namespace we can indicate the same type of items
                         // -> So we can simple use the db id as cache key
                         'options' => array(
-                            'namespace' => 'dbtable'
+                            'namespace' => 'google'
                         ),
                     ),
                     'plugins' => array(
@@ -236,23 +240,74 @@ class MediaManagerController extends BaseController
         ));
     }
 
-    public function getGooglePhotos()
+    private function getYoutubeVideos()
+    {
+        $yVideo = [];
+        $cache  = $this->getApcCache();
+        $key    = 'google_yVideo';
+        if (!$cache->getItem($key)) {
+            $client = $this->getGoogleClient();
+
+//        \Zend\Debug\Debug::dump($client);
+
+            $yt    = new \ZendGData\YouTube($client);
+            $yt->setMajorProtocolVersion(2);
+            $query = $yt->newVideoQuery();
+            $query->setOrderBy('relevance');
+            $query->setSafeSearch('none');
+            $query->setVideoQuery('Zend Framework');
+
+//        \Zend\Debug\Debug::dump($userFeed);
+
+            $videoFeed = $yt->getVideoFeed($query->getQueryUrl(2));
+            $yVideos   = array();
+            foreach ($videoFeed as $videoEntry) {
+                $yVideo                     = array();
+                $yVideo['videoTitle']       = $videoEntry->getVideoTitle();
+                $yVideo['videoDescription'] = $videoEntry->getVideoDescription();
+                $yVideo['watchPage']        = $videoEntry->getVideoWatchPageUrl();
+                $yVideo['duration']         = $videoEntry->getVideoDuration();
+                $videoThumbnails            = $videoEntry->getVideoThumbnails();
+                $yVideo['thumbnailUrl']     = $videoThumbnails[0]['url'];
+                $yVideos[]                  = $yVideo;
+            }
+
+            $cache->setItem($key, $yVideo);
+        } else {
+            $yVideo = $cache->getItem($key);
+        }
+
+        // Возвращение объединенного массива в представление для визуализации
+        return $yVideo;
+    }
+
+    /**
+     *
+     * @return \ZendGData\HttpClient
+     */
+    private function getGoogleClient()
+    {
+        $adapter    = new \Zend\Http\Client\Adapter\Curl();
+        $adapter->setOptions(array(
+            'curloptions' => array(
+                CURLOPT_SSL_VERIFYPEER => false,
+            )
+        ));
+        $httpClient = new \ZendGData\HttpClient();
+        $httpClient->setAdapter($adapter);
+        $client     = \ZendGData\ClientLogin::getHttpClient(
+                        self::GOOGLE_USER_ID, self::GOOGLE_PASSWORD, \ZendGData\Photos::AUTH_SERVICE_NAME, $httpClient);
+
+        return $client;
+    }
+
+    private function getGooglePhotos()
     {
         $gAlbums = [];
         $cache   = $this->getApcCache();
         $key     = 'google_photos';
         if (!$cache->getItem($key)) {
-
-            $adapter    = new \Zend\Http\Client\Adapter\Curl();
-            $adapter->setOptions(array(
-                'curloptions' => array(
-                    CURLOPT_SSL_VERIFYPEER => false,
-                )
-            ));
-            $httpClient = new \ZendGData\HttpClient();
-            $httpClient->setAdapter($adapter);
-            $client     = \ZendGData\ClientLogin::getHttpClient(
-                            self::GOOGLE_USER_ID, self::GOOGLE_PASSWORD, \ZendGData\Photos::AUTH_SERVICE_NAME, $httpClient);
+            $client = $this->getGoogleClient();
 
 //        \Zend\Debug\Debug::dump($client);
 
