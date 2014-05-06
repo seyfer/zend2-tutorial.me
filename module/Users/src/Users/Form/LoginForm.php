@@ -29,6 +29,10 @@ class LoginForm extends Form
         $password->setLabel('password');
         $this->add($password);
 
+        $remember = new Element\Checkbox('rememberme');
+        $remember->setLabel('remember me');
+        $this->add($remember);
+
         $submit = new Element\Submit('submit');
         $submit->setValue("submit")->setLabel("submit");
         $this->add($submit);

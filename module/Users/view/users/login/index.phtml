@@ -26,7 +26,13 @@
         <dd><?php
             echo $this->formElement($form->get('password'));
             echo $this->formElementErrors($form->get('password'));
-            ?></dd>
+            ?>
+        </dd>
+        <dd><?php
+            echo $this->formElement($form->get('rememberme'));
+            echo $this->formElementErrors($form->get('rememberme'));
+            ?>
+        </dd>
         <dd>
             <?php
             echo $this->formElement($form->get('submit'));

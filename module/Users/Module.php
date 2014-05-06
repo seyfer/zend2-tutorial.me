@@ -145,12 +145,16 @@ class Module implements AutoloaderProviderInterface
 
             return $form;
         },
+                'AuthStorageUsers' => function ($sm) {
+            return new Model\AuthStorage();
+        },
                 'AuthServiceUsers' => function ($sm) {
             $dbAdapter          = $sm->get('Zend\Db\Adapter\Adapter');
             $dbTableAuthAdapter = new DbTableAuthAdapter(
                     $dbAdapter, 'myuser', 'email', 'password', 'MD5(?)');
             $authService        = new AuthenticationService();
             $authService->setAdapter($dbTableAuthAdapter);
+            $authService->setStorage($sm->get('AuthStorageUsers'));
 
             return $authService;
         },

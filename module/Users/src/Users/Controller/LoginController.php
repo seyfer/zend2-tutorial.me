@@ -5,6 +5,7 @@ namespace Users\Controller;
 use Users\Controller\BaseController;
 use Zend\View\Model\ViewModel;
 use Users\Form\LoginForm;
+use Users\Model\AuthStorage;
 
 /**
  * Description of LoginController
@@ -14,11 +15,31 @@ use Users\Form\LoginForm;
 class LoginController extends BaseController
 {
 
+    /**
+     *
+     * @var AuthStorage
+     */
+    protected $storage;
+
     public function indexAction()
     {
         $form      = new LoginForm();
         $viewModel = new ViewModel(array('form' => $form));
         return $viewModel;
+    }
+
+    /**
+     *
+     * @return AuthStorage
+     */
+    public function getSessionStorage()
+    {
+        if (!$this->storage) {
+            $this->storage = $this->getServiceLocator()
+                    ->get('AuthStorageUsers');
+        }
+
+        return $this->storage;
     }
 
     public function processAction()
@@ -43,6 +64,13 @@ class LoginController extends BaseController
             $result = $this->getAuthService()->authenticate();
 
             if ($result->isValid()) {
+                if ($this->request->getPost('rememberme') == 1) {
+                    $this->getSessionStorage()
+                            ->setRememberMe(1);
+                    //set storage again
+                    $this->getAuthService()->setStorage($this->getSessionStorage());
+                }
+
                 $this->getAuthService()->getStorage()->write(
                         $this->request->getPost('email'));
 
