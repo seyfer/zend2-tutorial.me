@@ -6,6 +6,7 @@ use Users\Controller\BaseController;
 use ZendSearch\Lucene;
 use ZendSearch\Lucene\Document;
 use ZendSearch\Lucene\Index;
+use Zend\View\Model\ViewModel;
 
 /**
  * Description of SearchController
@@ -14,6 +15,46 @@ use ZendSearch\Lucene\Index;
  */
 class SearchController extends BaseController
 {
+
+    public function indexAction()
+    {
+        $request = $this->getRequest();
+        if ($request->isPost()) {
+            $queryText           = $request->getPost()->get('query');
+            $searchIndexLocation = $this->getIndexLocation();
+            $index               = Lucene\Lucene::open($searchIndexLocation);
+            $searchResults       = $index->find($queryText);
+
+//            \Zend\Debug\Debug::dump($searchResults);
+        }
+
+        // Подготовка формы поиска
+        $form      = new \Zend\Form\Form();
+        $form->add(array(
+            'name'       => 'query',
+            'attributes' => array(
+                'type'     => 'text',
+                'id'       => 'queryText',
+                'required' => 'required'
+            ),
+            'options'    => array(
+                'label' => 'Search String',
+            ),
+        ));
+        $form->add(array(
+            'name'       => 'submit',
+            'attributes' => array(
+                'type'  => 'submit',
+                'value' => 'Search'
+            ),
+        ));
+        $viewModel = new ViewModel(array(
+            'form'          => $form,
+            'searchResults' => $searchResults
+                )
+        );
+        return $viewModel;
+    }
 
     public function getIndexLocation()
     {
