@@ -31,7 +31,8 @@
         "doctrine/doctrine-orm-module": "0.8.*",
         "webino/webino-image-thumb": "dev-master",
         "zendframework/zendgdata": "dev-master",
-        "zendframework/zendsearch": "dev-master"
+        "zendframework/zendsearch": "dev-master",
+        "speckcommerce/speck-paypal": "dev-master"
     },
     "repositories": [
         {
