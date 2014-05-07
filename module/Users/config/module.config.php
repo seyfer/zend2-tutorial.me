@@ -15,6 +15,7 @@ return array(
             'Users\Controller\UploadManager' => 'Users\Controller\UploadManagerController',
             'Users\Controller\GroupChat'     => 'Users\Controller\GroupChatController',
             'Users\Controller\MediaManager'  => 'Users\Controller\MediaManagerController',
+            'Users\Controller\Search'        => 'Users\Controller\SearchController',
         ),
     ),
     'router'        => array(
@@ -41,7 +42,7 @@ return array(
                     'default' => array(
                         'type'    => 'Segment',
                         'options' => array(
-                            'route'       => '/[:controller[/][:action]]',
+                            'route'       => '/[:controller][/][:action]',
                             'constraints' => array(
                                 'controller' => '[a-zA-Z][a-zA-Z0-9_-]*',
                                 'action'     => '[a-zA-Z][a-zA-Z0-9_-]*',
