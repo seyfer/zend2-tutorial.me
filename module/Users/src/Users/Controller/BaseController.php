@@ -21,4 +21,12 @@ class BaseController extends AbstractActionController
         return $this->authservice;
     }
 
+    protected function getFileUploadLocation()
+    {
+        // Получение конфигурации из конфигурационных данных модуля
+        $config = $this->getServiceLocator()->get('config');
+
+        return $config['module_config']['upload_location'];
+    }
+
 }

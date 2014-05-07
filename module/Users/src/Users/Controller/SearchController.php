@@ -88,6 +88,22 @@ class SearchController extends BaseController
             $label        = Document\Field::Text('label', $fileUpload->getLabel());
             $owner        = Document\Field::Text('owner', $uploadOwner->getName());
 
+            $uploadPath = $this->getFileUploadLocation();
+            $fileName   = $fileUpload->getFilename();
+            $filePath   = $uploadPath . DIRECTORY_SEPARATOR . $fileName;
+
+            if (substr_compare($fileName, ".xlsx", strlen($fileName) -
+                            strlen(".xlsx"), strlen(".xlsx")) === 0) {
+                // Индексирование таблицы excel
+                $indexDoc = Lucene\Document\Xlsx::loadXlsxFile($filePath);
+            } else if (substr_compare($fileName, ".docx", strlen($fileName) -
+                            strlen(".docx"), strlen(".docx")) === 0) {
+                // Индексирование документа Word
+                $indexDoc = Lucene\Document\Docx::loadDocxFile($filePath);
+            } else {
+                $indexDoc = new Lucene\Document();
+            }
+
             // создание нового документа и добавление всех полей
             $indexDoc = new Lucene\Document();
             $indexDoc->addField($label);

@@ -5,6 +5,9 @@ namespace Users\Controller;
 use Users\Controller\BaseController;
 use Zend\View\Model\ViewModel;
 use Users\Form\UploadForm;
+use ZendSearch\Lucene;
+use ZendSearch\Lucene\Document;
+use ZendSearch\Lucene\Index;
 
 /**
  * Description of UploadManagerController
@@ -84,6 +87,41 @@ class UploadManagerController extends BaseController
 
                 $uploadTable = $this->getServiceLocator()->get('UploadTable');
                 $uploadTable->save($upload);
+
+                //добавить в Lucene
+                $searchIndexLocation = $this->getIndexLocation();
+                $index               = Lucene\Lucene::create($searchIndexLocation);
+
+                // создание полей lucene
+                $fileUploadId = Document\Field::unIndexed(
+                                'upload_id', $upload->getId());
+                $label        = Document\Field::Text('label', $upload->getLabel());
+                $owner        = Document\Field::Text('owner', $user->getName());
+
+                $uploadPath = $this->getFileUploadLocation();
+                $fileName   = $upload->getFilename();
+                $filePath   = $uploadPath . DIRECTORY_SEPARATOR . $fileName;
+
+                if (substr_compare($fileName, ".xlsx", strlen($fileName) -
+                                strlen(".xlsx"), strlen(".xlsx")) === 0) {
+                    // Индексирование таблицы excel
+                    $indexDoc = Lucene\Document\Xlsx::loadXlsxFile($filePath);
+                } else if (substr_compare($fileName, ".docx", strlen($fileName) -
+                                strlen(".docx"), strlen(".docx")) === 0) {
+                    // Индексирование документа Word
+                    $indexDoc = Lucene\Document\Docx::loadDocxFile($filePath);
+                } else {
+                    $indexDoc = new Lucene\Document();
+                }
+
+                // создание нового документа и добавление всех полей
+                $indexDoc = new Lucene\Document();
+                $indexDoc->addField($label);
+                $indexDoc->addField($owner);
+                $indexDoc->addField($fileUploadId);
+                $index->addDocument($indexDoc);
+
+                $index->commit();
             }
         }
 
@@ -124,14 +162,6 @@ class UploadManagerController extends BaseController
             'form'     => $form,
             'uploadId' => $uploadId,
         );
-    }
-
-    private function getFileUploadLocation()
-    {
-        // Получение конфигурации из конфигурационных данных модуля
-        $config = $this->getServiceLocator()->get('config');
-
-        return $config['module_config']['upload_location'];
     }
 
     /**
@@ -184,6 +214,13 @@ class UploadManagerController extends BaseController
         if (file_exists($fileNameP)) {
             unlink($fileNameP);
         }
+
+        //удалить из Lucene
+        $searchIndexLocation = $this->getIndexLocation();
+        $index               = Lucene\Lucene::create($searchIndexLocation);
+        $document            = $index->find($fileId);
+        $index->delete($document->document_id);
+        $index->commit();
 
         $uploadTable->deleteById($fileId);
 

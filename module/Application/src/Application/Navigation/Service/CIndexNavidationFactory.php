@@ -103,6 +103,20 @@ class CIndexNavidationFactory extends ConstructedNavigationFactory
                 'label' => "Group chat",
                 'route' => 'group-chat',
             ),
+            array(
+                'label'      => "Search document",
+                'route'      => 'users/default',
+                'controller' => 'search',
+                'pages'      => array(
+                    array(
+                        'label'      => "Generate index",
+                        'route'      => 'users/default',
+                        'visible'    => TRUE,
+                        'action'     => 'generateIndex',
+                        'controller' => 'search',
+                    ),
+                ),
+            ),
         );
 
         $username = $this->getUsername();
