@@ -16,6 +16,7 @@ return array(
             'Users\Controller\GroupChat'     => 'Users\Controller\GroupChatController',
             'Users\Controller\MediaManager'  => 'Users\Controller\MediaManagerController',
             'Users\Controller\Search'        => 'Users\Controller\SearchController',
+            'Users\Controller\Html5test'     => 'Users\Controller\Html5TestController',
         ),
     ),
     'router'        => array(

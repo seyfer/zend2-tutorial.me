@@ -1,0 +1,29 @@
+<?php
+
+$form = $this->form;
+$form->prepare();
+$form->setAttribute('action', $this->url('media', array(
+            'action' => 'process')));
+$form->setAttribute('method', 'post');
+echo $this->form()->openTag($form);
+?>
+
+<?php
+
+echo $this->formCollection($form);
+
+echo $this->formDateTime($form->get('element-date-time'));
+echo $this->formDateTimeLocal($form->get('element-date-time-local'));
+echo $this->formTime($form->get('element-time'));
+echo $this->formDate($form->get('element-date'));
+echo $this->formWeek($form->get('element-week'));
+echo $this->formMonth($form->get('element-month'));
+echo $this->formEmail($form->get('element-email'));
+echo $this->formUrl($form->get('element-url'));
+//echo $this->formNumber($form->get('element-number'));
+//echo $this->formRange($form->get('element-range'));
+echo $this->formColor($form->get('element-color'));
+?>
+
+<?php echo $this->form()->closeTag() ?>
+
