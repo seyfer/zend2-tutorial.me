@@ -3,6 +3,7 @@
 namespace Users\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
+use Zend\Authentication\AuthenticationService;
 
 /**
  * Description of BaseController
@@ -12,7 +13,16 @@ use Zend\Mvc\Controller\AbstractActionController;
 class BaseController extends AbstractActionController
 {
 
-    // Определение класса
+    /**
+     *
+     * @var AuthenticationService
+     */
+    protected $authservice;
+
+    /**
+     * Определение класса
+     * @return AuthenticationService
+     */
     public function getAuthService()
     {
         if (!$this->authservice) {
