@@ -12,3 +12,4 @@ vendor/
 .htaccess
 data/uploads/
 data/search_index/
+config/autoload/local.php
