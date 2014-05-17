@@ -33,6 +33,60 @@ class CAdminNavidationFactory extends ConstructedNavigationFactory
             array(
                 'label' => 'На главную',
                 'route' => 'home',
+            ),            
+            array(
+                'label' => "User manager",
+                'route' => 'user-manager',
+                'pages' => array(
+                    array(
+                        'label'   => "Users edit",
+                        'route'   => 'user-manager',
+                        'visible' => FALSE,
+                        'action'  => 'edit',
+                    ),
+                ),
+            ),
+            array(
+                'label' => "Upload manager",
+                'route' => 'uploads',
+                'pages' => array(
+                    array(
+                        'label'   => "Upload",
+                        'route'   => 'uploads',
+                        'visible' => TRUE,
+                        'action'  => 'upload',
+                    ),
+                ),
+            ),
+            array(
+                'label' => "Media manager",
+                'route' => 'media',
+                'pages' => array(
+                    array(
+                        'label'   => "Upload",
+                        'route'   => 'media',
+                        'visible' => TRUE,
+                        'action'  => 'upload',
+                    ),
+                ),
+            ),
+            array(
+                'label' => "Group chat",
+                'route' => 'group-chat',
+            ),
+            array(
+                'label'      => "Search document",
+                'route'      => 'users/default',
+                'controller' => 'search',
+                'pages'      => array(
+                    array(
+                        'label'      => "Generate index",
+                        'route'      => 'users/default',
+                        'visible'    => TRUE,
+                        'action'     => 'generateIndex',
+                        'controller' => 'search',
+                    ),
+                ),
             ),
 //            array(
 //                "label"  => "Выйти",

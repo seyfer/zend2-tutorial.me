@@ -25,9 +25,9 @@ class SearchController extends BaseController
             $index               = Lucene\Lucene::open($searchIndexLocation);
             $searchResults       = $index->find($queryText);
 
-            foreach ($searchResults as $searchResult) {
-                \Zend\Debug\Debug::dump($searchResult->upload_id);
-            }
+//            foreach ($searchResults as $searchResult) {
+//                \Zend\Debug\Debug::dump($searchResult->upload_id);
+//            }
         }
 
         // Подготовка формы поиска
@@ -50,6 +50,11 @@ class SearchController extends BaseController
                 'value' => 'Search'
             ),
         ));
+        
+        if ($request->isPost()) {
+            $form->get('query')->setValue($request->getPost()->get('query'));
+        }
+        
         $viewModel = new ViewModel(array(
             'form'          => $form,
             'searchResults' => $searchResults

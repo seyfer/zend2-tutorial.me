@@ -157,14 +157,6 @@ class MediaManagerController extends BaseController
         ));
     }
 
-    private function getFileUploadLocation()
-    {
-        // Получение конфигурации из конфигурационных данных модуля
-        $config = $this->getServiceLocator()->get('config');
-
-        return $config['module_config']['upload_location'];
-    }
-
     public function processAction()
     {
         $userEmail = $this->getAuthService()->getStorage()->read();
