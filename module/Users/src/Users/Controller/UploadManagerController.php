@@ -87,6 +87,7 @@ class UploadManagerController extends BaseController
 
                 $uploadTable = $this->getServiceLocator()->get('UploadTable');
                 $uploadTable->save($upload);
+                $upload->setId($uploadTable->getLastInsertValue());
 
                 //добавить в Lucene
                 $searchIndexLocation = $this->getIndexLocation();
@@ -219,8 +220,11 @@ class UploadManagerController extends BaseController
         $searchIndexLocation = $this->getIndexLocation();
         $index               = Lucene\Lucene::create($searchIndexLocation);
         $document            = $index->find($fileId);
-        $index->delete($document->document_id);
-        $index->commit();
+
+        if ($document) {
+            $index->delete($document->document_id);
+            $index->commit();
+        }
 
         $uploadTable->deleteById($fileId);
 

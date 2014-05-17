@@ -29,6 +29,26 @@ class Upload extends BaseModel
                 $data['user_id'] : null;
     }
 
+    public function setId($id)
+    {
+        $this->id = $id;
+    }
+
+    public function setFilename($filename)
+    {
+        $this->filename = $filename;
+    }
+
+    public function setLabel($label)
+    {
+        $this->label = $label;
+    }
+
+    public function setUser_id($user_id)
+    {
+        $this->user_id = $user_id;
+    }
+
     public function getId()
     {
         return $this->id;

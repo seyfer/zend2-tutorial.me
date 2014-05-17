@@ -38,5 +38,19 @@ class BaseController extends AbstractActionController
 
         return $config['module_config']['upload_location'];
     }
+    
+    public function getIndexLocation()
+    {
+        // выборка конфигурации из конфигурационных данных модуля
+        $config = $this->getServiceLocator()->get('config');
+        if ($config instanceof Traversable) {
+            $config = ArrayUtils::iteratorToArray($config);
+        }
+        if (!empty($config['module_config']['search_index'])) {
+            return $config['module_config']['search_index'];
+        } else {
+            return FALSE;
+        }
+    }
 
 }

@@ -40,6 +40,10 @@ abstract class BaseTable
             }
         }
     }
+    
+    public function getLastInsertValue() {
+        return $this->tableGateway->getLastInsertValue();
+    }
 
     public function getById($id)
     {
