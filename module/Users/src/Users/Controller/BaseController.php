@@ -36,9 +36,15 @@ class BaseController extends AbstractActionController
         // Получение конфигурации из конфигурационных данных модуля
         $config = $this->getServiceLocator()->get('config');
 
-        return $config['module_config']['upload_location'];
+        $path = $config['module_config']['upload_location'];
+
+        if (!is_writable($path)) {
+            throw new \Exception(__METHOD__ . $path . " not writable");
+        }
+
+        return $path;
     }
-    
+
     public function getIndexLocation()
     {
         // выборка конфигурации из конфигурационных данных модуля

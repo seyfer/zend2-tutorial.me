@@ -59,7 +59,7 @@ return array(
             'user-manager' => array(
                 'type'    => 'Segment',
                 'options' => array(
-                    'route'       => '/user-manager[/:action[/:id]]',
+                    'route'       => '/user-manager[/][:action][/][:id]',
                     'constraints' => array(
                         'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
                         'id'     => '[a-zA-Z0-9_-]*',
@@ -74,7 +74,7 @@ return array(
                 'type'    => 'Segment',
                 'options' => array(
                     // Change this to something specific to your module
-                    'route'    => '/uploads[/][:action][/:id]',
+                    'route'    => '/uploads[/][:action][/][:id]',
                     'defaults' => array(
                         // Change this value to reflect the namespace in which
                         // the controllers for your module are found
@@ -121,6 +121,9 @@ return array(
         ),
         'template_map'        => array(
             'layout/myaccount' => __DIR__ . '/../view/layout/myaccount-layout.phtml',
+        ),
+        'strategies'          => array(
+            'ViewJsonStrategy',
         ),
     ),
 );
