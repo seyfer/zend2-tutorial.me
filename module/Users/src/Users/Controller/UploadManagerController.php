@@ -61,10 +61,9 @@ class UploadManagerController extends BaseController
                 $datas          = [];
                 $datas['files'] = [];
                 $uploadPath     = $this->getFileUploadLocation();
-                $uploadFiles    = $this->params()->fromFiles('files');
+//                $uploadFiles    = $this->params()->fromFiles('files');
 
 //                throw new \Exception(json_encode("FILES " . serialize($_FILES)));
-
                 // Сохранение выгруженного файла
                 $adapter = new \Zend\File\Transfer\Adapter\Http();
                 $adapter->setDestination($uploadPath);
@@ -74,6 +73,13 @@ class UploadManagerController extends BaseController
                             )
                     ),
 //                    new \Zend\Validator\File\Upload()
+                ));
+                $adapter->setFilters(array(
+                    new \Zend\Filter\File\RenameUpload(array(
+                        'target'    => $uploadPath . '../tmpuploads/tmp',
+                        'randomize' => true,
+                            )
+                    )
                 ));
 
                 if (!$adapter->isValid()) {
