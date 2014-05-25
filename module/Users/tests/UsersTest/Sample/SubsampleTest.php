@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Zend Framework (http://framework.zend.com/)
  *
@@ -7,22 +8,20 @@
  * @license   http://framework.zend.com/license/new-bsd New BSD License
  */
 
-namespace Users\Framework;
+namespace UsersTest\Sample;
 
 use PHPUnit_Framework_TestCase;
 
-class TestCase extends PHPUnit_Framework_TestCase
+//require_once 'Framework/TestCase.php';
+
+//use Users\Framework\TestCase;
+//class SampleTest extends TestCase
+class SubsampleTest extends PHPUnit_Framework_TestCase
 {
 
-    public static $locator;
-
-    public static function setLocator($locator)
+    public function testSample()
     {
-        self::$locator = $locator;
+//        $this->assertInstanceOf('Zend\Di\LocatorInterface', $this->getLocator());
     }
 
-    public function getLocator()
-    {
-        return self::$locator;
-    }
 }
