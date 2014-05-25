@@ -28,7 +28,7 @@ define('ZF2_PATH', realpath(__DIR__ . '/../../../vendor/zendframework/zendframew
  */
 
 // Override the module name (usually because the namespace is something besides the root foldername)
-//define('MODULE_NAME', 'Users');
+define('MODULE_NAME', 'Users');
 
 // Add additional paths where additional modules can be found
 // $additionalModulePaths = array(

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Zend Framework (http://framework.zend.com/)
  *
@@ -9,13 +10,14 @@
 
 namespace Users;
 
-use Users\Framework\TestCase;
-
-class SampleTest extends TestCase
+//use Users\Framework\TestCase;
+//class SampleTest extends TestCase
+class SampleTest extends Framework\TestCase
 {
 
     public function testSample()
     {
         $this->assertInstanceOf('Zend\Di\LocatorInterface', $this->getLocator());
     }
+
 }

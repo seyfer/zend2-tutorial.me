@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Zend Framework (http://framework.zend.com/)
  *
@@ -6,10 +7,9 @@
  * @copyright Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
  * @license   http://framework.zend.com/license/new-bsd New BSD License
  */
+$additionalNamespaces  = $additionalModulePaths = $moduleDependencies    = null;
 
-$additionalNamespaces = $additionalModulePaths = $moduleDependencies = null;
-
-$rootPath = realpath(dirname(__DIR__));
+$rootPath  = realpath(dirname(__DIR__));
 $testsPath = "$rootPath/tests";
 
 if (is_readable($testsPath . '/TestConfiguration.php')) {
@@ -24,21 +24,21 @@ $path = array(
 );
 set_include_path(implode(PATH_SEPARATOR, $path));
 
-require_once  'Zend/Loader/AutoloaderFactory.php';
-require_once  'Zend/Loader/StandardAutoloader.php';
+require_once 'Zend/Loader/AutoloaderFactory.php';
+require_once 'Zend/Loader/StandardAutoloader.php';
 
 use Zend\Loader\AutoloaderFactory;
 use Zend\Loader\StandardAutoloader;
 
 // setup autoloader
 AutoloaderFactory::factory(
-    array(
-    	'Zend\Loader\StandardAutoloader' => array(
-            StandardAutoloader::AUTOREGISTER_ZF => true,
-            StandardAutoloader::ACT_AS_FALLBACK => false,
-            StandardAutoloader::LOAD_NS => $additionalNamespaces,
+        array(
+            'Zend\Loader\StandardAutoloader' => array(
+                StandardAutoloader::AUTOREGISTER_ZF => true,
+                StandardAutoloader::ACT_AS_FALLBACK => false,
+                StandardAutoloader::LOAD_NS         => $additionalNamespaces,
+            )
         )
-    )
 );
 
 // The module name is obtained using directory name or constant
@@ -48,7 +48,7 @@ if (defined('MODULE_NAME')) {
 }
 
 // A locator will be set to this class if available
-$moduleTestCaseClassname = '\\'.$moduleName.'\\Framework\\TestCase';
+$moduleTestCaseClassname = '\\' . $moduleName . 'Test\\Framework\\TestCase';
 
 // This module's path plus additionally defined paths are used $modulePaths
 $modulePaths = array(dirname($rootPath));
@@ -63,10 +63,10 @@ if (isset($moduleDependencies)) {
 }
 
 
-$listenerOptions = new Zend\ModuleManager\Listener\ListenerOptions(array('module_paths' => $modulePaths));
+$listenerOptions  = new Zend\ModuleManager\Listener\ListenerOptions(array('module_paths' => $modulePaths));
 $defaultListeners = new Zend\ModuleManager\Listener\DefaultListenerAggregate($listenerOptions);
-$sharedEvents = new Zend\EventManager\SharedEventManager();
-$moduleManager = new \Zend\ModuleManager\ModuleManager($modules);
+$sharedEvents     = new Zend\EventManager\SharedEventManager();
+$moduleManager    = new \Zend\ModuleManager\ModuleManager($modules);
 $moduleManager->getEventManager()->setSharedManager($sharedEvents);
 $moduleManager->getEventManager()->attachAggregate($defaultListeners);
 $moduleManager->loadModules();
@@ -83,22 +83,22 @@ if (method_exists($moduleTestCaseClassname, 'setLocator')) {
     }
 
     $routerDiConfig = new \Zend\Di\Config(
-        array(
-            'definition' => array(
-                'class' => array(
-                    'Zend\Mvc\Router\RouteStackInterface' => array(
-                        'instantiator' => array(
-                            'Zend\Mvc\Router\Http\TreeRouteStack',
-                            'factory'
-                        ),
+            array(
+        'definition' => array(
+            'class' => array(
+                'Zend\Mvc\Router\RouteStackInterface' => array(
+                    'instantiator' => array(
+                        'Zend\Mvc\Router\Http\TreeRouteStack',
+                        'factory'
                     ),
                 ),
             ),
-        )
+        ),
+            )
     );
     $routerDiConfig->configure($di);
 
-    call_user_func_array($moduleTestCaseClassname.'::setLocator', array($di));
+    call_user_func_array($moduleTestCaseClassname . '::setLocator', array($di));
 }
 
 // When this is in global scope, PHPUnit catches exception:
