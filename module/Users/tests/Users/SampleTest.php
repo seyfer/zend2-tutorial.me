@@ -7,9 +7,11 @@
  * @license   http://framework.zend.com/license/new-bsd New BSD License
  */
 
-namespace ZendSkeletonModuleTest;
+namespace Users;
 
-class SampleTest extends Framework\TestCase
+use Users\Framework\TestCase;
+
+class SampleTest extends TestCase
 {
 
     public function testSample()

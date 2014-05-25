@@ -48,7 +48,7 @@ if (defined('MODULE_NAME')) {
 }
 
 // A locator will be set to this class if available
-$moduleTestCaseClassname = '\\'.$moduleName.'Test\\Framework\\TestCase';
+$moduleTestCaseClassname = '\\'.$moduleName.'\\Framework\\TestCase';
 
 // This module's path plus additionally defined paths are used $modulePaths
 $modulePaths = array(dirname($rootPath));

@@ -51,101 +51,114 @@ class UploadManagerController extends BaseController
 
     public function processjqueryAction()
     {
+        $form      = new \Users\Form\UploadJqueryForm();
+//        $form->setInputFilter(new \Users\Form\Filter\UploadJqueryFilter());
         $request   = $this->getRequest();
         $response  = $this->getResponse();
         $jsonModel = new \Zend\View\Model\JsonModel();
 
-        if ($request->isPost()) {
+        try {
 
-            try {
-                $datas          = [];
-                $datas['files'] = [];
-                $uploadPath     = $this->getFileUploadLocation();
+            if ($request->isPost()) {
+
+                $data = array_merge_recursive(
+                        $this->getRequest()->getPost()->toArray(), $this->getRequest()->getFiles()->toArray()
+                );
+
+//                throw new \Exception(json_encode("data " . serialize($data)));
+
+                $form->setData($data);
+                if ($form->isValid()) {
+                    $datas          = [];
+                    $datas['files'] = [];
+                    $uploadPath     = $this->getFileUploadLocation();
 //                $uploadFiles    = $this->params()->fromFiles('files');
-
 //                throw new \Exception(json_encode("FILES " . serialize($_FILES)));
-                // Сохранение выгруженного файла
-                $adapter = new \Zend\File\Transfer\Adapter\Http();
-                $adapter->setDestination($uploadPath);
-                $adapter->setValidators(array(
-                    new \Zend\Validator\File\Extension(array(
-                        'extension' => array('jpg', 'jpeg', 'png', 'rtf')
-                            )
-                    ),
+                    // Сохранение выгруженного файла
+                    $adapter        = new \Zend\File\Transfer\Adapter\Http();
+                    $adapter->setDestination($uploadPath);
+                    $adapter->setValidators(array(
+                        new \Zend\Validator\File\Extension(array(
+                            'extension' => array('jpg', 'jpeg', 'png', 'rtf')
+                                )
+                        ),
 //                    new \Zend\Validator\File\Upload()
-                ));
-                $adapter->setFilters(array(
-                    new \Zend\Filter\File\RenameUpload(array(
-                        'target'    => $uploadPath . '../tmpuploads/tmp',
-                        'randomize' => true,
-                            )
-                    )
-                ));
+                    ));
+//                    $adapter->setFilters(array(
+//                        new \Zend\Filter\File\RenameUpload(array(
+//                            'target'    => $uploadPath . '../tmpuploads/tmp',
+//                            'randomize' => true,
+//                                )
+//                        )
+//                    ));
 
-                if (!$adapter->isValid()) {
-                    throw new \Exception(json_encode("!isValid " . implode(" ", $adapter->getMessages())));
-                }
+                    if (!$adapter->isValid()) {
+                        throw new \Exception(json_encode("!isValid " . implode(" ", $adapter->getMessages())));
+                    }
 
-                $files = $adapter->getFileInfo();
+                    $files = $adapter->getFileInfo();
 //                throw new \Exception(json_encode($files));
 
-                foreach ($files as $file => $info) {
+                    foreach ($files as $file => $info) {
 //                    throw new \Exception(json_encode($info));
 
-                    $name = $adapter->getFileName($file);
+                        $name = $adapter->getFileName($file);
 
-                    // file uploaded & is valid
-                    if (!$adapter->isUploaded($file)) {
-                        throw new \Exception(json_encode("!isUploaded") . implode(" ", $adapter->getMessages()));
-                        continue;
+                        // file uploaded & is valid
+                        if (!$adapter->isUploaded($file)) {
+                            throw new \Exception(json_encode("!isUploaded") . implode(" ", $adapter->getMessages()));
+                            continue;
+                        }
+
+                        if (!$adapter->isValid($file)) {
+                            throw new \Exception(json_encode("!isValid " . implode(" ", $adapter->getMessages())));
+                            continue;
+                        }
+
+                        // receive the files into the user directory
+                        $check = $adapter->receive($file); // this has to be on top
+
+                        if (!$check) {
+                            throw new \Exception(json_encode("! receive" . implode(" ", $adapter->getMessages())));
+                        }
+
+                        /**
+                         * "name": "picture1.jpg",
+                          "size": 902604,
+                          "url": "http:\/\/example.org\/files\/picture1.jpg",
+                          "thumbnailUrl": "http:\/\/example.org\/files\/thumbnail\/picture1.jpg",
+                          "deleteUrl": "http:\/\/example.org\/files\/picture1.jpg",
+                          "deleteType": "DELETE"
+                         */
+                        $fileclass             = new stdClass();
+                        // we stripped out the image thumbnail for our purpose, primarily for security reasons
+                        // you could add it back in here.
+                        $fileclass->name       = $name;
+                        $fileclass->size       = $adapter->getFileSize($name);
+                        $fileclass->type       = $adapter->getMimeType($name);
+                        $fileclass->deleteUrl  = '/uploads/delete';
+                        $fileclass->deleteType = 'DELETE';
+                        //$fileclass->error = 'null';
+                        $fileclass->url        = '/';
+
+                        $datas['files'][] = $fileclass;
                     }
 
-                    if (!$adapter->isValid($file)) {
-                        throw new \Exception(json_encode("!isValid " . implode(" ", $adapter->getMessages())));
-                        continue;
-                    }
-
-                    // receive the files into the user directory
-                    $check = $adapter->receive($file); // this has to be on top
-
-                    if (!$check) {
-                        throw new \Exception(json_encode("! receive" . implode(" ", $adapter->getMessages())));
-                    }
-
-                    /**
-                     * "name": "picture1.jpg",
-                      "size": 902604,
-                      "url": "http:\/\/example.org\/files\/picture1.jpg",
-                      "thumbnailUrl": "http:\/\/example.org\/files\/thumbnail\/picture1.jpg",
-                      "deleteUrl": "http:\/\/example.org\/files\/picture1.jpg",
-                      "deleteType": "DELETE"
-                     */
-                    $fileclass             = new stdClass();
-                    // we stripped out the image thumbnail for our purpose, primarily for security reasons
-                    // you could add it back in here.
-                    $fileclass->name       = $name;
-                    $fileclass->size       = $adapter->getFileSize($name);
-                    $fileclass->type       = $adapter->getMimeType($name);
-                    $fileclass->deleteUrl  = '/uploads/delete';
-                    $fileclass->deleteType = 'DELETE';
-                    //$fileclass->error = 'null';
-                    $fileclass->url        = '/';
-
-                    $datas['files'][] = $fileclass;
-                }
-
-                $response->getHeaders()->addHeaders(array(
-                    'Pragma'        => 'no-cache',
-                    'Cache-Control' => 'private, no-cache',
-                    "Content-Type"  => 'application/json'
-                ));
+                    $response->getHeaders()->addHeaders(array(
+                        'Pragma'        => 'no-cache',
+                        'Cache-Control' => 'private, no-cache',
+                        "Content-Type"  => 'application/json'
+                    ));
 
 //                return $response->setContent(json_encode(array('files' => $files)));
-                return $response->setContent(json_encode($datas));
-            } catch (\Exception $e) {
-
-                return $response->setContent(json_encode($e->getMessage()));
+                    return $response->setContent(json_encode($datas));
+                } else {
+                    throw new \Exception(json_encode("!isValid form" . serialize($form->getMessages())));
+                }
             }
+        } catch (\Exception $e) {
+
+            return $response->setContent(json_encode($e->getMessage()));
         }
 
         return $jsonModel;
@@ -298,6 +311,10 @@ class UploadManagerController extends BaseController
                         toRoute('uploads', array('action' => 'index'));
     }
 
+    /**
+     * обычная загрузка
+     * @return type
+     */
     public function uploadAction()
     {
         $form = new UploadForm();
@@ -307,6 +324,10 @@ class UploadManagerController extends BaseController
         );
     }
 
+    /**
+     * тест загрузки через плагин
+     * @return \Zend\View\Model\ViewModel
+     */
     public function uploadJqueryAction()
     {
         $view = new ViewModel();
